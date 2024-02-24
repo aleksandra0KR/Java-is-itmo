@@ -11,9 +11,11 @@ import aleksandra0KR.Entity.Transaction.Withdraw;
 import aleksandra0KR.Entity.User.User;
 import aleksandra0KR.Entity.Bank.Bank;
 import aleksandra0KR.Model.Transaction.Transaction;
+import lombok.Getter;
 
 public abstract class Account {
     public BigDecimal Profit;
+    @Getter
     public UUID AccountId;
     public BigDecimal Money;
     protected Date CreationDate;
@@ -26,7 +28,7 @@ public abstract class Account {
 
 
     public Account(BigDecimal money, Date creationDate, Date closeDate, User user, Bank bank, BigDecimal percentage, BigDecimal commission){
-        AccountId = UUID.randomUUID(); /// read up on  it
+        AccountId = UUID.randomUUID(); // TODO read up on it
         Money = money;
         CreationDate = creationDate;
         CloseDate = closeDate;

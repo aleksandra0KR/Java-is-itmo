@@ -1,7 +1,11 @@
 package aleksandra0KR.Entity.User;
 
+import lombok.Getter;
+
 public class User {
+    @Getter
     private String Name;
+    @Getter
     private String Surname;
     private String Address;
     private String PassportNumber;

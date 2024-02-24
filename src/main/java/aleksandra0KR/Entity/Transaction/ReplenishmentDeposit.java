@@ -4,9 +4,11 @@ import aleksandra0KR.Entity.Status.Status;
 import aleksandra0KR.Model.Account.Account;
 import aleksandra0KR.Model.Transaction.Transaction;
 import aleksandra0KR.Tools.CheckingForValidTransaction;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+@AllArgsConstructor
 public class ReplenishmentDeposit implements Transaction {
     private Account Account;
     private BigDecimal Money;

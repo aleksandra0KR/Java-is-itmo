@@ -1,15 +1,26 @@
 package aleksandra0KR.Entity.Bank;
 
+import aleksandra0KR.Entity.Status.Status;
+import aleksandra0KR.Entity.Transaction.ReplenishmentDeposit;
+import aleksandra0KR.Entity.Transaction.TransactionCaretaker;
+import aleksandra0KR.Entity.Transaction.Transfer;
+import aleksandra0KR.Entity.Transaction.Withdraw;
 import aleksandra0KR.Model.Account.Account;
 
-import java.time.Clock;
-import java.time.LocalDate;
+import java.math.BigDecimal;
 import java.util.*;
 
 public class CentralBank {
-    private List<Bank> _banks = new ArrayList<>();
+    // TODO make singleton
+    private final List<Bank> _banks;
 
-    private Calendar Calendar;
+    private Calendar BankCalendar;
+    private final TransactionCaretaker TransactionCaretaker;
+
+    public CentralBank(){
+        _banks = new ArrayList<>();
+        TransactionCaretaker = new TransactionCaretaker();
+    }
 
     public Bank GetBank(String bankName){
         for(Bank bank: _banks){
@@ -20,20 +31,39 @@ public class CentralBank {
 
     public void AddBank(Bank bank){
         if (_banks.contains(bank)) return;
-
+        bank.BankCalendar = BankCalendar;
         _banks.add(bank);
     }
 
     public void updateClock(Calendar calendar){
         if(calendar == null) throw new NullPointerException("Clock can't be null");
-        Calendar = calendar;
+        BankCalendar = calendar;
     }
 
     public void CheckForNewMoth(){
-        if(Calendar.get(Calendar.DAY_OF_MONTH) == 1){
+        if(BankCalendar.get(Calendar.DAY_OF_MONTH) == 1){
             for(Bank bank : _banks){
-                bank.NotifyNewMonth();
+                bank.NotifyNewMonth(TransactionCaretaker);
             }
         }
+    }
+
+    public void CancelTransaction(UUID transactionId){
+        TransactionCaretaker.Undo(transactionId);
+    }
+
+    public void Transfer(Account sender, Account receiver, BigDecimal amount){
+        TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
+    }
+    public void Withdraw(Account sender, Account receiver, BigDecimal amount){
+        TransactionCaretaker.Backup(new Withdraw(sender, receiver, amount, Status.Created));
+    }
+
+    public void ReplenishmentDeposit(Account sender, BigDecimal amount){
+        TransactionCaretaker.Backup(new ReplenishmentDeposit(sender, amount, Status.Created));
+    }
+
+    public void AddTime(int days){
+        BankCalendar.add(Calendar.DATE, days);
     }
 }
