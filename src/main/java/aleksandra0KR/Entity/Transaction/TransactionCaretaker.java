@@ -9,12 +9,13 @@ public class TransactionCaretaker {
     private HashMap<UUID, Transaction> TransactionHistory = new HashMap<>();
     private Transaction _originator;
 
-    public void Backup(Transaction transaction)
+    public UUID Backup(Transaction transaction)
     {
         this._originator = transaction;
         UUID transactionId = UUID.randomUUID();
         transaction.execute();
         this.TransactionHistory.put(transactionId, this._originator);
+        return transactionId;
     }
 
     public void Undo(UUID transactionId)

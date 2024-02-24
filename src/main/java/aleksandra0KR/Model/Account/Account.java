@@ -38,7 +38,6 @@ public abstract class Account {
         Commission = commission;
 
     }
-
     public BigDecimal DailyPercentage(){
         if(Money.compareTo(BigDecimal.ZERO) <= 0) {
             return BigDecimal.ZERO;
@@ -48,10 +47,11 @@ public abstract class Account {
         return dailyProfit;
     }
     public Transaction MonthlyProfit(){
-        return new Withdraw(this,Bank.Account, Profit, Status.Created);
+        Transaction transaction = new Withdraw(this,Bank.Account, Profit, Status.Created);
+        return transaction;
     }
 
     public Transaction MonthlyCommission(){
-        return new Transfer(this,Bank.Account, Commission, Status.Created);
+        return (new Transfer(this,Bank.Account, Commission, Status.Created));
     }
 }

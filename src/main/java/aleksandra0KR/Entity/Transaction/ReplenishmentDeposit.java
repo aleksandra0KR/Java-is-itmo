@@ -19,7 +19,7 @@ public class ReplenishmentDeposit implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Account, Money, Status);
 
-        Account.Money.add(Money);
+        Account.Money = Account.Money.add(Money);
         Status = Status.Valid;
     }
 
@@ -29,7 +29,7 @@ public class ReplenishmentDeposit implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckingForValidTransactionForCancel(Account, Money, Status);
 
-        Account.Money.subtract(Money);
+        Account.Money = Account.Money.subtract(Money);
 
         Status = Status.Cancelled;
     }

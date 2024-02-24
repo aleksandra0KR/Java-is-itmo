@@ -20,8 +20,8 @@ public class Withdraw implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Receiver, Sender, Money);
 
-        Sender.Money.add(Money);
-        Receiver.Money.subtract(Money);
+        Sender.Money = Sender.Money.add(Money);
+        Receiver.Money = Receiver.Money.subtract(Money);
         Status = Status.Valid;
 
     }
@@ -32,8 +32,8 @@ public class Withdraw implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckingForValidTransactionForCancel(Receiver, Sender, Money, Status);
 
-        Sender.Money.subtract(Money);
-        Receiver.Money.add(Money);
+        Sender.Money = Sender.Money.subtract(Money);
+        Receiver.Money = Receiver.Money.add(Money);
 
         Status = Status.Cancelled;
     }

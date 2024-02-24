@@ -52,15 +52,15 @@ public class CentralBank {
         TransactionCaretaker.Undo(transactionId);
     }
 
-    public void Transfer(Account sender, Account receiver, BigDecimal amount){
-        TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
+    public UUID Transfer(Account sender, Account receiver, BigDecimal amount){
+        return TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
     }
-    public void Withdraw(Account sender, Account receiver, BigDecimal amount){
-        TransactionCaretaker.Backup(new Withdraw(sender, receiver, amount, Status.Created));
+    public UUID Withdraw(Account sender, Account receiver, BigDecimal amount){
+        return TransactionCaretaker.Backup(new Withdraw(sender, receiver, amount, Status.Created));
     }
 
-    public void ReplenishmentDeposit(Account sender, BigDecimal amount){
-        TransactionCaretaker.Backup(new ReplenishmentDeposit(sender, amount, Status.Created));
+    public UUID ReplenishmentDeposit(Account sender, BigDecimal amount){
+        return TransactionCaretaker.Backup(new ReplenishmentDeposit(sender, amount, Status.Created));
     }
 
     public void AddTime(int days){

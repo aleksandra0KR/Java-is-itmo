@@ -20,8 +20,8 @@ public class Transfer implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Sender, Receiver, Money);
 
-        Sender.Money.subtract(Money);
-        Receiver.Money.add(Money);
+        Sender.Money = Sender.Money.subtract(Money);
+        Receiver.Money =  Receiver.Money.add(Money);
         Status = Status.Valid;
 
     }
@@ -32,8 +32,8 @@ public class Transfer implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckingForValidTransactionForCancel(Sender, Receiver, Money,Status);
 
-        Receiver.Money.subtract(Money);
-        Sender.Money.add(Money);
+        Receiver.Money = Receiver.Money.subtract(Money);
+        Sender.Money = Sender.Money.add(Money);
 
         Status = Status.Cancelled;
     }

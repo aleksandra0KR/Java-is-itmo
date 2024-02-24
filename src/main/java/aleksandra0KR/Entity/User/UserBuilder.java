@@ -1,30 +1,32 @@
 package aleksandra0KR.Entity.User;
 
+import aleksandra0KR.Entity.Bank.Bank;
+
 public class UserBuilder {
-    private User user = new User();
+    private User User = new User();
 
     public void CreateUser(String name, String surname){
-        user.SetName(name);
-        user.SetSurname(surname);
+        User.SetName(name);
+        User.SetSurname(surname);
     }
 
     public void SetAddress(String address){
-        user.SetAddress(address);
+        User.SetAddress(address);
     }
 
     public void SetPassport(String passport){
-        user.SetPassport(passport);
+        User.SetPassport(passport);
     }
 
     public User GetClient(){
 
-        User result = this.user;
+        User result = this.User;
         this.Reset();
         return result;
     }
 
     public void Reset()
     {
-        this.user = new User();
+        this.User = new User();
     }
 }
