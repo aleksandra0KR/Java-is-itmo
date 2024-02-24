@@ -4,6 +4,8 @@ import aleksandra0KR.Entity.Account.CreditAccount;
 import aleksandra0KR.Entity.Account.DebitAccount;
 import aleksandra0KR.Entity.Account.DepositAccount;
 import aleksandra0KR.Entity.Transaction.TransactionCaretaker;
+import aleksandra0KR.Model.Observer.ObserverUser;
+import aleksandra0KR.Model.Observer.SubjectBank;
 import aleksandra0KR.Model.Transaction.Transaction;
 import aleksandra0KR.Entity.User.User;
 import aleksandra0KR.Model.Account.Account;
@@ -13,7 +15,7 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.*;
-public class Bank {
+public class Bank implements SubjectBank {
     public String Name;
     public UUID BankId;
     public Account Account;
@@ -41,12 +43,14 @@ public class Bank {
     private final TransactionCaretaker transactionCaretaker;
     private final List<User> _users;
     private final List<Account> _accounts;
+    private final List<ObserverUser> _observers;
 
     public Bank(){
         transactionCaretaker = new TransactionCaretaker();
         _users = new ArrayList<>();
         _accounts = new ArrayList<>();
         BankId = UUID.randomUUID();
+        _observers = new ArrayList<>();
     }
     public void AddUser(User user){
         if(!_users.contains(user)) _users.add(user);
@@ -112,11 +116,26 @@ public class Bank {
         return BigDecimal.ZERO;
     }
 
-    // TODO attach
+    public void Attach(ObserverUser observer)
+    {
+        if(_observers.contains(observer)) return;
+        _observers.add(observer);
+    }
 
-    // TODO detach
+    public void Detach(ObserverUser observer)
+    {
+       _observers.remove(observer);
+    }
 
-    // TODO notify
+    // Запуск обновления в каждом подписчике.
+    public void Notify(String updates)
+    {
+
+        for (var observer: _observers)
+        {
+            observer.Update(updates);
+        }
+    }
 
 
 }
