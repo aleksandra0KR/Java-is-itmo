@@ -10,6 +10,10 @@ repositories {
 }
 
 dependencies {
+
+    implementation ("info.picocli:picocli:4.7.5")
+    annotationProcessor ("info.picocli:picocli-codegen:4.7.5")
+
     compileOnly ("org.projectlombok:lombok:1.18.30")
     annotationProcessor ("org.projectlombok:lombok:1.18.30")
 

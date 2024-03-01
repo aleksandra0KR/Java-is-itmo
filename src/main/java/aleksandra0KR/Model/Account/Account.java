@@ -2,6 +2,7 @@ package aleksandra0KR.Model.Account;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
 
@@ -18,8 +19,8 @@ public abstract class Account {
     @Getter
     public UUID AccountId;
     public BigDecimal Money;
-    protected Date CreationDate;
-    public Date CloseDate;
+    protected Calendar CreationDate;
+    public Calendar CloseDate;
     public User User;
     public Bank Bank;
     public BigDecimal Percentage;
@@ -27,13 +28,12 @@ public abstract class Account {
     public BigDecimal Commission;
 
 
-    public Account(BigDecimal money, Date creationDate, Date closeDate, User user, Bank bank, BigDecimal percentage, BigDecimal commission){
-        AccountId = UUID.randomUUID(); // TODO read up on it
+    public Account(BigDecimal money, Calendar creationDate, Calendar closeDate, User user, BigDecimal percentage, BigDecimal commission){
+        AccountId = UUID.randomUUID();
         Money = money;
         CreationDate = creationDate;
         CloseDate = closeDate;
         User = user;
-        Bank = bank;
         Percentage = percentage;
         Commission = commission;
 

@@ -13,6 +13,7 @@ import aleksandra0KR.Tools.DepositMoneyGapPercentage;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.*;
 public class Bank implements SubjectBank {
@@ -55,10 +56,10 @@ public class Bank implements SubjectBank {
     public void AddUser(User user){
         if(!_users.contains(user)) _users.add(user);
     }
-    public User GetUser(String name, String surname){
+    public User GetUser(UUID userId){
 
         for (User user : _users) {
-            if (user.getName().equals(name) && user.getSurname().equals(surname)) return  user;
+            if (user.getID().equals(userId)) return  user;
         }
 
         return null;
@@ -67,26 +68,18 @@ public class Bank implements SubjectBank {
         if(!_accounts.contains(account)) _accounts.add(account);
     }
 
-    public void CreateCreditAccount(BigDecimal money, User user,  Date closeDate){
-        Account creditAccount = new CreditAccount(money, closeDate, user, this, CreditLimit, CreditCommission);
-        this.AddAccount(creditAccount);
-    }
-
-    public void CreateDebitAccount(BigDecimal money, User user, Date closeDate){
-        Account debitAccount = new DebitAccount(money, closeDate, user, this, DebitPercentage);
-        this.AddAccount(debitAccount);
-    }
-
-    public void CreateDeposit(BigDecimal money, User user, Date closeDate){
-        Account depositAccount = new DepositAccount(money, closeDate, user, this, this.AccountDepositPercentage(money));
-        this.AddAccount(depositAccount);
-    }
-
-    public Account getAccount(UUID accountId) {
+    public List<Account> GetUsersAccount(UUID userId) {
+        var accounts = new ArrayList<Account>();
         for (Account account : _accounts) {
-            if (account.getAccountId().toString().equals(accountId)) return account;
+            if (account.User.getID().toString().equals(userId)) accounts.add(account);
         }
+        return accounts;
+    }
 
+    public Account GetAccount(UUID accountID){
+        for (Account account : _accounts) {
+            if (account.AccountId.equals(accountID)) return account;
+        }
         return null;
     }
     public void NotifyNewMonth(TransactionCaretaker transactionCaretakerCentralBank){
@@ -135,6 +128,29 @@ public class Bank implements SubjectBank {
         {
             observer.Update(updates);
         }
+    }
+    public DebitAccount openDebitAccount(User user, BigDecimal money) {
+        Calendar closeDate = BankCalendar;
+        closeDate.add(Calendar.YEAR, 2);
+        DebitAccount debitAccount = new DebitAccount(money, BankCalendar, closeDate, user, this, DebitPercentage);
+        this.AddAccount(debitAccount);
+        return debitAccount;
+    }
+
+    public CreditAccount openCreditAccount(User user, BigDecimal money) {
+        Calendar closeDate = BankCalendar;
+        closeDate.add(Calendar.YEAR, 5);
+        CreditAccount creditAccount = new CreditAccount(money, BankCalendar, closeDate, user, this, CreditLimit, CreditCommission);
+        this.AddAccount(creditAccount);
+        return creditAccount;
+    }
+
+    public DepositAccount openDepositAccount(User user, BigDecimal money) {
+        Calendar closeDate = BankCalendar;
+        closeDate.add(Calendar.YEAR, 1);
+        DepositAccount depositAccount = new DepositAccount(money, BankCalendar, closeDate, user, this, AccountDepositPercentage(money));
+        this.AddAccount(depositAccount);
+        return depositAccount;
     }
 
 

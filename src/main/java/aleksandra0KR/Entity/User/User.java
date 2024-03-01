@@ -1,7 +1,10 @@
 package aleksandra0KR.Entity.User;
 
+import aleksandra0KR.Exceptions.NullUserSurnameException;
+import aleksandra0KR.Exceptions.NullUserNameException;
 import aleksandra0KR.Model.Observer.ObserverUser;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.*;
 
@@ -15,6 +18,10 @@ public class User implements ObserverUser {
     private String PassportNumber;
     @Getter
     private List<String> _messages = new ArrayList<>();
+
+    @Getter
+    @Setter
+    private UUID ID;
 
     public boolean IsVerified(){
         if(Address != null && PassportNumber != null) return true;
@@ -30,12 +37,12 @@ public class User implements ObserverUser {
     }
 
     public void SetName(String name){
-        if(name == null)  throw new IllegalArgumentException("Parameter 'Name' can't be null");
+        if(name == null)  throw new NullUserNameException();
         Name = name;
     }
 
     public void SetSurname(String surname){
-        if(surname == null)  throw new IllegalArgumentException("Parameter 'Surname' can't be null");
+        if(surname == null)  throw new NullUserSurnameException();
         Surname = surname;
     }
 

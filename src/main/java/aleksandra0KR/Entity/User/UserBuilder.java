@@ -2,12 +2,15 @@ package aleksandra0KR.Entity.User;
 
 import aleksandra0KR.Entity.Bank.Bank;
 
+import java.util.UUID;
+
 public class UserBuilder {
     private User User = new User();
 
     public void CreateUser(String name, String surname){
         User.SetName(name);
         User.SetSurname(surname);
+        User.setID(UUID.randomUUID());
     }
 
     public void SetAddress(String address){
@@ -18,7 +21,7 @@ public class UserBuilder {
         User.SetPassport(passport);
     }
 
-    public User GetClient(){
+    public User GetUser(){
 
         User result = this.User;
         this.Reset();

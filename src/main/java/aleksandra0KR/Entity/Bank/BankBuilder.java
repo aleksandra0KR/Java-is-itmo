@@ -48,7 +48,11 @@ public class BankBuilder {
 
     public Bank GetBank(){
         Bank bank = this.Bank;
+        bank.Account.Bank = bank;
         this.Reset();
         return bank;
     }
+
+
+
 }

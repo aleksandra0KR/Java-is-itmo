@@ -5,10 +5,10 @@ import aleksandra0KR.Entity.User.User;
 import aleksandra0KR.Entity.Bank.Bank;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.util.Calendar;
 
 public class BankAccount extends Account {
-    public BankAccount(BigDecimal money, Date closeDate, Bank bank) {
-        super(money, new Date(), closeDate, null, bank, BigDecimal.ZERO, BigDecimal.ZERO);
+    public BankAccount(BigDecimal money, Calendar openDate) {
+        super(money, openDate, null, null, BigDecimal.ZERO, BigDecimal.ZERO);
     }
 }

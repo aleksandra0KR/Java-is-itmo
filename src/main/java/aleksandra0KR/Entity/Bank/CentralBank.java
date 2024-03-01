@@ -6,27 +6,37 @@ import aleksandra0KR.Entity.Transaction.TransactionCaretaker;
 import aleksandra0KR.Entity.Transaction.Transfer;
 import aleksandra0KR.Entity.Transaction.Withdraw;
 import aleksandra0KR.Model.Account.Account;
+import lombok.Getter;
 
 import java.math.BigDecimal;
 import java.util.*;
 
 public class CentralBank {
-    // TODO make singleton
+    private static CentralBank instance;
     private final List<Bank> _banks;
 
+    @Getter
     private Calendar BankCalendar;
     private final TransactionCaretaker TransactionCaretaker;
 
-    public CentralBank(){
+    private CentralBank(){
+        BankCalendar = Calendar.getInstance();
         _banks = new ArrayList<>();
         TransactionCaretaker = new TransactionCaretaker();
+    }
+
+    public static CentralBank getInstance()
+    {
+        if (instance == null)
+            instance = new CentralBank();
+        return instance;
     }
 
     public Bank GetBank(String bankName){
         for(Bank bank: _banks){
             if (Objects.equals(bank.Name, bankName)) return bank;
         }
-        throw new NoSuchElementException("There is no bank with name " + bankName);
+        return null;
     }
 
     public void AddBank(Bank bank){
@@ -66,4 +76,6 @@ public class CentralBank {
     public void AddTime(int days){
         BankCalendar.add(Calendar.DATE, days);
     }
+
+    // TODO add creating of Account which trigers bank
 }
