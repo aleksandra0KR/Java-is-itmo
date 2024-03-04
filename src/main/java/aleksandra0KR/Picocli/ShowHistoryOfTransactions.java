@@ -3,14 +3,14 @@ package aleksandra0KR.Picocli;
 import aleksandra0KR.Entity.Bank.Bank;
 import aleksandra0KR.Entity.Bank.CentralBank;
 import aleksandra0KR.Model.Account.Account;
+import aleksandra0KR.Model.Transaction.Transaction;
 import picocli.CommandLine;
 
-import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
-@CommandLine.Command(name = "-showBalance", description = "Shows account balance by it's ID")
-public class ShowBalanceCommand implements Runnable{
+@CommandLine.Command(name = "-showHistoryOfTransactions", description = "Shows account's transactions by it's ID")
+public class ShowHistoryOfTransactions implements Runnable{
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);
@@ -35,7 +35,9 @@ public class ShowBalanceCommand implements Runnable{
             return;
         }
 
-        System.out.println("Current balance: " + account.getMoney());
-
+        System.out.println("Account's history:");
+        for (Transaction transaction: account.HistoryOfTransactions){
+            transaction.printInfo();
+        }
     }
 }

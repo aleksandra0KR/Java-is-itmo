@@ -2,15 +2,15 @@ package aleksandra0KR.Picocli;
 
 import aleksandra0KR.Entity.Bank.Bank;
 import aleksandra0KR.Entity.Bank.CentralBank;
-import aleksandra0KR.Model.Account.Account;
+import aleksandra0KR.Entity.User.User;
 import picocli.CommandLine;
 
-import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
-@CommandLine.Command(name = "-showBalance", description = "Shows account balance by it's ID")
-public class ShowBalanceCommand implements Runnable{
+@CommandLine.Command(name = "-showNotifications", description = "Shows user's messages from bank")
+
+public class ShowNotifications implements Runnable{
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);
@@ -25,17 +25,18 @@ public class ShowBalanceCommand implements Runnable{
             return;
         }
 
-        System.out.println("Please, enter account ID: ");
-        UUID accountId = UUID.fromString(in.nextLine());
+        System.out.println("Please, enter user ID: ");
+        UUID userId = UUID.fromString(in.nextLine());
 
-        Account account = bank.GetAccount(accountId);
+        User user = bank.GetUser(userId);
 
-        if(account == null){
-            System.out.println("No such Account in a bank. You can register by running command -createAccount");
+        if(user == null){
+            System.out.println("No such User in a bank. You can register by running command -createUser");
             return;
         }
 
-        System.out.println("Current balance: " + account.getMoney());
-
+        for(String message: user.get_messages()){
+            System.out.println(message);
+        }
     }
 }

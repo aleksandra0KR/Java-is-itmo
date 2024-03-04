@@ -15,6 +15,19 @@ public class HelpCommand implements Runnable {
         System.out.println("-addPassport");
         System.out.println("-transaction");
         System.out.println("-cancelOperation");
+        System.out.println("-showBalance");
+        System.out.println("-showHistoryOfTransactions");
+        System.out.println("-addDays");
+        System.out.println("-changeCreditCommission");
+        System.out.println("-changeCreditLimit");
+        System.out.println("-changeDebitPercentage");
+        System.out.println("-changeDepositPercentage");
+        System.out.println("-changeUntrustedLimit");
+        System.out.println("-notifyUsers");
+        System.out.println("-showHistoryOfTransactions");
+        System.out.println("-showNotifications");
+        System.out.println("-subscribeAccountOnNotifications");
+        System.out.println("-unSubscribeAccountFROMNotifications");
         System.out.println("-stop");
     }
 }

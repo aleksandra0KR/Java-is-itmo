@@ -2,6 +2,7 @@ package aleksandra0KR.Picocli;
 
 import aleksandra0KR.Entity.Bank.CentralBank;
 import aleksandra0KR.Interface.AccountHandlers.AccountHandlerBuilder;
+import aleksandra0KR.Interface.TransactionHandlers.TransactionHandler;
 import aleksandra0KR.Interface.TransactionHandlers.TransactionHandlerBuilder;
 import picocli.CommandLine;
 
@@ -14,10 +15,13 @@ public class TransactionCommand implements Runnable{
         Scanner in = new Scanner(System.in);
 
         System.out.println("Please, enter type of transaction: ");
+        System.out.println("-replenishment");
+        System.out.println("-transfer");
+        System.out.println("Please, enter type of transaction: ");
         String typeOfTransaction = in.nextLine();
 
-        var handlerBuilder = new TransactionHandlerBuilder();
-        var handler = handlerBuilder.GetHandler();
+        TransactionHandlerBuilder handlerBuilder = new TransactionHandlerBuilder();
+        TransactionHandler handler = handlerBuilder.GetHandler();
         handler.HandleRequest(typeOfTransaction);
     }
 }

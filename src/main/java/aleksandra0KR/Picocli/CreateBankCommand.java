@@ -17,18 +17,18 @@ public class CreateBankCommand implements Runnable{
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);
-        var centralBank = CentralBank.getInstance();
+        CentralBank centralBank = CentralBank.getInstance();
 
         System.out.println("Please, enter bank name:");
         String bankName = in.nextLine();
 
-        var bank = centralBank.GetBank(bankName);
+        Bank bank = centralBank.GetBank(bankName);
         if(bank != null) {
             System.out.println("Such bank already exists");
             return;
         }
 
-        var bankBuilder = new BankBuilder();
+        BankBuilder bankBuilder = new BankBuilder();
         bankBuilder.SetBankName(bankName);
         System.out.println("Please, enter Deposit Percentage (LowerBoundary, TopBoundary, Percentage):");
         String numbers = in.nextLine();
@@ -52,11 +52,10 @@ public class CreateBankCommand implements Runnable{
 
         System.out.println("Please, enter Credit Limit:");
         BigDecimal creditLimit = new BigDecimal(in.nextLine());
-        bankBuilder.SetCreditLimit(creditLimit);
 
         System.out.println("Please, enter Credit Commission:");
         BigDecimal creditCommission = new BigDecimal(in.nextLine());
-        bankBuilder.SetCreditCommission(creditCommission);
+        bankBuilder.SetCreditRules(creditLimit, creditCommission);
 
         System.out.println("Please, enter Debit Percentage:");
         BigDecimal debitPercentage = new BigDecimal(in.nextLine());
@@ -69,7 +68,7 @@ public class CreateBankCommand implements Runnable{
 
         System.out.println("Please, enter untrusted users limit:");
         BigDecimal untrustedLimit = new BigDecimal(in.nextLine());
-        bankBuilder.SetUntrustedLimit(untrustedLimit);
+        bankBuilder.SetUntrustedRules(untrustedLimit);
 
         centralBank.AddBank(bankBuilder.GetBank());
 

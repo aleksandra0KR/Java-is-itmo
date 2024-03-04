@@ -1,6 +1,8 @@
 package aleksandra0KR.Picocli;
 
 import aleksandra0KR.Entity.Bank.CentralBank;
+import aleksandra0KR.Entity.User.User;
+import aleksandra0KR.Interface.AccountHandlers.AccountHandler;
 import aleksandra0KR.Interface.AccountHandlers.AccountHandlerBuilder;
 import picocli.CommandLine;
 
@@ -28,7 +30,7 @@ public class CreateAccountCommand implements Runnable {
 
         System.out.println("Please, enter User's ID");
         UUID userId = UUID.fromString(in.nextLine());
-        var user = bank.GetUser(userId);
+        User user = bank.GetUser(userId);
         if(user == null){
             System.out.println("User is not client of a bank. You can register by running command -crateUser");
             return;
@@ -40,8 +42,8 @@ public class CreateAccountCommand implements Runnable {
         System.out.println("Please, enter Money:");
         BigDecimal money = new BigDecimal(in.nextLine());
 
-        var handlerBuilder = new AccountHandlerBuilder();
-        var handler = handlerBuilder.GetHandler();
+        AccountHandlerBuilder handlerBuilder = new AccountHandlerBuilder();
+        AccountHandler handler = handlerBuilder.GetHandler();
         handler.HandleRequest(user, bank, typeOfAccount, money);
 
     }

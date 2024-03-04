@@ -11,7 +11,7 @@ public class CancelTransactionCommand implements Runnable{
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);
-        var centralBank = CentralBank.getInstance();
+        CentralBank centralBank = CentralBank.getInstance();
 
         System.out.println("Please, enter operation's ID:");
         UUID operationId = UUID.fromString(in.nextLine());
