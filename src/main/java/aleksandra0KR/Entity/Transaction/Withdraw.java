@@ -10,19 +10,17 @@ import java.math.BigDecimal;
 
 @AllArgsConstructor
 public class Withdraw implements Transaction {
-    private Account Sender;
-    private Account Receiver;
+    private Account Account;
     private BigDecimal Money;
     private Status Status;
 
     @Override
     public void execute() {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
-        checker.CheckValidationOfTransaction(Receiver, Sender, Money);
-
-        Sender.Money = Sender.Money.add(Money);
-        Receiver.Money = Receiver.Money.subtract(Money);
+        checker.CheckValidationOfTransaction(Account, Money, Status);
+        Account.TakeOffMoney(Money);
         Status = Status.Valid;
+        Account.HistoryOfTransactions.add(this);
 
     }
 
@@ -30,11 +28,15 @@ public class Withdraw implements Transaction {
     public void cancel() {
 
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
-        checker.CheckingForValidTransactionForCancel(Receiver, Sender, Money, Status);
+        checker.CheckingForValidTransactionForCancel(Account, Money, Status);
 
-        Sender.Money = Sender.Money.subtract(Money);
-        Receiver.Money = Receiver.Money.add(Money);
+        Account.Money = Account.Money.add(Money);
 
         Status = Status.Cancelled;
+    }
+
+    @Override
+    public void printInfo() {
+        System.out.println("Withdraw from Account: " + Account.AccountId + " Money: " + Money);
     }
 }

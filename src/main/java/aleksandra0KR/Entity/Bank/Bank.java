@@ -86,17 +86,24 @@ public class Bank implements SubjectBank {
         for(Account account: _accounts){
 
             Transaction transaction = account.MonthlyProfit();
-            transactionCaretaker.Backup(transaction);
-            transactionCaretakerCentralBank.Backup(transaction);
+            if(transaction != null) {
+                transactionCaretaker.Backup(transaction);
+                transactionCaretakerCentralBank.Backup(transaction);
+            }
+
 
             transaction = account.MonthlyCommission();
-            transactionCaretaker.Backup(transaction);
-            transactionCaretakerCentralBank.Backup(transaction);
+            if(transaction != null) {
+                transactionCaretaker.Backup(transaction);
+                transactionCaretakerCentralBank.Backup(transaction);
+            }
         }
     }
-    public void NotifyNewTime(Calendar calendar){
-        if(calendar == null) throw new NullPointerException("calender can't be null");
-        BankCalendar = calendar;
+    public void NotifyNewTime(int days){
+        BankCalendar.add(Calendar.DATE, days);
+        for(Account account : _accounts){
+            account.DailyPercentage(days);
+        }
     }
 
     public BigDecimal AccountDepositPercentage(BigDecimal depositMoney){
@@ -120,34 +127,32 @@ public class Bank implements SubjectBank {
        _observers.remove(observer);
     }
 
-    // Запуск обновления в каждом подписчике.
     public void Notify(String updates)
     {
-
         for (var observer: _observers)
         {
             observer.Update(updates);
         }
     }
-    public DebitAccount openDebitAccount(User user, BigDecimal money) {
+    public DebitAccount openDebitAccount(User user, BigDecimal money, int years) {
         Calendar closeDate = BankCalendar;
-        closeDate.add(Calendar.YEAR, 2);
+        closeDate.add(Calendar.YEAR, years);
         DebitAccount debitAccount = new DebitAccount(money, BankCalendar, closeDate, user, this, DebitPercentage);
         this.AddAccount(debitAccount);
         return debitAccount;
     }
 
-    public CreditAccount openCreditAccount(User user, BigDecimal money) {
+    public CreditAccount openCreditAccount(User user, BigDecimal money, int years) {
         Calendar closeDate = BankCalendar;
-        closeDate.add(Calendar.YEAR, 5);
+        closeDate.add(Calendar.YEAR, years);
         CreditAccount creditAccount = new CreditAccount(money, BankCalendar, closeDate, user, this, CreditLimit, CreditCommission);
         this.AddAccount(creditAccount);
         return creditAccount;
     }
 
-    public DepositAccount openDepositAccount(User user, BigDecimal money) {
+    public DepositAccount openDepositAccount(User user, BigDecimal money, int years) {
         Calendar closeDate = BankCalendar;
-        closeDate.add(Calendar.YEAR, 1);
+        closeDate.add(Calendar.YEAR, years);
         DepositAccount depositAccount = new DepositAccount(money, BankCalendar, closeDate, user, this, AccountDepositPercentage(money));
         this.AddAccount(depositAccount);
         return depositAccount;

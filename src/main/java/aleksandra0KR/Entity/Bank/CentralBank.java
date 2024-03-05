@@ -1,7 +1,7 @@
 package aleksandra0KR.Entity.Bank;
 
 import aleksandra0KR.Entity.Status.Status;
-import aleksandra0KR.Entity.Transaction.ReplenishmentDeposit;
+import aleksandra0KR.Entity.Transaction.Replenishment;
 import aleksandra0KR.Entity.Transaction.TransactionCaretaker;
 import aleksandra0KR.Entity.Transaction.Transfer;
 import aleksandra0KR.Entity.Transaction.Withdraw;
@@ -50,8 +50,9 @@ public class CentralBank {
         BankCalendar = calendar;
     }
 
-    public void CheckForNewMoth(){
-        if(BankCalendar.get(Calendar.DAY_OF_MONTH) == 1){
+    public void CheckForNewMoth(int oldMonth){
+        int newMonth = BankCalendar.get(Calendar.MONTH);
+        if(newMonth != oldMonth){
             for(Bank bank : _banks){
                 bank.NotifyNewMonth(TransactionCaretaker);
             }
@@ -65,17 +66,21 @@ public class CentralBank {
     public UUID Transfer(Account sender, Account receiver, BigDecimal amount){
         return TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
     }
-    public UUID Withdraw(Account sender, Account receiver, BigDecimal amount){
-        return TransactionCaretaker.Backup(new Withdraw(sender, receiver, amount, Status.Created));
+    public UUID Withdraw(Account account, BigDecimal amount){
+        return TransactionCaretaker.Backup(new Withdraw(account, amount, Status.Created));
     }
 
     public UUID ReplenishmentDeposit(Account sender, BigDecimal amount){
-        return TransactionCaretaker.Backup(new ReplenishmentDeposit(sender, amount, Status.Created));
+        return TransactionCaretaker.Backup(new Replenishment(sender, amount, Status.Created));
     }
 
     public void AddTime(int days){
+        int oldMonth = BankCalendar.get(Calendar.MONTH);
         BankCalendar.add(Calendar.DATE, days);
+        for(Bank bank : _banks){
+            bank.NotifyNewTime(days);
+        }
+        this.CheckForNewMoth(oldMonth);
     }
 
-    // TODO add creating of Account which trigers bank
 }

@@ -2,9 +2,7 @@ package aleksandra0KR.Model.Account;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 import aleksandra0KR.Entity.Status.Status;
 import aleksandra0KR.Entity.Transaction.Transfer;
@@ -18,6 +16,7 @@ public abstract class Account {
     public BigDecimal Profit;
     @Getter
     public UUID AccountId;
+    @Getter
     public BigDecimal Money;
     protected Calendar CreationDate;
     public Calendar CloseDate;
@@ -26,6 +25,8 @@ public abstract class Account {
     public BigDecimal Percentage;
 
     public BigDecimal Commission;
+
+    public List<Transaction> HistoryOfTransactions;
 
 
     public Account(BigDecimal money, Calendar creationDate, Calendar closeDate, User user, BigDecimal percentage, BigDecimal commission){
@@ -36,22 +37,19 @@ public abstract class Account {
         User = user;
         Percentage = percentage;
         Commission = commission;
+        Profit = BigDecimal.ZERO;
+        HistoryOfTransactions = new ArrayList<>();
 
     }
-    public BigDecimal DailyPercentage(){
-        if(Money.compareTo(BigDecimal.ZERO) <= 0) {
-            return BigDecimal.ZERO;
-        }
-        BigDecimal dailyProfit = Percentage.divide(BigDecimal.valueOf(365), 10, RoundingMode.CEILING).multiply(Money);
-        Profit.add(dailyProfit);
-        return dailyProfit;
-    }
-    public Transaction MonthlyProfit(){
-        Transaction transaction = new Withdraw(this,Bank.Account, Profit, Status.Created);
-        return transaction;
-    }
+    public abstract void DailyPercentage(int days);
+    public abstract Transaction MonthlyProfit();
 
-    public Transaction MonthlyCommission(){
-        return (new Transfer(this,Bank.Account, Commission, Status.Created));
-    }
+    public abstract Transaction MonthlyCommission();
+
+    public void FillUpMoney(BigDecimal money){
+        if(money.compareTo(BigDecimal.ZERO) <= 0) throw new IllegalArgumentException("Amount of money should be > 0");
+        Money = Money.add(money);
+    };
+
+    public abstract void TakeOffMoney(BigDecimal money);
 }

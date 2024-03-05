@@ -10,7 +10,7 @@ import java.util.UUID;
 public class TransferHandler extends TransactionHandler {
     @Override
     public void HandleRequest(String typeOfTransaction) {
-        if(Objects.equals(typeOfTransaction, "transfer")){
+        if(Objects.equals(typeOfTransaction, "-transfer")){
             Scanner in = new Scanner(System.in);
             var centralBank = CentralBank.getInstance();
 

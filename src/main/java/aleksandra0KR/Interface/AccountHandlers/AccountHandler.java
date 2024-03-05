@@ -11,5 +11,5 @@ public abstract class AccountHandler {
     @Setter
     @Getter
     public AccountHandler Successor;
-    public abstract void HandleRequest(User user, Bank bank, String typeOfAccount, BigDecimal money);
+    public abstract void HandleRequest(User user, Bank bank, String typeOfAccount, BigDecimal money, int years);
 }

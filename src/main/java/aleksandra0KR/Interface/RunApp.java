@@ -5,7 +5,11 @@ import picocli.CommandLine;
 
 import java.util.*;
 
-@CommandLine.Command(name = "myapp", subcommands = {StopCommand.class, HelpCommand.class, CreateUserCommand.class, CreateBankCommand.class, CreateAccountCommand.class, AddAddressCommand.class, AddPassportCommand.class, TransactionCommand.class, CancelTransactionCommand.class})
+@CommandLine.Command(name = "myapp", subcommands = {StopCommand.class, HelpCommand.class,
+        CreateUserCommand.class, CreateBankCommand.class, CreateAccountCommand.class,
+        AddAddressCommand.class, AddPassportCommand.class, TransactionCommand.class,
+        CancelTransactionCommand.class, ShowBalanceCommand.class, AddDaysCommand.class,
+        ShowHistoryOfTransactions.class})
 public class RunApp {
     private static final Map<String, Runnable> COMMANDS = new HashMap<>();
 
@@ -19,6 +23,10 @@ public class RunApp {
         COMMANDS.put("-addAddress", new AddAddressCommand());
         COMMANDS.put("-transaction", new TransactionCommand());
         COMMANDS.put("-cancelTransaction", new CancelTransactionCommand());
+        COMMANDS.put("-showBalance", new ShowBalanceCommand());
+        COMMANDS.put("-addDays", new AddDaysCommand());
+        COMMANDS.put("-showHistoryOfTransactions", new ShowHistoryOfTransactions());
+
     }
 
     public static void main(String[] args) {
@@ -34,4 +42,3 @@ public class RunApp {
     }
 }
 
-// TODO all UUID equals

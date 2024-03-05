@@ -8,8 +8,10 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+import static aleksandra0KR.Entity.Status.Status.Created;
+
 @AllArgsConstructor
-public class ReplenishmentDeposit implements Transaction {
+public class Replenishment implements Transaction {
     private Account Account;
     private BigDecimal Money;
     private Status Status;
@@ -19,8 +21,10 @@ public class ReplenishmentDeposit implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Account, Money, Status);
 
-        Account.Money = Account.Money.add(Money);
+
+        Account.FillUpMoney(Money);
         Status = Status.Valid;
+        Account.HistoryOfTransactions.add(this);
     }
 
     @Override
@@ -32,5 +36,10 @@ public class ReplenishmentDeposit implements Transaction {
         Account.Money = Account.Money.subtract(Money);
 
         Status = Status.Cancelled;
+    }
+
+    @Override
+    public void printInfo() {
+        System.out.println("Replenishment Account: " + Account.AccountId + " Money: " + Money);
     }
 }

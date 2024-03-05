@@ -7,10 +7,10 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class ReplenishmentDepositHandler extends TransactionHandler {
+public class ReplenishmentHandler extends TransactionHandler {
     @Override
     public void HandleRequest(String typeOfTransaction) {
-        if(Objects.equals(typeOfTransaction, "-depositReplenishment")){
+        if(Objects.equals(typeOfTransaction, "-replenishment")){
             Scanner in = new Scanner(System.in);
             var centralBank = CentralBank.getInstance();
 
@@ -42,8 +42,9 @@ public class ReplenishmentDepositHandler extends TransactionHandler {
         {
             System.out.println("There is no such operation");
             System.out.println("List of operations: ");
-            System.out.println("-depositReplenishment");
+            System.out.println("-replenishment");
             System.out.println("-transfer");
+            System.out.println("-withdraw");
         }
     }
 

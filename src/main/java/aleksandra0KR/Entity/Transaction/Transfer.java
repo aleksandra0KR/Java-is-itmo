@@ -18,11 +18,13 @@ public class Transfer implements Transaction {
     @Override
     public void execute() {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
-        checker.CheckValidationOfTransaction(Sender, Receiver, Money);
+        checker.CheckValidationOfTransaction(Sender, Receiver, Money, Status);
 
         Sender.Money = Sender.Money.subtract(Money);
         Receiver.Money =  Receiver.Money.add(Money);
         Status = Status.Valid;
+        Sender.HistoryOfTransactions.add(this);
+        Receiver.HistoryOfTransactions.add(this);
 
     }
 
@@ -36,5 +38,10 @@ public class Transfer implements Transaction {
         Sender.Money = Sender.Money.add(Money);
 
         Status = Status.Cancelled;
+    }
+
+    @Override
+    public void printInfo() {
+        System.out.println("Transaction Sender: " + Receiver.AccountId + " Receiver: " + Sender.AccountId + " Money: " + Money);
     }
 }

@@ -17,6 +17,7 @@ public class TransactionCommand implements Runnable{
         System.out.println("Please, enter type of transaction: ");
         System.out.println("-replenishment");
         System.out.println("-transfer");
+        System.out.println("-withdraw");
         System.out.println("Please, enter type of transaction: ");
         String typeOfTransaction = in.nextLine();
 

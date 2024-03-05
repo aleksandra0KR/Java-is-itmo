@@ -27,23 +27,22 @@ public class BankBuilder {
     }
 
     public void SetDebitPercentage(BigDecimal debitPercentage){
-        Bank.DebitPercentage = debitPercentage;
+
+        Bank.setDebitPercentage(debitPercentage);
     }
 
     public void SetDepositPercentage(List<DepositMoneyGapPercentage> depositPercentage){
-        Bank.DepositPercentage = depositPercentage;
+        Bank.setDepositPercentage(depositPercentage);
     }
 
-    public void SetCreditLimit(BigDecimal creditLimit){
-        Bank.CreditLimit = creditLimit;
+    public void SetCreditRules(BigDecimal creditLimit, BigDecimal creditCommission){
+
+        Bank.setCreditLimit(creditLimit);
+        Bank.setCreditCommission(creditCommission);
     }
 
-    public void SetCreditCommission(BigDecimal creditCommission){
-        Bank.CreditCommission = creditCommission;
-    }
-
-    public void SetUntrustedLimit(BigDecimal untrustedLimit){
-        Bank.UntrustedLimit = untrustedLimit;
+    public void SetUntrustedRules(BigDecimal untrustedLimit){
+        Bank.setUntrustedLimit(untrustedLimit);
     }
 
     public Bank GetBank(){

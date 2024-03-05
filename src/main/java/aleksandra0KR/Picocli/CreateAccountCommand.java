@@ -37,14 +37,20 @@ public class CreateAccountCommand implements Runnable {
         }
 
         System.out.println("Please, enter type of account: ");
+        System.out.println("debit");
+        System.out.println("credit");
+        System.out.println("deposit");
         String typeOfAccount = in.nextLine();
 
         System.out.println("Please, enter Money:");
         BigDecimal money = new BigDecimal(in.nextLine());
 
+        System.out.println("Please, enter years");
+        int years = in.nextInt();
+
         AccountHandlerBuilder handlerBuilder = new AccountHandlerBuilder();
         AccountHandler handler = handlerBuilder.GetHandler();
-        handler.HandleRequest(user, bank, typeOfAccount, money);
+        handler.HandleRequest(user, bank, typeOfAccount, money, years);
 
     }
 }
