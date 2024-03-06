@@ -1,8 +1,19 @@
 package aleksandra0KRBank.Console.Interface.AccountHandlers;
 
+
+/**
+ * Class for building a AccountHandler
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 public class AccountHandlerBuilder {
 
-    AccountHandler AccountHandler;
+    AccountHandler AccountHandler; // The current account handler.
+
+    /**
+     * Constructs a new AccountHandlerBuilder
+     * initialize new AccountHandler and it's Successors
+     */
     public AccountHandlerBuilder(){
         AccountHandler = new CreditAccountHandler();
         AccountHandler.Successor = new DebitAccountHandler();
@@ -11,5 +22,5 @@ public class AccountHandlerBuilder {
 
     public AccountHandler GetHandler(){
         return AccountHandler;
-    }
+    } // Return the current account handler.
 }

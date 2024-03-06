@@ -7,7 +7,20 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Class for handling performance of transfer transaction requests
+ * Extends TransactionHandler class.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 public class TransferHandler extends TransactionHandler {
+
+    /**
+     * Handles a request for a transfer transaction.
+     * If the request is for a transfer transaction, it prompts for sender and receiver bank and account details, processes the transfer, and prints the operation's ID.
+     * If not, it passes the request to the successor handler.
+     * @param typeOfTransaction The type of transaction requested.
+*/
     @Override
     public void HandleRequest(String typeOfTransaction) {
         if(Objects.equals(typeOfTransaction, "-transfer")){

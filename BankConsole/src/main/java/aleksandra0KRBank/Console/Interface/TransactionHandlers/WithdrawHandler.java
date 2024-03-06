@@ -7,7 +7,20 @@ import java.util.Objects;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Class for handling performance of withdraw transaction requests
+ * Extends TransactionHandler class.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 public class WithdrawHandler extends TransactionHandler{
+
+    /**
+     * Handles a request for a withdraw transaction.
+     * If the request is for a withdraw transaction, it prompts for bank and account details, processes the withdrawal, and prints the operation's ID.
+     * If not, it passes the request to the successor handler.
+     * @param typeOfTransaction The type of transaction requested.
+*/
     @Override
     public void HandleRequest(String typeOfTransaction) {
         if(Objects.equals(typeOfTransaction, "-withdraw")){
