@@ -1,7 +1,10 @@
 package aleksandra0KRBank.Model.Transaction;
 
-import java.util.UUID;
-
+/**
+ * Interface for transaction
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 public interface Transaction {
     void execute();
     void cancel();
