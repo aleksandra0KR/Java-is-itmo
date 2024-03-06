@@ -6,6 +6,12 @@ import picocli.CommandLine;
 
 import java.util.*;
 
+/**
+ * Main class to run the banking application with various commands.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
+
 @CommandLine.Command(name = "myapp", subcommands = {StopCommand.class, HelpCommand.class,
         CreateUserCommand.class, CreateBankCommand.class, CreateAccountCommand.class,
         AddAddressCommand.class, AddPassportCommand.class, TransactionCommand.class,
@@ -41,6 +47,11 @@ public class RunApp {
         COMMANDS.put("-changeUntrustedLimit", new ChangeUntrustedLimitCommand());
 
     }
+
+    /**
+     * Main method to run the bank application and handle user commands.
+     * @param args Command line arguments.
+     */
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);

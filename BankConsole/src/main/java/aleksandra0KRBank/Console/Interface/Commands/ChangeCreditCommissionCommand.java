@@ -7,8 +7,15 @@ import picocli.CommandLine;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+/**
+ * Command class for changing commission of a certain bank by its name
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-changeCreditCommission", description = "Changes credit commission of a bank")
 public class ChangeCreditCommissionCommand implements Runnable {
+
+    // Changes credit commission of a bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

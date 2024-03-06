@@ -8,9 +8,16 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for unsubscribe users from notifications of a bank by name of a bank and users ID
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-unSubscribeAccountFROMNotifications", description = "Unsubscribes user from bank's notifications by it's id")
 
 public class UnSubscribeAccountFromNotificationsCommand implements Runnable{
+
+    // Unsubscribes user from bank's notifications by it's id
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

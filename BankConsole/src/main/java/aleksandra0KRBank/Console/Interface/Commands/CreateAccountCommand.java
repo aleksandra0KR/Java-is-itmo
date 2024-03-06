@@ -10,9 +10,15 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for creating an account for a certain user in a certain bank
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-createAccount", description = "Creates new account")
 public class CreateAccountCommand implements Runnable {
 
+    // Creates new account in needed bank
     @Override
     public void run() {
 

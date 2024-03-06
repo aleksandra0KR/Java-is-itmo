@@ -6,9 +6,17 @@ import picocli.CommandLine;
 
 import java.util.Scanner;
 
+
+/**
+ * Command class for notifying all users of a bank
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-notifyUsers", description = "Sends to users notifications from bank")
 
 public class NotifyUsersCommand implements Runnable{
+
+    // Sends to users notifications from bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

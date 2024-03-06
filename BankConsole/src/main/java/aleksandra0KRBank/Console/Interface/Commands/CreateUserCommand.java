@@ -8,8 +8,15 @@ import picocli.CommandLine;
 
 import java.util.Scanner;
 
+/**
+ * Command class for creating a user in a bank
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-createUser", description = "Creates new user of a bank")
 public class CreateUserCommand implements Runnable{
+
+    // Creates new user of a bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

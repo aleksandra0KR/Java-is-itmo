@@ -8,9 +8,16 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for showing notifications of specific user by its ID
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-showNotifications", description = "Shows user's messages from bank")
 
 public class ShowNotificationsCommand implements Runnable{
+
+    // Shows user's messages from bank by ID
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

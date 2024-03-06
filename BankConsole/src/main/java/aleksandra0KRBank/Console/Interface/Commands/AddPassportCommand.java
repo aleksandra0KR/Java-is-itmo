@@ -8,9 +8,15 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for adding a passport to a user by its ID  in the banking system.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-addPassport", description = "Adds passport to user")
 public class AddPassportCommand implements Runnable{
 
+    // Executes the command to add a passport to a user.
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

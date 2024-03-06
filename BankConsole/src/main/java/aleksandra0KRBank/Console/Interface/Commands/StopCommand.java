@@ -2,8 +2,15 @@ package aleksandra0KRBank.Console.Interface.Commands;
 
 import picocli.CommandLine;
 
+/**
+ * Command class for stop running
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-stop", description = "Stops program")
 public class StopCommand implements Runnable {
+
+    // Stops program
     @Override
     public void run() {
         System.out.println("Running is finished");

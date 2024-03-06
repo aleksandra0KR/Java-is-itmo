@@ -6,8 +6,15 @@ import picocli.CommandLine;
 
 import java.util.Scanner;
 
+/**
+ * Command class for transaction performance
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-transaction", description = "Run transaction")
 public class TransactionCommand implements Runnable{
+
+    // Run transaction
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

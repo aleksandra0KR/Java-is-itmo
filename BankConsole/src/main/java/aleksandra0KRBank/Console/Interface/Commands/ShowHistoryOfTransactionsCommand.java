@@ -9,8 +9,15 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for showing history of transactions of specific account by its ID
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-showHistoryOfTransactions", description = "Shows account's transactions by it's ID")
 public class ShowHistoryOfTransactionsCommand implements Runnable{
+
+    // Shows account's transactions by it's ID
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

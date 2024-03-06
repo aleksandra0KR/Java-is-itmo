@@ -7,9 +7,16 @@ import picocli.CommandLine;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+/**
+ * Command class for changing debit percentage of a certain bank by its name
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-changeDebitPercentage", description = "Changes debit percentage of a bank")
 
 public class ChangeDebitPercentageCommand implements Runnable {
+
+    // Changes debit percentage of a bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

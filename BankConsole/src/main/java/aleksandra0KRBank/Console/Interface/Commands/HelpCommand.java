@@ -2,9 +2,15 @@ package aleksandra0KRBank.Console.Interface.Commands;
 
 import picocli.CommandLine;
 
+/**
+ * Command class for output all existing commands
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-help", description = "Prints all commands")
 public class HelpCommand implements Runnable {
 
+    // Prints all commands
     @Override
     public void run() {
         System.out.println("Commands:");

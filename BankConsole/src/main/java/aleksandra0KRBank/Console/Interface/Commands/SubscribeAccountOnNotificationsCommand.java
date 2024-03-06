@@ -8,9 +8,15 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for subscribe users for notifications of a bank by name of a bank and users ID
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-subscribeAccountOnNotifications", description = "Subscribes user on bank's notifications by it's id")
 public class SubscribeAccountOnNotificationsCommand implements Runnable {
 
+    // Subscribes user on bank's notifications by it's id
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

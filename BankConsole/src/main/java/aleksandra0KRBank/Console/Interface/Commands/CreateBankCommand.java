@@ -11,8 +11,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Command class for creating a bank
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-createBank", description = "Creates new bank")
 public class CreateBankCommand implements Runnable{
+
+    // Creates new bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

@@ -5,8 +5,14 @@ import picocli.CommandLine;
 
 import java.util.Scanner;
 
+/**
+ * Command class for adding days to a central bank in the banking system.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-addDays", description = "Adds days to central bank")
 public class AddDaysCommand implements Runnable{
+    // Executes the command to add days to a central bank.
     @Override
     public void run() {
 

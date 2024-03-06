@@ -6,8 +6,15 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for cancel operation by its ID
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-cancelTransaction", description = "Cancels transaction")
 public class CancelTransactionCommand implements Runnable{
+
+    // Cancels operation
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

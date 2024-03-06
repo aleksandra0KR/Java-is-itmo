@@ -10,8 +10,15 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Command class for changing deposit percentage of a certain bank by its name
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @CommandLine.Command(name = "-changeDepositPercentage", description = "Changes deposit percentage of a bank")
 public class ChangeDepositPercentageCommand implements Runnable {
+
+    // Changes deposit percentage of a bank
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);

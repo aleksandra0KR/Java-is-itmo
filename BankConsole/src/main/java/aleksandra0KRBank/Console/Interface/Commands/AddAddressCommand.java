@@ -9,8 +9,16 @@ import picocli.CommandLine;
 import java.util.Scanner;
 import java.util.UUID;
 
+/**
+ * Command class for adding an address to a user by its ID in the banking system.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
+
 @CommandLine.Command(name = "-addAddress", description = "Add address to user")
 public class AddAddressCommand implements Runnable{
+
+    // Executes the command to add an address to a user.
     @Override
     public void run() {
         Scanner in = new Scanner(System.in);
