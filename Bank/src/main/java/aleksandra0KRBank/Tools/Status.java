@@ -1,4 +1,4 @@
-package aleksandra0KRBank.Entity.Status;
+package aleksandra0KRBank.Tools;
 
 // Enum representing the status of a transaction or account
 public enum Status {

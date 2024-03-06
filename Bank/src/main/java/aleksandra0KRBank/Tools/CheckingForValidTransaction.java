@@ -6,11 +6,26 @@ import aleksandra0KRBank.Exceptions.NotEnoughMoneyException;
 import aleksandra0KRBank.Exceptions.NullAccountException;
 import aleksandra0KRBank.Exceptions.UntrustedTransactionException;
 import aleksandra0KRBank.Model.Account.Account;
-import aleksandra0KRBank.Entity.Status.Status;
 
 import java.math.BigDecimal;
 
+/**
+ * Class for checking the validity of transactions
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
+
 public class CheckingForValidTransaction {
+
+    /**
+     * Checks the validation of a transaction with a single sender.
+     * @param sender The account sending the money.
+     * @param money The amount of money being sent.
+     * @param status The status of the transaction.
+     * @throws CancelledOperationException customized exception if operation was cancelled
+     * @throws NullAccountException customized exception if sender is null
+     * @throws UntrustedTransactionException customized exception if exceeded the untrusted limit
+    */
     public void CheckValidationOfTransaction(Account sender, BigDecimal money, Status status){
         if (status == Status.Cancelled) throw new CancelledOperationException();
 
@@ -23,6 +38,18 @@ public class CheckingForValidTransaction {
 
         }
     }
+
+    /**
+     * Checks the validation of a transaction between a sender and a receiver.
+     * @param sender The account sending the money.
+     * @param receiver The account receiving the money.
+     * @param money The amount of money being sent.
+     * @param status The status of the transaction.
+     * @throws CancelledOperationException customized exception if operation was cancelled
+     * @throws NullAccountException customized exception if sender is null
+     * @throws UntrustedTransactionException customized exception if exceeded the untrusted limit
+     * @throws NotEnoughMoneyException customized exception if not enough money on account
+     */
     public void CheckValidationOfTransaction(Account sender, Account receiver, BigDecimal money, Status status){
         if (status == Status.Cancelled) throw new CancelledOperationException();
 
@@ -44,7 +71,15 @@ public class CheckingForValidTransaction {
         }
     }
 
-
+    /**
+     * Checks the validation of a cancellation transaction with a single sender.
+     * @param sender The account initiating the cancellation.
+     * @param money The amount of money involved in the cancellation.
+     * @param status The status of the transaction being cancelled.
+     * @throws CancelledOperationException customized exception if operation was cancelled
+     * @throws NullAccountException customized exception if sender is null
+     * @throws NotEnoughMoneyException customized exception if not enough money on account
+     */
     public void CheckingForValidTransactionForCancel(Account sender, BigDecimal money, Status status){
         if (status == Status.Cancelled) throw new CancelledOperationException();
 
@@ -53,6 +88,17 @@ public class CheckingForValidTransaction {
         if(sender.Money.compareTo(money) < 0) throw new NotEnoughMoneyException();
 
     }
+
+    /**
+     * Checks the validation of a cancellation transaction between a sender and a receiver.
+     * @param sender The account initiating the cancellation.
+     * @param receiver The account involved in the cancellation.
+     * @param money The amount of money involved in the cancellation.
+     * @param status The status of the transaction being cancelled.
+     * @throws CancelledOperationException customized exception if operation was cancelled
+     * @throws NullAccountException customized exception if sender is null
+     * @throws NotEnoughMoneyException customized exception if not enough money on account
+     */
     public void CheckingForValidTransactionForCancel(Account sender, Account receiver, BigDecimal money, Status status){
         if (status == Status.Cancelled) throw new CancelledOperationException();
 
