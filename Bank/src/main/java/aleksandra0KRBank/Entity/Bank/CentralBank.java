@@ -1,6 +1,6 @@
 package aleksandra0KRBank.Entity.Bank;
 
-import aleksandra0KRBank.Entity.Status.Status;
+import aleksandra0KRBank.Tools.Status;
 import aleksandra0KRBank.Entity.Transaction.Replenishment;
 import aleksandra0KRBank.Entity.Transaction.TransactionCaretaker;
 import aleksandra0KRBank.Entity.Transaction.Transfer;

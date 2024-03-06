@@ -2,7 +2,7 @@ package aleksandra0KRBank.Entity.Transaction;
 
 import aleksandra0KRBank.Model.Transaction.Transaction;
 import aleksandra0KRBank.Model.Account.Account;
-import aleksandra0KRBank.Entity.Status.Status;
+import aleksandra0KRBank.Tools.Status;
 import aleksandra0KRBank.Tools.CheckingForValidTransaction;
 import lombok.AllArgsConstructor;
 

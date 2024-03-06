@@ -2,7 +2,7 @@ package aleksandra0KRBank.Entity.Account;
 
 import aleksandra0KRBank.Entity.Transaction.Transfer;
 import aleksandra0KRBank.Exceptions.NotEnoughMoneyException;
-import aleksandra0KRBank.Entity.Status.Status;
+import aleksandra0KRBank.Tools.Status;
 import aleksandra0KRBank.Model.Account.Account;
 import aleksandra0KRBank.Entity.User.User;
 import aleksandra0KRBank.Entity.Bank.Bank;

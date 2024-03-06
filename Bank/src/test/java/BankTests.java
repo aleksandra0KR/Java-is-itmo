@@ -5,7 +5,7 @@ import aleksandra0KRBank.Entity.Account.DepositAccount;
 import aleksandra0KRBank.Entity.Bank.Bank;
 import aleksandra0KRBank.Entity.Bank.BankBuilder;
 import aleksandra0KRBank.Entity.Bank.CentralBank;
-import aleksandra0KRBank.Entity.Status.Status;
+import aleksandra0KRBank.Tools.Status;
 import aleksandra0KRBank.Entity.Transaction.Replenishment;
 import aleksandra0KRBank.Entity.Transaction.Transfer;
 import aleksandra0KRBank.Entity.User.User;
