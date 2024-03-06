@@ -8,12 +8,22 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+/**
+ * Class for Withdraw
+ * Handles the process of subtracting money from an account.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class Withdraw implements Transaction {
     private Account Account;
     private BigDecimal Money;
     private Status Status;
 
+    /**
+     * Executes the withdrawal transaction by subtracting money from the account.
+     * Updates the status of the transaction to Valid and adds the transaction to the account's history.
+     */
     @Override
     public void execute() {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
@@ -24,6 +34,10 @@ public class Withdraw implements Transaction {
 
     }
 
+    /**
+     * Cancels the withdrawal transaction by adding back the withdrawn money to the account.
+     * Updates the status of the transaction to Cancelled.
+     */
     @Override
     public void cancel() {
 
@@ -35,6 +49,9 @@ public class Withdraw implements Transaction {
         Status = Status.Cancelled;
     }
 
+    /**
+     Prints information about the withdraw transaction.
+     */
     @Override
     public void printInfo() {
         System.out.println("Withdraw from Account: " + Account.AccountId + " Money: " + Money + "Status: " + Status);

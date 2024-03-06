@@ -8,12 +8,23 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+
+/**
+ * Class for Replenishment
+ * Handles the process of adding money to an account.
+ * @author Aleksandra0KR
+ * @version 1.0
+ */
 @AllArgsConstructor
 public class Replenishment implements Transaction {
     private Account Account;
     private BigDecimal Money;
     private Status Status;
 
+    /**
+     Executes the replenishment transaction.
+     Validates the transaction, adds money to the account, updates status, and logs the transaction.
+     */
     @Override
     public void execute() {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
@@ -25,6 +36,10 @@ public class Replenishment implements Transaction {
         Account.HistoryOfTransactions.add(this);
     }
 
+    /**
+     Cancels the replenishment transaction.
+     Validates the cancellation, deducts money from the account, and updates status to cancelled.
+     */
     @Override
     public void cancel() {
 
@@ -35,7 +50,9 @@ public class Replenishment implements Transaction {
 
         Status = Status.Cancelled;
     }
-
+    /**
+     Prints information about the replenishment transaction.
+     */
     @Override
     public void printInfo() {
         System.out.println("Replenishment Account: " + Account.AccountId + " Money: " + Money + "Status: " + Status);
