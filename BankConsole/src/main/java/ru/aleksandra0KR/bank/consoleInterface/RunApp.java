@@ -38,7 +38,7 @@ public class RunApp {
         COMMANDS.put("-notifyUsers", new NotifyUsersCommand());
         COMMANDS.put("-showNotifications", new ShowNotificationsCommand());
         COMMANDS.put("-subscribeAccountOnNotifications", new SubscribeAccountOnNotificationsCommand());
-        COMMANDS.put("-unSubscribeAccountFROMNotifications", new UnSubscribeAccountFromNotificationsCommand());
+        COMMANDS.put("-unSubscribeAccountFromNotifications", new UnSubscribeAccountFromNotificationsCommand());
         COMMANDS.put("-changeCreditCommission", new ChangeCreditCommissionCommand());
         COMMANDS.put("-changeCreditLimit", new ChangeCreditLimitCommand());
         COMMANDS.put("-changeDebitPercentage", new ChangeDebitPercentageCommand());

@@ -13,7 +13,7 @@ import java.util.UUID;
  * @author Aleksandra0KR
  * @version 1.0
  */
-@CommandLine.Command(name = "-unSubscribeAccountFROMNotifications", description = "Unsubscribes user from bank's notifications by it's id")
+@CommandLine.Command(name = "-unSubscribeAccountFromNotifications", description = "Unsubscribes user from bank's notifications by it's id")
 
 public class UnSubscribeAccountFromNotificationsCommand implements Runnable{
 
