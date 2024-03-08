@@ -5,6 +5,6 @@ package ru.aleksandra0KR.bank.Model.Observer;
  * @author Aleksandra0KR
  * @version 1.0
  */
-public interface    ObserverUser {
+public interface ObserverUser {
     void Update(String updates);
 }

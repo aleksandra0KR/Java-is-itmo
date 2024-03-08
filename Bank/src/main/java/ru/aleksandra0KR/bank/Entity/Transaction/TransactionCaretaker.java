@@ -7,13 +7,12 @@ import java.util.UUID;
 
 /**
  * The TransactionCaretaker class is responsible for managing the history of transactions and
- * providing functionality to backup and undo transactions.
+ * providing functionality to back up and undo transactions.
  * @author Aleksandra0KR
  * @version 1.0
  */
 public class TransactionCaretaker {
-    private HashMap<UUID, Transaction> TransactionHistory = new HashMap<>();
-    private Transaction _originator;
+    private final HashMap<UUID, Transaction> TransactionHistory = new HashMap<>();
 
     /**
      * Backs up a transaction by storing it in the transaction history along with a unique transaction ID.
@@ -23,10 +22,9 @@ public class TransactionCaretaker {
      */
     public UUID Backup(Transaction transaction)
     {
-        this._originator = transaction;
         UUID transactionId = UUID.randomUUID();
         transaction.execute();
-        this.TransactionHistory.put(transactionId, this._originator);
+        this.TransactionHistory.put(transactionId, transaction);
         return transactionId;
     }
 
@@ -43,6 +41,14 @@ public class TransactionCaretaker {
 
         var memento = this.TransactionHistory.get(transactionId);
         memento.cancel();
-        this.TransactionHistory.remove(memento);
+        TransactionHistory.remove(memento);
+    }
+
+    public Transaction GetTransaction(UUID transactionId){
+        if (!TransactionHistory.containsKey(transactionId))
+        {
+            return null;
+        }
+        return TransactionHistory.get(transactionId);
     }
 }

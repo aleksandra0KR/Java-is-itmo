@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+import static ru.aleksandra0KR.bank.Tools.Status.Cancelled;
+import static ru.aleksandra0KR.bank.Tools.Status.Valid;
+
 
 /**
  * Class for Replenishment
@@ -30,31 +33,30 @@ public class Replenishment implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Account, Money, Status);
 
-
         Account.FillUpMoney(Money);
-        Status = Status.Valid;
-        Account.HistoryOfTransactions.add(this);
+        Status = Valid;
+        Account.getHistoryOfTransactions().add(this);
+
     }
 
     /**
      Cancels the replenishment transaction.
-     Validates the cancellation, deducts money from the account, and updates status to cancelled.
+     Validates the cancellation, deducts money from the account, and updates status to cancel.
      */
     @Override
     public void cancel() {
-
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckingForValidTransactionForCancel(Account, Money, Status);
 
-        Account.Money = Account.Money.subtract(Money);
+        Account.setMoney(Account.getMoney().subtract(Money));
 
-        Status = Status.Cancelled;
+        Status = Cancelled;
     }
     /**
      Prints information about the replenishment transaction.
      */
     @Override
     public void printInfo() {
-        System.out.println("Replenishment Account: " + Account.AccountId + " Money: " + Money + "Status: " + Status);
+        System.out.println("Replenishment Account: " + Account.getAccountId() + " Money: " + Money + " Status: " + Status);
     }
 }

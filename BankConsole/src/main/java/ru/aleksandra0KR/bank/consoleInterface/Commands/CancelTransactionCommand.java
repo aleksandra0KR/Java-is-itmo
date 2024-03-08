@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.bank.consoleInterface.Commands;
 
+import ru.aleksandra0KR.bank.Entity.Bank.Bank;
 import ru.aleksandra0KR.bank.Entity.Bank.CentralBank;
 import picocli.CommandLine;
 
@@ -20,9 +21,21 @@ public class CancelTransactionCommand implements Runnable{
         Scanner in = new Scanner(System.in);
         CentralBank centralBank = CentralBank.getInstance();
 
+        System.out.println("Please, enter bank name:");
+        String SenderBankName = in.nextLine();
+        Bank SenderBank = centralBank.GetBank(SenderBankName);
+
         System.out.println("Please, enter operation's ID:");
         UUID operationId = UUID.fromString(in.nextLine());
-        centralBank.CancelTransaction(operationId);
+
+        if(centralBank.GetTransactionById(operationId) != null){
+            centralBank.CancelTransaction(operationId);
+            System.out.println("Operation is canceled");
+            return;
+        }
+
+        SenderBank.CancelTransaction(operationId);
         System.out.println("Operation is canceled");
+
     }
 }

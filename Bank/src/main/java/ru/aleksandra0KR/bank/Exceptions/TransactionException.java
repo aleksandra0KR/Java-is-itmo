@@ -7,6 +7,7 @@ package ru.aleksandra0KR.bank.Exceptions;
  */
 public class TransactionException extends RuntimeException{
     public TransactionException(String errorMessage) {
+
         super(errorMessage);
     }
 }

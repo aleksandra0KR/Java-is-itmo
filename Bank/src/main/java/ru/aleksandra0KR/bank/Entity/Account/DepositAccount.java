@@ -12,8 +12,7 @@ import ru.aleksandra0KR.bank.Model.Transaction.Transaction;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Calendar;
-
+import java.time.LocalDate;
 /**
  * Class for the deposit account
  * It extends the Account class and includes methods for managing money transactions and calculations.
@@ -31,9 +30,9 @@ public class DepositAccount extends Account {
      * @param bank the bank associated with the account
      * @param percentage the year percentage for profit calculation
      */
-    public DepositAccount(BigDecimal money, Calendar openDate, Calendar closeDate, User user, Bank bank, BigDecimal percentage) {
+    public DepositAccount(BigDecimal money, LocalDate openDate, LocalDate closeDate, User user, Bank bank, BigDecimal percentage) {
         super(money, openDate, closeDate, user, percentage, BigDecimal.ZERO);
-        Bank = bank;
+        setBank(bank);
     }
 
     /**
@@ -41,15 +40,14 @@ public class DepositAccount extends Account {
      *
      * @param days the number of days for which to calculate the daily percentage
      */
-    @Override
     public void DailyPercentage(int days) {
-        if(Money.compareTo(BigDecimal.ZERO) <= 0) {
+        if(getMoney().compareTo(BigDecimal.ZERO) <= 0) {
             return;
         }
 
-        BigDecimal dailyProfit = Percentage.divide(BigDecimal.valueOf(365), 10, RoundingMode.CEILING).multiply(Money);
+        BigDecimal dailyProfit = getPercentage().divide(BigDecimal.valueOf(365), 10, RoundingMode.CEILING).multiply(getMoney());
         BigDecimal daysProfit = dailyProfit.multiply(BigDecimal.valueOf(days));
-        Profit = Profit.add(daysProfit);
+        setProfit(getProfit().add(daysProfit));
     }
     /**
      * Calculates the monthly profit for the account.
@@ -57,20 +55,18 @@ public class DepositAccount extends Account {
      * @return a Transaction object representing the monthly profit operation
      */
 
-    @Override
     public Transaction MonthlyProfit() {
-        if (Percentage.equals(BigDecimal.ZERO)) return null;
-        Transaction transaction = new Transfer(Bank.Account,this, Profit, Status.Created);
-        Profit = BigDecimal.ZERO;
+        if (getPercentage().equals(BigDecimal.ZERO)) return null;
+        Transaction transaction = new Transfer(getBank().getAccount(),this, getProfit(), Status.Created);
+        setProfit(BigDecimal.ZERO);
         return transaction;
     }
 
     /**
-     * Calculates the monthly commission for the account. Deposit account doesn't have commission
+     * Calculates the monthly commission for the account. Deposit account doesn't have a commission
      *
      * @return a Transaction object representing the monthly commission operation
      */
-    @Override
     public Transaction MonthlyCommission() {
         return null;
     }
@@ -82,11 +78,10 @@ public class DepositAccount extends Account {
      * @throws DepositErrorTakeOffMoney customized exception if it's not a close date yet
      * @throws NotEnoughMoneyException customized exception if there is not enough money in the account to perform the transaction
      */
-    @Override
     public void TakeOffMoney(BigDecimal money) {
         CentralBank centralBank = CentralBank.getInstance();
-        if(CloseDate.compareTo(centralBank.getBankCalendar()) < 0) throw new DepositErrorTakeOffMoney();
-        if(Money.compareTo(money) < 0) throw new NotEnoughMoneyException();
-        Money = Money.subtract(money);
+        if(this.getCloseDate().isBefore(centralBank.getBankCalendar())) throw new DepositErrorTakeOffMoney();
+        if(getMoney().compareTo(money) < 0) throw new NotEnoughMoneyException();
+        setMoney(getMoney().subtract(money));
     }
 }

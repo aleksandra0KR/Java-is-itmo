@@ -7,6 +7,7 @@ package ru.aleksandra0KR.bank.Exceptions;
  */
 public class NotEnoughMoneyException extends TransactionException{
     public NotEnoughMoneyException() {
+
         super("On your account not enough money");
     }
 }

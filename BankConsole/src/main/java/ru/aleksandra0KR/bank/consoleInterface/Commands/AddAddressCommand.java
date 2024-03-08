@@ -44,6 +44,6 @@ public class AddAddressCommand implements Runnable{
         System.out.println("Please, enter address: ");
         String address = in.nextLine();
 
-        user.SetAddress(address);
+        user.setAddress(address);
     }
 }

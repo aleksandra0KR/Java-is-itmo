@@ -8,6 +8,9 @@ import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
+import static ru.aleksandra0KR.bank.Tools.Status.Cancelled;
+import static ru.aleksandra0KR.bank.Tools.Status.Valid;
+
 /**
  * Class for Withdraw
  * Handles the process of subtracting money from an account.
@@ -29,24 +32,25 @@ public class Withdraw implements Transaction {
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckValidationOfTransaction(Account, Money, Status);
         Account.TakeOffMoney(Money);
-        Status = Status.Valid;
-        Account.HistoryOfTransactions.add(this);
+        Status = Valid;
+        Account.getHistoryOfTransactions().add(this);
 
     }
 
     /**
      * Cancels the withdrawal transaction by adding back the withdrawn money to the account.
-     * Updates the status of the transaction to Cancelled.
+     * Updates the status of the transaction to Cancel.
      */
     @Override
     public void cancel() {
 
         CheckingForValidTransaction checker = new CheckingForValidTransaction();
         checker.CheckingForValidTransactionForCancel(Account, Money, Status);
+        checker.CheckValidationOfTransactionMoney(Account, Money);
 
-        Account.Money = Account.Money.add(Money);
+        Account.setMoney( Account.getMoney().add(Money));
 
-        Status = Status.Cancelled;
+        Status = Cancelled;
     }
 
     /**
@@ -54,6 +58,6 @@ public class Withdraw implements Transaction {
      */
     @Override
     public void printInfo() {
-        System.out.println("Withdraw from Account: " + Account.AccountId + " Money: " + Money + "Status: " + Status);
+        System.out.println("Withdraw from Account: " + Account.getAccountId() + " Money: " + Money + " Status: " + Status);
     }
 }

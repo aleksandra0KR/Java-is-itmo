@@ -9,7 +9,7 @@ import ru.aleksandra0KR.bank.Entity.Bank.Bank;
 import ru.aleksandra0KR.bank.Model.Transaction.Transaction;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 /**
  * Class for the credit account
@@ -18,7 +18,7 @@ import java.util.Calendar;
  * @version 1.0
  */
 public class CreditAccount extends Account {
-    private BigDecimal CreditLimit;
+    private final BigDecimal CreditLimit;
 
     /**
      * Constructs a CreditAccount object with the specified parameters.
@@ -31,26 +31,24 @@ public class CreditAccount extends Account {
      * @param creditLimit the maximum credit limit allowed for the account
      * @param commission the commission charged for using the account
      */
-    public CreditAccount(BigDecimal money, Calendar openDate, Calendar closeDate, User user, Bank bank, BigDecimal creditLimit, BigDecimal commission){
+    public CreditAccount(BigDecimal money, LocalDate openDate, LocalDate closeDate, User user, Bank bank, BigDecimal creditLimit, BigDecimal commission){
         super(money, openDate, closeDate, user,BigDecimal.ZERO, commission);
         CreditLimit = creditLimit;
-        Bank = bank;
+        setBank(bank);
     }
 
     /**
-     * Calculates daily percentage based on the number of days. CreditAccount doesn't have percentage
+     * Calculates daily percentage based on the number of days. CreditAccount doesn't have a percentage
      *
      * @param days the number of days for which to calculate the daily percentage
      */
-    @Override
     public void DailyPercentage(int days) {}
 
     /**
-     * Calculates the monthly profit for the account. CreditAccount doesn't have percentage
+     * Calculates the monthly profit for the account. CreditAccount doesn't have a percentage
      *
      * @return a Transaction object representing the monthly profit operation
      */
-    @Override
     public Transaction MonthlyProfit() {
         return null;
     }
@@ -62,8 +60,8 @@ public class CreditAccount extends Account {
      */
     public Transaction MonthlyCommission()
     {
-        if(Money.compareTo(BigDecimal.ZERO) < 0) {
-            return (new Transfer(this, Bank.Account, Commission, Status.Created));
+        if(getMoney().compareTo(BigDecimal.ZERO) < 0) {
+            return (new Transfer(this, getBank().getAccount(), getCommission(), Status.Created));
         }
         return null;
     }
@@ -74,9 +72,8 @@ public class CreditAccount extends Account {
      * @param money the amount to be subtracted from the account balance
      * @throws NotEnoughMoneyException customized exception if there is not enough money in the account to perform the transaction
      */
-    @Override
     public void TakeOffMoney(BigDecimal money) {
-        if(Money.compareTo(CreditLimit) < 0) throw new NotEnoughMoneyException();
-        Money = Money.subtract(money);
+        if(getMoney().compareTo(CreditLimit) < 0) throw new NotEnoughMoneyException();
+        setMoney(getMoney().subtract(money));
     }
 }

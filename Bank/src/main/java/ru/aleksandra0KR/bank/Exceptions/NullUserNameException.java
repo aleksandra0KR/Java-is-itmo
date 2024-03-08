@@ -7,6 +7,7 @@ package ru.aleksandra0KR.bank.Exceptions;
  */
 public class NullUserNameException extends UserExceptions{
     public NullUserNameException() {
+
         super("Name can't be null");
     }
 }

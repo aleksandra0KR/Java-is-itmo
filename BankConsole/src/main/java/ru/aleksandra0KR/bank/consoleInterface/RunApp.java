@@ -1,7 +1,5 @@
 package ru.aleksandra0KR.bank.consoleInterface;
 
-
-import aleksandra0KRBank.Console.Interface.Commands.*;
 import picocli.CommandLine;
 import ru.aleksandra0KR.bank.consoleInterface.Commands.*;
 
@@ -56,9 +54,8 @@ public class RunApp {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        CommandLine cmd = new CommandLine(new RunApp());
 
-        while (true) {
+        while(true) {
             System.out.println("Enter a command:");
             String input = scanner.nextLine();
 

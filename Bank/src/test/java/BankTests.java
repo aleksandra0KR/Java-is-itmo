@@ -79,7 +79,7 @@ public class BankTests {
     public void OpenDepositAccountMakeReplenishment() {
         Transaction addMoney = new Replenishment(debitAccount, BigDecimal.valueOf(100000), Status.Created);
         addMoney.execute();
-        Assertions.assertEquals(BigDecimal.valueOf(150000), debitAccount.Money);
+        Assertions.assertEquals(BigDecimal.valueOf(150000), debitAccount.getMoney());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class BankTests {
         CentralBank centralBank = CentralBank.getInstance();
         centralBank.AddTime(50);
         BigDecimal expected = new BigDecimal("16849.3151").setScale(10, RoundingMode.HALF_UP);
-        BigDecimal actual = depositAccount.Money.setScale(10, RoundingMode.HALF_UP);
+        BigDecimal actual = depositAccount.getMoney().setScale(10, RoundingMode.HALF_UP);
         assertEquals(expected, actual);
     }
 
@@ -95,7 +95,7 @@ public class BankTests {
     public void MakeTransfer() {
         Transaction transaction = new Transfer(creditAccount, debitAccount, BigDecimal.valueOf(10000), Status.Created);
         transaction.execute();
-        Assertions.assertEquals(BigDecimal.valueOf(990000), creditAccount.Money);
+        Assertions.assertEquals(BigDecimal.valueOf(990000), creditAccount.getMoney());
     }
 
     @Test
@@ -103,7 +103,46 @@ public class BankTests {
         bank.Attach(user);
         bank.Notify("Hello World!!!!!");
 
-        Assertions.assertEquals(user.get_messages().get(0),"Hello World!!!!!");
+        Assertions.assertEquals("Hello World!!!!!", user.get_messages().get(0));
     }
+
+    @Test
+    public void CancelTransfer() {
+        CentralBank centralBank = CentralBank.getInstance();
+        var transactionID = centralBank.Transfer(creditAccount, debitAccount, BigDecimal.valueOf(10000));
+        centralBank.CancelTransaction(transactionID);
+        Assertions.assertEquals( BigDecimal.valueOf(1000000), creditAccount.getMoney());
+    }
+
+    @Test
+    public void NotificationsDetach() {
+        bank.Attach(user);
+        bank.Notify("Hello World!!!!!");
+        bank.Detach(user);
+        bank.Notify("Hello World2.0!!!!!");
+
+        Assertions.assertEquals(1, user.get_messages().size());
+    }
+
+    @Test
+    public void ChangeCreditLimit() {
+        bank.setCreditLimit(BigDecimal.valueOf(100000));
+        Assertions.assertEquals(BigDecimal.valueOf(100000), bank.getCreditLimit());
+    }
+
+    @Test
+    public void ShowBalance() {
+        Assertions.assertEquals(BigDecimal.valueOf(50000),debitAccount.getMoney());
+    }
+
+    @Test
+    public void AddDays() {
+        CentralBank centralBank = CentralBank.getInstance();
+        var time = centralBank.getBankCalendar();
+        centralBank.AddTime(20);
+        time = time.plusDays(20);
+        Assertions.assertEquals(time, centralBank.getBankCalendar());
+    }
+
 
 }

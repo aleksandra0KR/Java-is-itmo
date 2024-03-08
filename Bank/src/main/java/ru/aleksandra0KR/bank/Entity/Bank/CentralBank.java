@@ -1,14 +1,16 @@
 package ru.aleksandra0KR.bank.Entity.Bank;
 
+import lombok.Setter;
+import ru.aleksandra0KR.bank.Model.Transaction.Transaction;
 import ru.aleksandra0KR.bank.Tools.Status;
-import ru.aleksandra0KR.bank.Entity.Transaction.Replenishment;
 import ru.aleksandra0KR.bank.Entity.Transaction.TransactionCaretaker;
 import ru.aleksandra0KR.bank.Entity.Transaction.Transfer;
-import ru.aleksandra0KR.bank.Entity.Transaction.Withdraw;
 import ru.aleksandra0KR.bank.Model.Account.Account;
 import lombok.Getter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 /**
@@ -25,15 +27,15 @@ public class CentralBank {
     private final List<Bank> _banks;
 
     @Getter
-    private Calendar BankCalendar;
-    private final ru.aleksandra0KR.bank.Entity.Transaction.TransactionCaretaker TransactionCaretaker;
+    @Setter
+    private LocalDate BankCalendar;
+    private final TransactionCaretaker TransactionCaretaker;
 
     /**
      Private constructor to initialize the CentralBank instance with default values.
      */
-
     private CentralBank(){
-        BankCalendar = Calendar.getInstance();
+        BankCalendar = LocalDate.now();
         _banks = new ArrayList<>();
         TransactionCaretaker = new TransactionCaretaker();
     }
@@ -56,8 +58,9 @@ public class CentralBank {
      */
 
     public Bank GetBank(String bankName){
+
         for(Bank bank: _banks){
-            if (Objects.equals(bank.Name, bankName)) return bank;
+            if (bank.getName().compareTo( bankName) == 0) return bank;
         }
         return null;
     }
@@ -67,9 +70,10 @@ public class CentralBank {
      @param bank The Bank object to add.
      */
     public void AddBank(Bank bank){
-        if (_banks.contains(bank)) return;
-        bank.BankCalendar = BankCalendar;
-        _banks.add(bank);
+        if(_banks.stream().noneMatch(a -> a.getBankId().compareTo(bank.getBankId()) == 0)) {
+            bank.setBankCalendar(BankCalendar);
+            _banks.add(bank);
+        }
     }
 
     /**
@@ -77,12 +81,13 @@ public class CentralBank {
      @param oldMonth The previous month value.
      @param oldYear The previous year value.
      */
-    public void CheckForNewMoth(int oldMonth, int oldYear){
-        int newMonth = BankCalendar.get(Calendar.MONTH);
-        int newYear = BankCalendar.get(Calendar.YEAR);
-        if(newMonth != oldMonth || newYear != oldYear){
+    public void CheckForNewMoth(Month oldMonth, int oldYear){
+
+        Month newMonth = BankCalendar.getMonth();
+        int newYear = BankCalendar.getYear();
+        if(newMonth.compareTo(oldMonth) != 0 || newYear != oldYear){
             for(Bank bank : _banks){
-                bank.NotifyNewMonth(TransactionCaretaker);
+                bank.NotifyNewMonth();
             }
         }
     }
@@ -96,7 +101,7 @@ public class CentralBank {
     }
 
     /**
-     Initiate a transfer transaction between two accounts and backup the transaction.
+     Initiate a transfer transaction between two accounts and back up the transaction.
      @param sender The sender Account object.
      @param receiver The receiver Account object.
      @param amount The amount of money to transfer.
@@ -107,37 +112,26 @@ public class CentralBank {
     }
 
     /**
-     Initiate a withdrawal transaction from an account and backup the transaction.
-     @param account The Account from which to withdraw funds.
-     @param amount The amount of money to withdraw.
-     @return The UUID of the initiated withdrawal transaction.
-     */
-    public UUID Withdraw(Account account, BigDecimal amount){
-        return TransactionCaretaker.Backup(new Withdraw(account, amount, Status.Created));
-    }
-
-    /**
-     Initiate a replenishment transaction to an account and backup the transaction.
-     @param sender The Account receiving the deposit.
-     @param amount The amount of money to replenish.
-     @return The UUID of the initiated replenishment transaction.
-     */
-    public UUID Replenishment(Account sender, BigDecimal amount){
-        return TransactionCaretaker.Backup(new Replenishment(sender, amount, Status.Created));
-    }
-
-    /**
      Add a specified number of days to the central bank's calendar and notify banks about the time change.
      @param days The number of days to add to the current date in the calendar.
      */
     public void AddTime(int days){
-        int oldMonth = BankCalendar.get(Calendar.MONTH);
-        int oldYear = BankCalendar.get(Calendar.YEAR);
-        BankCalendar.add(Calendar.DATE, days);
+        Month oldMonth = BankCalendar.getMonth();
+        int oldYear = BankCalendar.getYear();
+        BankCalendar = BankCalendar.plusDays(days);
         for(Bank bank : _banks){
             bank.NotifyNewTime(days);
         }
         this.CheckForNewMoth(oldMonth, oldYear);
+    }
+
+    /**
+     Returns a transaction by its unique ID using the TransactionCaretaker.
+     @param transactionId The unique ID of the transaction to return.
+     @return The transaction corresponding to the provided transactionId.
+     */
+    public Transaction GetTransactionById(UUID transactionId){
+        return TransactionCaretaker.GetTransaction(transactionId);
     }
 
 }

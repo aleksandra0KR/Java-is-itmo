@@ -18,6 +18,7 @@ public class BankBuilder {
      * Resets the Bank object to a new instance.
      */
     public void Reset(){
+
         Bank = new Bank();
     }
 
@@ -25,6 +26,7 @@ public class BankBuilder {
      * Constructs a new BankBuilder instance and resets it to initialize a new Bank object.
      */
     public BankBuilder(){
+
         this.Reset();
     }
 
@@ -34,7 +36,8 @@ public class BankBuilder {
      * @param name the name of the bank
      */
     public void SetBankName(String name){
-        Bank.Name = name;
+
+        Bank.setName(name);
     }
 
     /**
@@ -43,7 +46,8 @@ public class BankBuilder {
      * @param account the account of the bank
      */
     public void SetBankAccount(Account account){
-        Bank.Account = account;
+
+        Bank.setAccount(account);
     }
 
     /**
@@ -83,17 +87,18 @@ public class BankBuilder {
      * @param untrustedLimit the limit for transactions with users without passport or address
      */
     public void SetUntrustedRules(BigDecimal untrustedLimit){
+
         Bank.setUntrustedLimit(untrustedLimit);
     }
 
     /**
      * Returns the Bank object, assigns it to its account, resets itself, and returns the Bank object.
      *
-     * @return a fully configured Bank object with associated account
+     * @return a fully configured Bank object with an associated account
      */
     public Bank GetBank(){
         Bank bank = this.Bank;
-        bank.Account.Bank = bank;
+        bank.getAccount().setBank(bank);
         this.Reset();
         return bank;
     }

@@ -64,7 +64,15 @@ public class TransferHandler extends TransactionHandler {
             System.out.println("Please, enter money:");
             BigDecimal money = new BigDecimal(in.nextLine());
 
-            var resultID = centralBank.Transfer(sender, receiver, money);
+            UUID resultID;
+
+            if(senderBank.equals(receiverBank)){
+                resultID =  senderBank.Transfer(sender, receiver, money);
+            }
+            else{
+                resultID = centralBank.Transfer(sender, receiver, money);
+            }
+
             System.out.println("Transfer is completed, operation's ID: " + resultID);
 
         }

@@ -1,8 +1,11 @@
 package ru.aleksandra0KR.bank.Model.Account;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
+import lombok.Setter;
+import ru.aleksandra0KR.bank.Entity.Bank.Bank;
 import ru.aleksandra0KR.bank.Model.Transaction.Transaction;
 import ru.aleksandra0KR.bank.Entity.User.User;
 import lombok.Getter;
@@ -13,20 +16,36 @@ import lombok.Getter;
  * @version 1.0
  */
 public abstract class Account {
-    public BigDecimal Profit; // The profit of the account.
-    @Getter
-    public UUID AccountId; // The unique identifier for the account.
-    @Getter
-    public BigDecimal Money; // The money in the account.
-    protected Calendar CreationDate; // The creation date of the account.
-    public Calendar CloseDate; // The close date of the account.
 
-    public ru.aleksandra0KR.bank.Entity.User.User User; // The user associated with the account.
+    @Getter
+    @Setter
+    private BigDecimal Profit; // The profit of the account.
 
-    public ru.aleksandra0KR.bank.Entity.Bank.Bank Bank; // The bank associated with the account.
-    public BigDecimal Percentage; // The percentage of the account.
-    public BigDecimal Commission; // The commission of the account.
-    public List<Transaction> HistoryOfTransactions; // The history of transactions for the account.
+    @Getter
+    private final UUID AccountId; // The unique identifier for the account.
+
+    @Getter
+    @Setter
+    private BigDecimal Money; // The money in the account.
+    protected LocalDate CreationDate; // The creation date of the account.
+    @Getter
+    @Setter
+    private LocalDate CloseDate; // The close date of the account.
+
+    @Getter
+    private final User User; // The user associated with the account.
+
+    @Setter
+    @Getter
+    private Bank Bank; // The bank associated with the account.
+    @Getter
+    @Setter
+    private BigDecimal Percentage; // The percentage of the account.
+    @Getter
+    @Setter
+    private BigDecimal Commission; // The commission of the account.
+    @Getter
+    private final List<Transaction> HistoryOfTransactions; // The history of transactions for the account.
 
     /**
      Constructor for the account.
@@ -37,7 +56,7 @@ public abstract class Account {
      @param percentage The percentage of the account.
      @param commission The commission of the account.
      */
-    public Account(BigDecimal money, Calendar creationDate, Calendar closeDate, User user, BigDecimal percentage, BigDecimal commission){
+    public Account(BigDecimal money, LocalDate creationDate, LocalDate closeDate, User user, BigDecimal percentage, BigDecimal commission){
         AccountId = UUID.randomUUID();
         Money = money;
         CreationDate = creationDate;

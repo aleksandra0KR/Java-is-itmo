@@ -47,7 +47,7 @@ public class WithdrawHandler extends TransactionHandler{
             System.out.println("Please, enter money:");
             BigDecimal money = new BigDecimal(in.nextLine());
 
-            var resultID = centralBank.Withdraw(sender, money);
+            var resultID = senderBank.Withdraw(sender, money);
             System.out.println("Withdraw is completed, operation's ID: " + resultID);
 
         }

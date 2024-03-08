@@ -47,7 +47,7 @@ public class ReplenishmentHandler extends TransactionHandler {
             System.out.println("Please, enter money:");
             BigDecimal money = new BigDecimal(in.nextLine());
 
-            var resultID = centralBank.Replenishment(sender, money);
+            var resultID = senderBank.Replenishment(sender, money);
             System.out.println("Replenishment is completed, operation's ID: " + resultID);
 
         }

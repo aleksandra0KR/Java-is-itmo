@@ -5,7 +5,7 @@ import ru.aleksandra0KR.bank.Model.Account.Account;
 import ru.aleksandra0KR.bank.Model.Transaction.Transaction;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
+import java.time.LocalDate;
 
 /**
  * Class for the bank account
@@ -21,36 +21,36 @@ public class BankAccount extends Account {
      *
      * @param money the initial amount of money in the account
      * @param openDate the date when the account was opened
-     * other parameters are nulls because the bank account does not have an expiration date, a specific user, and commissions as a percentage
+     * other parameters is nulls because the bank account does not have an expiration date,
+     * a specific user, and commissions as a percentage
      */
-    public BankAccount(BigDecimal money, Calendar openDate) {
+    public BankAccount(BigDecimal money, LocalDate openDate) {
         super(money, openDate, null, null, BigDecimal.ZERO, BigDecimal.ZERO);
     }
 
     /**
-     * Calculates daily percentage based on the number of days. BankAccount doesn't have percentage
+     * Calculates daily percentage based on the number of days. BankAccount doesn't have a percentage
      *
      * @param days the number of days for which to calculate the daily percentage
      */
-    @Override
+
     public void DailyPercentage(int days) {}
 
     /**
-     * Calculates the monthly profit for the account. BankAccount doesn't have percentage
+     * Calculates the monthly profit for the account. BankAccount doesn't have a percentage
      *
      * @return a Transaction object representing the monthly profit operation
      */
-    @Override
+
     public Transaction MonthlyProfit() {
         return null;
     }
 
     /**
-     * Calculates the monthly commission for the account. BankAccount doesn't have commission
+     * Calculates the monthly commission for the account. BankAccount doesn't have a commission
      *
      * @return a Transaction object representing the monthly commission operation
      */
-    @Override
     public Transaction MonthlyCommission() {
         return null;
     }
@@ -61,9 +61,8 @@ public class BankAccount extends Account {
      * @param money the amount to be subtracted from the account balance
      * @throws NotEnoughMoneyException customized exception if there is not enough money in the account to perform the transaction
      */
-    @Override
     public void TakeOffMoney(BigDecimal money) {
-        if(Money.compareTo(money) <= 0) throw new NotEnoughMoneyException();
-        Money = Money.subtract(money);
+        if(getMoney().compareTo(money) <= 0) throw new NotEnoughMoneyException();
+        setMoney(getMoney().subtract(money));
     }
 }

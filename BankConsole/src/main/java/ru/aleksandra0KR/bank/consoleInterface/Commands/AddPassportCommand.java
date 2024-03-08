@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.UUID;
 
 /**
- * Command class for adding a passport to a user by its ID  in the banking system.
+ * Command class for adding a passport to a user by its ID in the banking system.
  * @author Aleksandra0KR
  * @version 1.0
  */
@@ -42,6 +42,6 @@ public class AddPassportCommand implements Runnable{
         System.out.println("Please, enter passport: ");
         String passport = in.nextLine();
 
-        user.SetPassport(passport);
+        user.setPassportNumber(passport);
     }
 }

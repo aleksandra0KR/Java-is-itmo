@@ -13,43 +13,30 @@ import java.util.*;
  * @author Aleksandra0KR
  * @version 1.0
  */
+@Getter
 public class User implements ObserverUser {
-    @Getter
-    private String Name;  // The name of the user
-    @Getter
-    private String Surname; // The surname of the user
-    private String Address; // The address of the user
-    private String PassportNumber;  // The passport number of the user
-    @Getter
-    private List<String> _messages = new ArrayList<>(); // List of messages for the user
 
-    @Getter
+    private String Name;  // The name of the user
+
+    private String Surname; // The surname of the user
+
+    @Setter
+    private String Address; // The address of the user
+
+    @Setter
+    private String PassportNumber;  // The passport number of the user
+
+    private final List<String> _messages = new ArrayList<>(); // List of messages for the user
+
     @Setter
     private UUID ID; // The unique identifier for the user
 
     /**
      Checks if the user is verified based on address and passport information.
-     @return true if both address and passport number are not null, false otherwise.
+     @return true if both address and passport number is not null, false otherwise.
      */
     public boolean IsVerified(){
-        if(Address != null && PassportNumber != null) return true;
-        return false;
-    }
-
-    /**
-     Sets the address for the user.
-     @param address The address to set.
-     */
-    public void SetAddress(String address){
-        Address = address;
-    }
-
-    /**
-     Sets the passport number for the user.
-     @param passportNumber The passport number to set.
-     */
-    public void SetPassport(String passportNumber){
-        PassportNumber = passportNumber;
+        return Address != null && PassportNumber != null;
     }
 
     /**
@@ -77,6 +64,7 @@ public class User implements ObserverUser {
      @param message The message to add to the user's messages list.
      */
     public void Update(String message) {
+
         _messages.add(message);
     }
 }

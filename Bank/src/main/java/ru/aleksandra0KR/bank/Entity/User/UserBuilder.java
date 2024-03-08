@@ -26,7 +26,7 @@ public class UserBuilder {
      * @param address The address to set.
      */
     public void SetAddress(String address){
-        User.SetAddress(address);
+        User.setAddress(address);
     }
 
     /**
@@ -34,7 +34,7 @@ public class UserBuilder {
      * @param passport The passport number to set.
      */
     public void SetPassport(String passport){
-        User.SetPassport(passport);
+        User.setPassportNumber(passport);
     }
 
     /**
@@ -53,6 +53,6 @@ public class UserBuilder {
      */
     public void Reset()
     {
-        this.User = new User();
+        User = new User();
     }
 }
