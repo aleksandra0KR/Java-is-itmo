@@ -34,6 +34,5 @@ public class ChangeDebitPercentageCommand implements Runnable {
         System.out.println("Please, enter new debit percentage: ");
         BigDecimal percentage = in.nextBigDecimal();
         bank.setDebitPercentage(percentage);
-        bank.Notify("Debit percentage was changed");
     }
 }

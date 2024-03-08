@@ -33,6 +33,5 @@ public class ChangeCreditCommissionCommand implements Runnable {
         System.out.println("Please, enter new credit commission: ");
         BigDecimal commission = in.nextBigDecimal();
         bank.setCreditCommission(commission);
-        bank.Notify("Credit commission was changed");
     }
 }

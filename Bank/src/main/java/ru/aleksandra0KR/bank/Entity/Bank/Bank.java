@@ -222,7 +222,6 @@ public class Bank implements SubjectBank {
      */
     public void Detach(User observer)
     {
-
         _observers.removeIf(o ->o.getID().compareTo(observer.getID()) == 0);
     }
 
@@ -325,7 +324,6 @@ public class Bank implements SubjectBank {
      @param transactionId The unique identifier of the transaction to be canceled.
      */
     public void CancelTransaction(UUID transactionId){
-
         TransactionCaretakerBank.Undo(transactionId);
     }
 

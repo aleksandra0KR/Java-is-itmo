@@ -53,7 +53,6 @@ public class UserBuilder {
      */
     public void Reset()
     {
-
         User = new User();
     }
 }

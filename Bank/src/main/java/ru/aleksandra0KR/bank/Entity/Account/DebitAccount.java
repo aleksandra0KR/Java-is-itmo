@@ -68,7 +68,6 @@ public class DebitAccount extends Account {
      * @return a Transaction object representing the monthly commission operation
      */
     public Transaction MonthlyCommission() {
-
         return null;
     }
 

@@ -43,7 +43,6 @@ public class BankAccount extends Account {
      */
 
     public Transaction MonthlyProfit() {
-
         return null;
     }
 
@@ -53,7 +52,6 @@ public class BankAccount extends Account {
      * @return a Transaction object representing the monthly commission operation
      */
     public Transaction MonthlyCommission() {
-
         return null;
     }
 
