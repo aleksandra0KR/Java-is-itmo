@@ -33,5 +33,6 @@ public class ChangeUntrustedLimitCommand implements Runnable {
         System.out.println("Please, enter new untrusted limit: ");
         BigDecimal percentage = in.nextBigDecimal();
         bank.setUntrustedLimit(percentage);
+        bank.Notify("Untrusted limit was changed");
     }
 }

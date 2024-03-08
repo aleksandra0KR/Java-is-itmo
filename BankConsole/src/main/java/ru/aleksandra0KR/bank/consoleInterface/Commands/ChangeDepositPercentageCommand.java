@@ -52,5 +52,6 @@ public class ChangeDepositPercentageCommand implements Runnable {
         }
 
         bank.setDepositPercentage(depositPercentage);
+        bank.Notify("Deposit percentage was changed");
     }
 }

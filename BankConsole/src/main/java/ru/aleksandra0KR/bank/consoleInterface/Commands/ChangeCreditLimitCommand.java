@@ -33,6 +33,7 @@ public class ChangeCreditLimitCommand implements Runnable {
         System.out.println("Please, enter new credit limit: ");
         BigDecimal limit = in.nextBigDecimal();
         bank.setCreditLimit(limit);
+        bank.Notify("Credit limit was changed");
     }
 
 }
