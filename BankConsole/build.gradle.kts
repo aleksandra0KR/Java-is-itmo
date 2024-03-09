@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     implementation ("info.picocli:picocli:4.7.5")
+    annotationProcessor ("org.projectlombok:lombok:1.18.30")
     compileOnly ("org.projectlombok:lombok:1.18.30")
     implementation(project(":Bank"))
 }

@@ -12,52 +12,55 @@ import static ru.aleksandra0KR.bank.Tools.Status.Cancelled;
 import static ru.aleksandra0KR.bank.Tools.Status.Valid;
 
 /**
- * Class for Withdraw
- * Handles the process of subtracting money from an account.
+ * Class for Withdraw Handles the process of subtracting money from an account.
+ *
  * @author Aleksandra0KR
  * @version 1.0
  */
 @AllArgsConstructor
 public class Withdraw implements Transaction {
-    private Account Account;
-    private BigDecimal Money;
-    private Status Status;
 
-    /**
-     * Executes the withdrawal transaction by subtracting money from the account.
-     * Updates the status of the transaction to Valid and adds the transaction to the account's history.
-     */
-    @Override
-    public void execute() {
-        CheckingForValidTransaction checker = new CheckingForValidTransaction();
-        checker.CheckValidationOfTransaction(Account, Money, Status);
-        Account.TakeOffMoney(Money);
-        Status = Valid;
-        Account.getHistoryOfTransactions().add(this);
+  private Account Account;
+  private BigDecimal Money;
+  private Status Status;
 
-    }
+  /**
+   * Executes the withdrawal transaction by subtracting money from the account. Updates the status
+   * of the transaction to Valid and adds the transaction to the account's history.
+   */
+  @Override
+  public void execute() {
+    CheckingForValidTransaction checker = new CheckingForValidTransaction();
+    checker.CheckValidationOfTransaction(Account, Money, Status);
+    Account.TakeOffMoney(Money);
+    Status = Valid;
+    Account.getHistoryOfTransactions().add(this);
 
-    /**
-     * Cancels the withdrawal transaction by adding back the withdrawn money to the account.
-     * Updates the status of the transaction to Cancel.
-     */
-    @Override
-    public void cancel() {
+  }
 
-        CheckingForValidTransaction checker = new CheckingForValidTransaction();
-        checker.CheckingForValidTransactionForCancel(Account, Money, Status);
-        checker.CheckValidationOfTransactionMoney(Account, Money);
+  /**
+   * Cancels the withdrawal transaction by adding back the withdrawn money to the account. Updates
+   * the status of the transaction to Cancel.
+   */
+  @Override
+  public void cancel() {
 
-        Account.setMoney( Account.getMoney().add(Money));
+    CheckingForValidTransaction checker = new CheckingForValidTransaction();
+    checker.CheckingForValidTransactionForCancel(Account, Money, Status);
+    checker.CheckValidationOfTransactionMoney(Account, Money);
 
-        Status = Cancelled;
-    }
+    Account.setMoney(Account.getMoney().add(Money));
 
-    /**
-     Prints information about the withdraw transaction.
-     */
-    @Override
-    public void printInfo() {
-        System.out.println("Withdraw from Account: " + Account.getAccountId() + " Money: " + Money + " Status: " + Status);
-    }
+    Status = Cancelled;
+  }
+
+  /**
+   * Prints information about the withdraw transaction.
+   */
+  @Override
+  public void printInfo() {
+    System.out.println(
+        "Withdraw from Account: " + Account.getAccountId() + " Money: " + Money + " Status: "
+            + Status);
+  }
 }

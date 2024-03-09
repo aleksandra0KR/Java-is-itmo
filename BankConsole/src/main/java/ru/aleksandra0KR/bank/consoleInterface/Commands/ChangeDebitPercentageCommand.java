@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 /**
  * Command class for changing debit percentage of a certain bank by its name
+ *
  * @author Aleksandra0KR
  * @version 1.0
  */
@@ -16,23 +17,23 @@ import java.util.Scanner;
 
 public class ChangeDebitPercentageCommand implements Runnable {
 
-    // Changes debit percentage of a bank
-    @Override
-    public void run() {
-        Scanner in = new Scanner(System.in);
-        CentralBank centralBank = CentralBank.getInstance();
+  // Changes debit percentage of a bank
+  @Override
+  public void run() {
+    Scanner in = new Scanner(System.in);
+    CentralBank centralBank = CentralBank.getInstance();
 
-        System.out.println("Please, enter bank name: ");
-        String bankName = in.nextLine();
+    System.out.println("Please, enter bank name: ");
+    String bankName = in.nextLine();
 
-        Bank bank = centralBank.GetBank(bankName);
-        if(bank == null) {
-            System.out.println("No such bank");
-            return;
-        }
-
-        System.out.println("Please, enter new debit percentage: ");
-        BigDecimal percentage = in.nextBigDecimal();
-        bank.setDebitPercentage(percentage);
+    Bank bank = centralBank.GetBank(bankName);
+    if (bank == null) {
+      System.out.println("No such bank");
+      return;
     }
+
+    System.out.println("Please, enter new debit percentage: ");
+    BigDecimal percentage = in.nextBigDecimal();
+    bank.setDebitPercentage(percentage);
+  }
 }

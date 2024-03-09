@@ -13,72 +13,82 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 /**
- * Class for the debit account
- * It extends the Account class and includes methods for managing money transactions and calculations.
+ * Class for the debit account It extends the Account class and includes methods for managing money
+ * transactions and calculations.
+ *
  * @author Aleksandra0KR
  * @version 1.0
  */
 
 public class DebitAccount extends Account {
-    /**
-     * Constructs a DebitAccount object with the specified parameters.
-     *
-     * @param money the initial amount of money in the account
-     * @param openDate the date when the account was opened
-     * @param closeDate the date when the account will be closed
-     * @param user the user associated with the account
-     * @param bank the bank associated with the account
-     * @param percentage the year percentage for profit calculation
-     */
-    public DebitAccount(BigDecimal money, LocalDate openDate, LocalDate closeDate, User user, Bank bank, BigDecimal percentage) {
-        super(money, openDate, closeDate, user, percentage, BigDecimal.ZERO);
-         setBank(bank);
+
+  /**
+   * Constructs a DebitAccount object with the specified parameters.
+   *
+   * @param money      the initial amount of money in the account
+   * @param openDate   the date when the account was opened
+   * @param closeDate  the date when the account will be closed
+   * @param user       the user associated with the account
+   * @param bank       the bank associated with the account
+   * @param percentage the year percentage for profit calculation
+   */
+  public DebitAccount(BigDecimal money, LocalDate openDate, LocalDate closeDate, User user,
+      Bank bank, BigDecimal percentage) {
+    super(money, openDate, closeDate, user, percentage, BigDecimal.ZERO);
+    setBank(bank);
+  }
+
+  /**
+   * Calculates daily percentage based on the number of days.
+   *
+   * @param days the number of days for which to calculate the daily percentage
+   */
+  public void DailyPercentage(int days) {
+    if (getMoney().compareTo(BigDecimal.ZERO) <= 0) {
+      return;
     }
 
-    /**
-     * Calculates daily percentage based on the number of days.
-     *
-     * @param days the number of days for which to calculate the daily percentage
-     */
-    public void DailyPercentage(int days) {
-        if(getMoney().compareTo(BigDecimal.ZERO) <= 0) {
-            return;
-        }
+    BigDecimal dailyProfit = getPercentage().divide(BigDecimal.valueOf(365), 10,
+        RoundingMode.CEILING).multiply(getMoney());
+    BigDecimal daysProfit = dailyProfit.multiply(BigDecimal.valueOf(days));
+    setProfit(getProfit().add(daysProfit));
+  }
 
-        BigDecimal dailyProfit = getPercentage().divide(BigDecimal.valueOf(365), 10, RoundingMode.CEILING).multiply(getMoney());
-        BigDecimal daysProfit = dailyProfit.multiply(BigDecimal.valueOf(days));
-        setProfit(getProfit().add(daysProfit));
-    }
+  /**
+   * Calculates the monthly profit for the account.
+   *
+   * @return a Transaction object representing the monthly profit operation
+   */
+  public Transaction MonthlyProfit() {
+      if (getPercentage().equals(BigDecimal.ZERO)) {
+          return null;
+      }
+    Transaction transaction = new Transfer(getBank().getAccount(), this, getProfit(),
+        Status.Created);
+    setProfit(BigDecimal.ZERO);
+    return transaction;
+  }
 
-    /**
-     * Calculates the monthly profit for the account.
-     *
-     * @return a Transaction object representing the monthly profit operation
-     */
-    public Transaction MonthlyProfit() {
-        if (getPercentage().equals(BigDecimal.ZERO)) return null;
-        Transaction transaction = new Transfer(getBank().getAccount(),this, getProfit(), Status.Created);
-        setProfit(BigDecimal.ZERO);
-        return transaction;
-    }
+  /**
+   * Calculates the monthly commission for the account. DebitAccount doesn't have a commission
+   *
+   * @return a Transaction object representing the monthly commission operation
+   */
+  public Transaction MonthlyCommission() {
+    return null;
+  }
 
-    /**
-     * Calculates the monthly commission for the account. DebitAccount doesn't have a commission
-     *
-     * @return a Transaction object representing the monthly commission operation
-     */
-    public Transaction MonthlyCommission() {
-        return null;
-    }
-
-    /**
-     * Takes off a specified amount of money from the account balance.
-     *
-     * @param money the amount to be subtracted from the account balance
-     * @throws NotEnoughMoneyException customized exception if there is not enough money in the account to perform the transaction
-     */
-    public void TakeOffMoney(BigDecimal money) {
-        if(getMoney().compareTo(money) < 0) throw new NotEnoughMoneyException();
-        setMoney(getMoney().subtract(money));
-    }
+  /**
+   * Takes off a specified amount of money from the account balance.
+   *
+   * @param money the amount to be subtracted from the account balance
+   * @throws NotEnoughMoneyException customized exception if there is not enough money in the
+   *                                 account to perform the transaction
+   */
+  public void TakeOffMoney(BigDecimal money) {
+      if (getMoney().compareTo(money) < 0) {
+          throw new NotEnoughMoneyException();
+      }
+    setMoney(getMoney().subtract(money));
+  }
 }

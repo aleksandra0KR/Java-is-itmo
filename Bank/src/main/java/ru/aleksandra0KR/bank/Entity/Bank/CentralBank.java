@@ -15,123 +15,136 @@ import java.util.*;
 
 /**
  * Class for the central bank
+ *
  * @author Aleksandra0KR
  * @version 1.0
  */
 public class CentralBank {
-    private static CentralBank instance;
 
-    /**
-     * List of all banks
-     */
-    private final List<Bank> _banks;
+  private static CentralBank instance;
 
-    @Getter
-    @Setter
-    private LocalDate BankCalendar;
-    private final TransactionCaretaker TransactionCaretaker;
+  /**
+   * List of all banks
+   */
+  private final List<Bank> _banks;
 
-    /**
-     Private constructor to initialize the CentralBank instance with default values.
-     */
-    private CentralBank(){
-        BankCalendar = LocalDate.now();
-        _banks = new ArrayList<>();
-        TransactionCaretaker = new TransactionCaretaker();
-    }
+  @Getter
+  @Setter
+  private LocalDate BankCalendar;
+  private final TransactionCaretaker TransactionCaretaker;
 
-    /**
-     Get the singleton instance of CentralBank.
-     @return The singleton instance of CentralBank.
-     */
-    public static CentralBank getInstance()
-    {
-        if (instance == null)
-            instance = new CentralBank();
-        return instance;
-    }
+  /**
+   * Private constructor to initialize the CentralBank instance with default values.
+   */
+  private CentralBank() {
+    BankCalendar = LocalDate.now();
+    _banks = new ArrayList<>();
+    TransactionCaretaker = new TransactionCaretaker();
+  }
 
-    /**
-     Get a specific bank by its name.
-     @param bankName The name of the bank to return.
-     @return The Bank object, or null if not found.
-     */
+  /**
+   * Get the singleton instance of CentralBank.
+   *
+   * @return The singleton instance of CentralBank.
+   */
+  public static CentralBank getInstance() {
+      if (instance == null) {
+          instance = new CentralBank();
+      }
+    return instance;
+  }
 
-    public Bank GetBank(String bankName){
+  /**
+   * Get a specific bank by its name.
+   *
+   * @param bankName The name of the bank to return.
+   * @return The Bank object, or null if not found.
+   */
 
-        for(Bank bank: _banks){
-            if (bank.getName().compareTo( bankName) == 0) return bank;
-        }
-        return null;
-    }
+  public Bank GetBank(String bankName) {
 
-    /**
-     Adds a new bank to the central bank's list of banks.
-     @param bank The Bank object to add.
-     */
-    public void AddBank(Bank bank){
-        if(_banks.stream().noneMatch(a -> a.getBankId().compareTo(bank.getBankId()) == 0)) {
-            bank.setBankCalendar(BankCalendar);
-            _banks.add(bank);
+    for (Bank bank : _banks) {
+        if (bank.getName().compareTo(bankName) == 0) {
+            return bank;
         }
     }
+    return null;
+  }
 
-    /**
-     Checks for a new month and notify all banks if a new month has started.
-     @param oldMonth The previous month value.
-     @param oldYear The previous year value.
-     */
-    public void CheckForNewMoth(Month oldMonth, int oldYear){
-
-        Month newMonth = BankCalendar.getMonth();
-        int newYear = BankCalendar.getYear();
-        if(newMonth.compareTo(oldMonth) != 0 || newYear != oldYear){
-            for(Bank bank : _banks){
-                bank.NotifyNewMonth();
-            }
-        }
+  /**
+   * Adds a new bank to the central bank's list of banks.
+   *
+   * @param bank The Bank object to add.
+   */
+  public void AddBank(Bank bank) {
+    if (_banks.stream().noneMatch(a -> a.getBankId().compareTo(bank.getBankId()) == 0)) {
+      bank.setBankCalendar(BankCalendar);
+      _banks.add(bank);
     }
+  }
 
-    /**
-     Cancel a specific transaction by its UUID identifier.
-     @param transactionId The UUID of the transaction to cancel.
-     */
-    public void CancelTransaction(UUID transactionId){
-        TransactionCaretaker.Undo(transactionId);
-    }
+  /**
+   * Checks for a new month and notify all banks if a new month has started.
+   *
+   * @param oldMonth The previous month value.
+   * @param oldYear  The previous year value.
+   */
+  public void CheckForNewMoth(Month oldMonth, int oldYear) {
 
-    /**
-     Initiate a transfer transaction between two accounts and back up the transaction.
-     @param sender The sender Account object.
-     @param receiver The receiver Account object.
-     @param amount The amount of money to transfer.
-     @return The UUID of the initiated transfer transaction.
-     */
-    public UUID Transfer(Account sender, Account receiver, BigDecimal amount){
-        return TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
+    Month newMonth = BankCalendar.getMonth();
+    int newYear = BankCalendar.getYear();
+    if (newMonth.compareTo(oldMonth) != 0 || newYear != oldYear) {
+      for (Bank bank : _banks) {
+        bank.NotifyNewMonth();
+      }
     }
+  }
 
-    /**
-     Add a specified number of days to the central bank's calendar and notify banks about the time change.
-     @param days The number of days to add to the current date in the calendar.
-     */
-    public void AddTime(int days){
-        Month oldMonth = BankCalendar.getMonth();
-        int oldYear = BankCalendar.getYear();
-        BankCalendar = BankCalendar.plusDays(days);
-        for(Bank bank : _banks){
-            bank.NotifyNewTime(days);
-        }
-        this.CheckForNewMoth(oldMonth, oldYear);
-    }
+  /**
+   * Cancel a specific transaction by its UUID identifier.
+   *
+   * @param transactionId The UUID of the transaction to cancel.
+   */
+  public void CancelTransaction(UUID transactionId) {
+    TransactionCaretaker.Undo(transactionId);
+  }
 
-    /**
-     Returns a transaction by its unique ID using the TransactionCaretaker.
-     @param transactionId The unique ID of the transaction to return.
-     @return The transaction corresponding to the provided transactionId.
-     */
-    public Transaction GetTransactionById(UUID transactionId){
-        return TransactionCaretaker.GetTransaction(transactionId);
+  /**
+   * Initiate a transfer transaction between two accounts and back up the transaction.
+   *
+   * @param sender   The sender Account object.
+   * @param receiver The receiver Account object.
+   * @param amount   The amount of money to transfer.
+   * @return The UUID of the initiated transfer transaction.
+   */
+  public UUID Transfer(Account sender, Account receiver, BigDecimal amount) {
+    return TransactionCaretaker.Backup(new Transfer(sender, receiver, amount, Status.Created));
+  }
+
+  /**
+   * Add a specified number of days to the central bank's calendar and notify banks about the time
+   * change.
+   *
+   * @param days The number of days to add to the current date in the calendar.
+   */
+  public void AddTime(int days) {
+    Month oldMonth = BankCalendar.getMonth();
+    int oldYear = BankCalendar.getYear();
+    BankCalendar = BankCalendar.plusDays(days);
+    for (Bank bank : _banks) {
+      bank.NotifyNewTime(days);
     }
+    this.CheckForNewMoth(oldMonth, oldYear);
+  }
+
+  /**
+   * Returns a transaction by its unique ID using the TransactionCaretaker.
+   *
+   * @param transactionId The unique ID of the transaction to return.
+   * @return The transaction corresponding to the provided transactionId.
+   */
+  public Transaction GetTransactionById(UUID transactionId) {
+    return TransactionCaretaker.GetTransaction(transactionId);
+  }
 
 }

@@ -22,127 +22,131 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BankTests {
 
-    private DebitAccount debitAccount;
-    private DepositAccount depositAccount;
-    private CreditAccount creditAccount;
-    private User user;
-    private Bank bank;
-    @BeforeEach
-    public void SetUp() {
-        CentralBank centralBank = CentralBank.getInstance();
-        BankBuilder bankBuilder = new BankBuilder();
-        bankBuilder.SetBankName("Tinkoff");
+  private DebitAccount debitAccount;
+  private DepositAccount depositAccount;
+  private CreditAccount creditAccount;
+  private User user;
+  private Bank bank;
 
-        var depositPercentage = new ArrayList<DepositMoneyGapPercentage>();
+  @BeforeEach
+  public void SetUp() {
+    CentralBank centralBank = CentralBank.getInstance();
+    BankBuilder bankBuilder = new BankBuilder();
+    bankBuilder.SetBankName("Tinkoff");
 
-        BigDecimal lowerBoundary = new BigDecimal(0);
-        BigDecimal topBoundary = new BigDecimal(100000);
-        BigDecimal percentage = new BigDecimal(5);
-        var percentageGap = new DepositMoneyGapPercentage(lowerBoundary, topBoundary, percentage);
-        depositPercentage.add(percentageGap);
+    var depositPercentage = new ArrayList<DepositMoneyGapPercentage>();
 
-        lowerBoundary = new BigDecimal(100001);
-        topBoundary = new BigDecimal(1000000000);
-        percentage = new BigDecimal(10);
-        percentageGap = new DepositMoneyGapPercentage(lowerBoundary, topBoundary, percentage);
-        depositPercentage.add(percentageGap);
+    BigDecimal lowerBoundary = new BigDecimal(0);
+    BigDecimal topBoundary = new BigDecimal(100000);
+    BigDecimal percentage = new BigDecimal(5);
+    var percentageGap = new DepositMoneyGapPercentage(lowerBoundary, topBoundary, percentage);
+    depositPercentage.add(percentageGap);
 
-        bankBuilder.SetDepositPercentage(depositPercentage);
+    lowerBoundary = new BigDecimal(100001);
+    topBoundary = new BigDecimal(1000000000);
+    percentage = new BigDecimal(10);
+    percentageGap = new DepositMoneyGapPercentage(lowerBoundary, topBoundary, percentage);
+    depositPercentage.add(percentageGap);
 
-        BigDecimal creditLimit = new BigDecimal(1000000000);
-        BigDecimal creditCommission = new BigDecimal(10);
-        bankBuilder.SetCreditRules(creditLimit, creditCommission);
+    bankBuilder.SetDepositPercentage(depositPercentage);
 
-        BigDecimal debitPercentage = new BigDecimal(10);
-        bankBuilder.SetDebitPercentage(debitPercentage);
+    BigDecimal creditLimit = new BigDecimal(1000000000);
+    BigDecimal creditCommission = new BigDecimal(10);
+    bankBuilder.SetCreditRules(creditLimit, creditCommission);
 
-        BigDecimal money = new BigDecimal(1000000000);
-        bankBuilder.SetBankAccount(new BankAccount(money, centralBank.getBankCalendar()));
+    BigDecimal debitPercentage = new BigDecimal(10);
+    bankBuilder.SetDebitPercentage(debitPercentage);
 
-        BigDecimal untrustedLimit = new BigDecimal(1000000);
-        bankBuilder.SetUntrustedRules(untrustedLimit);
+    BigDecimal money = new BigDecimal(1000000000);
+    bankBuilder.SetBankAccount(new BankAccount(money, centralBank.getBankCalendar()));
 
-        bank = bankBuilder.GetBank();
-        centralBank.AddBank(bank);
-        UserBuilder userBuilder = new UserBuilder();
-        userBuilder.CreateUser("Vadim", "Milovachky");
+    BigDecimal untrustedLimit = new BigDecimal(1000000);
+    bankBuilder.SetUntrustedRules(untrustedLimit);
 
-        user =  userBuilder.GetUser();
-        bank.AddUser(user);
-        depositAccount = bank.openDepositAccount(user,  BigDecimal.valueOf(10000), 1);
-        creditAccount = bank.openCreditAccount(user,  BigDecimal.valueOf(1000000), 10);
-        debitAccount = bank.openDebitAccount(user,  BigDecimal.valueOf(50000), 5);
+    bank = bankBuilder.GetBank();
+    centralBank.AddBank(bank);
+    UserBuilder userBuilder = new UserBuilder();
+    userBuilder.CreateUser("Vadim", "Milovachky");
 
-    }
+    user = userBuilder.GetUser();
+    bank.AddUser(user);
+    depositAccount = bank.openDepositAccount(user, BigDecimal.valueOf(10000), 1);
+    creditAccount = bank.openCreditAccount(user, BigDecimal.valueOf(1000000), 10);
+    debitAccount = bank.openDebitAccount(user, BigDecimal.valueOf(50000), 5);
 
-    @Test
-    public void OpenDepositAccountMakeReplenishment() {
-        Transaction addMoney = new Replenishment(debitAccount, BigDecimal.valueOf(100000), Status.Created);
-        addMoney.execute();
-        Assertions.assertEquals(BigDecimal.valueOf(150000), debitAccount.getMoney());
-    }
+  }
 
-    @Test
-    public void OpenDepositAccountGetPercentage() {
-        CentralBank centralBank = CentralBank.getInstance();
-        centralBank.AddTime(50);
-        BigDecimal expected = new BigDecimal("16849.3151").setScale(10, RoundingMode.HALF_UP);
-        BigDecimal actual = depositAccount.getMoney().setScale(10, RoundingMode.HALF_UP);
-        assertEquals(expected, actual);
-    }
+  @Test
+  public void OpenDepositAccountMakeReplenishment() {
+    Transaction addMoney = new Replenishment(debitAccount, BigDecimal.valueOf(100000),
+        Status.Created);
+    addMoney.execute();
+    Assertions.assertEquals(BigDecimal.valueOf(150000), debitAccount.getMoney());
+  }
 
-    @Test
-    public void MakeTransfer() {
-        Transaction transaction = new Transfer(creditAccount, debitAccount, BigDecimal.valueOf(10000), Status.Created);
-        transaction.execute();
-        Assertions.assertEquals(BigDecimal.valueOf(990000), creditAccount.getMoney());
-    }
+  @Test
+  public void OpenDepositAccountGetPercentage() {
+    CentralBank centralBank = CentralBank.getInstance();
+    centralBank.AddTime(50);
+    BigDecimal expected = new BigDecimal("16849.3151").setScale(10, RoundingMode.HALF_UP);
+    BigDecimal actual = depositAccount.getMoney().setScale(10, RoundingMode.HALF_UP);
+    assertEquals(expected, actual);
+  }
 
-    @Test
-    public void Notifications() {
-        bank.Attach(user);
-        bank.Notify("Hello World!!!!!");
+  @Test
+  public void MakeTransfer() {
+    Transaction transaction = new Transfer(creditAccount, debitAccount, BigDecimal.valueOf(10000),
+        Status.Created);
+    transaction.execute();
+    Assertions.assertEquals(BigDecimal.valueOf(990000), creditAccount.getMoney());
+  }
 
-        Assertions.assertEquals("Hello World!!!!!", user.get_messages().get(0));
-    }
+  @Test
+  public void Notifications() {
+    bank.Attach(user);
+    bank.Notify("Hello World!!!!!");
 
-    @Test
-    public void CancelTransfer() {
-        CentralBank centralBank = CentralBank.getInstance();
-        var transactionID = centralBank.Transfer(creditAccount, debitAccount, BigDecimal.valueOf(10000));
-        centralBank.CancelTransaction(transactionID);
-        Assertions.assertEquals( BigDecimal.valueOf(1000000), creditAccount.getMoney());
-    }
+    Assertions.assertEquals("Hello World!!!!!", user.get_messages().get(0));
+  }
 
-    @Test
-    public void NotificationsDetach() {
-        bank.Attach(user);
-        bank.Notify("Hello World!!!!!");
-        bank.Detach(user);
-        bank.Notify("Hello World2.0!!!!!");
+  @Test
+  public void CancelTransfer() {
+    CentralBank centralBank = CentralBank.getInstance();
+    var transactionID = centralBank.Transfer(creditAccount, debitAccount,
+        BigDecimal.valueOf(10000));
+    centralBank.CancelTransaction(transactionID);
+    Assertions.assertEquals(BigDecimal.valueOf(1000000), creditAccount.getMoney());
+  }
 
-        Assertions.assertEquals(1, user.get_messages().size());
-    }
+  @Test
+  public void NotificationsDetach() {
+    bank.Attach(user);
+    bank.Notify("Hello World!!!!!");
+    bank.Detach(user);
+    bank.Notify("Hello World2.0!!!!!");
 
-    @Test
-    public void ChangeCreditLimit() {
-        bank.setCreditLimit(BigDecimal.valueOf(100000));
-        Assertions.assertEquals(BigDecimal.valueOf(100000), bank.getCreditLimit());
-    }
+    Assertions.assertEquals(1, user.get_messages().size());
+  }
 
-    @Test
-    public void ShowBalance() {
-        Assertions.assertEquals(BigDecimal.valueOf(50000),debitAccount.getMoney());
-    }
+  @Test
+  public void ChangeCreditLimit() {
+    bank.setCreditLimit(BigDecimal.valueOf(100000));
+    Assertions.assertEquals(BigDecimal.valueOf(100000), bank.getCreditLimit());
+  }
 
-    @Test
-    public void AddDays() {
-        CentralBank centralBank = CentralBank.getInstance();
-        var time = centralBank.getBankCalendar();
-        centralBank.AddTime(20);
-        time = time.plusDays(20);
-        Assertions.assertEquals(time, centralBank.getBankCalendar());
-    }
+  @Test
+  public void ShowBalance() {
+    Assertions.assertEquals(BigDecimal.valueOf(50000), debitAccount.getMoney());
+  }
+
+  @Test
+  public void AddDays() {
+    CentralBank centralBank = CentralBank.getInstance();
+    var time = centralBank.getBankCalendar();
+    centralBank.AddTime(20);
+    time = time.plusDays(20);
+    Assertions.assertEquals(time, centralBank.getBankCalendar());
+  }
 
 
 }
