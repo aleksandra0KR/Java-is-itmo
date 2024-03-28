@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+  "-//Hibernate/Hibernate Configuration DTD//EN"
+  "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:postgresql://localhost:5432/lab2</property>
+    <property name="connection.driver_class">org.postgresql.Driver</property>
+    <!--<property name="connection.driver_class">org.h2.Driver</property>
+    <property name="connection.url">jdbc:h2:mem:test</property>-->
+    <property name="connection.username">root</property>
+    <property name="connection.password">root</property>
+    <!--<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>-->
+    <property name="hibernate.hbm2ddl.auto">update</property>
+    <mapping class="ru.aleksandra0KR.entity.Cat"/>
+    <mapping class="ru.aleksandra0KR.entity.Person"/>
+  </session-factory>
+</hibernate-configuration>
