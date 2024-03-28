@@ -8,26 +8,24 @@ import ru.aleksandra0KR.entity.Person;
 
 public class HibernateSessionFactoryUtil {
 
-  private static SessionFactory sessionFactory;
+  private final static SessionFactory sessionFactory = initSessionFactory();
 
-  private HibernateSessionFactoryUtil() {
+  private static SessionFactory initSessionFactory() {
+    try {
+      return new Configuration().configure().buildSessionFactory();
+    }
+    catch (Throwable ex){
+      System.err.println("aboba" + ex);
+      throw new ExceptionInInitializerError(ex);
+    }
   }
 
   public static SessionFactory getSessionFactory() {
-    if (sessionFactory == null) {
-      try {
-        Configuration configuration = new Configuration().configure();
 
-        configuration.addAnnotatedClass(Cat.class);
-        configuration.addAnnotatedClass(Person.class);
-
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(
-            configuration.getProperties());
-        sessionFactory = configuration.buildSessionFactory(builder.build());
-      } catch (Exception err) {
-        System.out.println(err);
-      }
-    }
     return sessionFactory;
+  }
+
+  public static void close() {
+    getSessionFactory().close();
   }
 }

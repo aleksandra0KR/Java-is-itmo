@@ -1,14 +1,10 @@
 package ru.aleksandra0KR.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +27,12 @@ public class Person {
   private String name;
 
   @Column(name = "date_of_birth")
-  private Date birthdate;
+  private LocalDate birthdate;
+
+  public Person(String name, LocalDate birthdate){
+    this.name = name;
+    this.birthdate = birthdate;
+  }
 
   //@OneToMany(mappedBy = "user", orphanRemoval = true)
   //private List<Cat> cats;

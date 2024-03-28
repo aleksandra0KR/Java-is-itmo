@@ -70,7 +70,7 @@ public class CatDaoPostgres implements CatDao {
 
     Transaction transaction = session.beginTransaction();
     query.setParameter(0, cat.getId());
-    query.setParameter(1, catsFriend.getFriends());
+    query.setParameter(1, catsFriend.getId());
     query.executeUpdate();
     transaction.commit();
   }

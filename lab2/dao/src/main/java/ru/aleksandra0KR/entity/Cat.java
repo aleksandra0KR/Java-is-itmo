@@ -1,16 +1,11 @@
 package ru.aleksandra0KR.entity;
 
+import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 import javax.persistence.Column;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -38,13 +33,13 @@ public class Cat {
   private String breed;
 
   @Column(name = "date_of_birth")
-  private Date birthday;
+  private LocalDate birthday;
 
   @ManyToOne
   @JoinColumn(name = "user_id")
   private Person owner;
 
-  public Cat(String name, String  color, String breed, Date birthday, Person owner){
+  public Cat(String name, String  color, String breed, LocalDate birthday, Person owner){
     this.name = name;
     this.breed = breed;
     this.color = color;
