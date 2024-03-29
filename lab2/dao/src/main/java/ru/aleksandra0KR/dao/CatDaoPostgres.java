@@ -2,6 +2,7 @@ package ru.aleksandra0KR.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -45,33 +46,18 @@ public class CatDaoPostgres implements CatDao {
 
   @Override
   public List<Cat> findAllFriends(long id) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-
-    String sql = "SELECT friend_id FROM Friends WHERE cat_id=:$0";
-    Query query = session.createSQLQuery(sql);
-
-    query.setParameter(0, id);
-
-    List<Long> friends_id = (List<Long>) query.getResultList();
-    List<Cat> friends = new ArrayList<>();
-
-    for (long a : friends_id) {
-      friends.add(findCatByID(a));
-    }
-    session.close();
-    return friends;
+    var res = this.findCatByID(id).getFriends();
+    return res;
   }
 
   @Override
   public void addFriend(Cat cat, Cat catsFriend) {
     Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    String sql = "INSERT INTO Friends (cat_id, friend_id) VALUES ($0, $1)";
-    Query query = session.createSQLQuery(sql);
-
     Transaction transaction = session.beginTransaction();
-    query.setParameter(0, cat.getId());
-    query.setParameter(1, catsFriend.getId());
-    query.executeUpdate();
+    List<Cat> friends = cat.getFriends();
+    friends.add(catsFriend);
+    session.update(cat);
     transaction.commit();
+    session.close();
   }
 }

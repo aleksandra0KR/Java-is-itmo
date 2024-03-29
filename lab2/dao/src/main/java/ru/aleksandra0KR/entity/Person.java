@@ -1,40 +1,39 @@
 package ru.aleksandra0KR.entity;
 
 import java.time.LocalDate;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Entity;
+import javax.persistence.Entity;
 
 @Data
 @ToString
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "People", schema = "TheCatEmpire")
+@Table(name = "People")
+@Entity
 public class Person {
 
   @Id
-  @GeneratedValue
-  private long id;
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "person_id")
+  private long person_id;
 
+  @Column(name = "name")
   private String name;
 
-  @Column(name = "date_of_birth")
+  @Column(name = "birthdate")
   private LocalDate birthdate;
 
-  public Person(String name, LocalDate birthdate){
+  public Person(String name, LocalDate birthdate) {
     this.name = name;
     this.birthdate = birthdate;
   }
-
-  //@OneToMany(mappedBy = "user", orphanRemoval = true)
-  //private List<Cat> cats;
 }
 

@@ -42,7 +42,7 @@ public class PersonPostgresDao implements PersonDao {
     session.save(person);
     transaction.commit();
     session.close();
-    return person.getId();
+    return person.getPerson_id();
   }
 
   @Override
