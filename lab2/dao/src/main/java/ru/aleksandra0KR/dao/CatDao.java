@@ -13,7 +13,7 @@ public interface CatDao {
 
   void deleteCat(Cat cat);
 
-  List<Cat> findAllFriends(long id);
+  List<Cat> findAllFriends(Cat cat);
 
   void addFriend(Cat cat, Cat catsFriend);
 
