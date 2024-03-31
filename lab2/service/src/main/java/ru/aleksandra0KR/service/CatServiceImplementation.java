@@ -2,8 +2,8 @@ package ru.aleksandra0KR.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import ru.aleksandra0KR.dao.CatDao;
 import ru.aleksandra0KR.dao.CatDaoPostgres;
 import ru.aleksandra0KR.dao.PersonDao;
@@ -13,43 +13,49 @@ import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.mapper.CatMapper;
 
+@NoArgsConstructor
 public class CatServiceImplementation implements CatService {
 
-  private final CatDao catDao = new CatDaoPostgres();
+  private final CatDao catDaoPostgres = new CatDaoPostgres();
   private final PersonDao personDao = new PersonPostgresDao();
 
-
   public CatDto findCatByID(long id) {
-    return CatMapper.asDto(catDao.findCatByID(id));
+    return CatMapper.asDto(catDaoPostgres.findCatByID(id));
   }
 
-  public CatDto addCat(String name, LocalDate birthday, String color, String breed, PersonDto owner) {
+  public CatDto addCat(String name, LocalDate birthday, String color, String breed,
+      PersonDto owner) {
+
     Cat cat = new Cat(name, color, breed, birthday, personDao.findPersonByID(owner.getId()));
-    long id = catDao.addCat(cat);
+    personDao.findPersonByID(owner.getId()).addCat(cat);
+
+    long id = catDaoPostgres.addCat(cat);
     CatDto catDto = CatMapper.asDto(cat);
     catDto.setId(id);
     return catDto;
   }
 
   public void updateCat(CatDto cat) {
-    catDao.updateCat(CatMapper.asDao(cat));
+    catDaoPostgres.updateCat(CatMapper.asDao(cat));
   }
 
-  public void deleteCat(CatDto cat) {
-
-    catDao.deleteCat(CatMapper.asDao(cat));
+  public void addFriend(long catID, long friendID) {
+    Cat cat = catDaoPostgres.findCatByID(catID);
+    Cat friend = catDaoPostgres.findCatByID(friendID);
+    catDaoPostgres.addFriend(cat, friend);
   }
 
-  public List<CatDto> findAllFriends(long id) {
-    List<CatDto> friendsDto = new ArrayList<>();
-    for (Cat cat : catDao.findAllFriends(id)) {
-      friendsDto.add(CatMapper.asDto(cat));
+  public List<CatDto> getAllFriends(long id) {
+    List<Cat> catList = catDaoPostgres.findAllFriends(catDaoPostgres.findCatByID(id));
+    List<CatDto> friends = new ArrayList<>();
+    for (Cat cat : catList) {
+      friends.add(CatMapper.asDto(cat));
     }
-    return friendsDto;
+    return friends;
   }
 
-  public void addFriend(CatDto cat, CatDto catsFriend) {
-    catDao.addFriend(CatMapper.asDao(cat), CatMapper.asDao(catsFriend));
+  public void deleteCat(long id) {
+    catDaoPostgres.deleteCat(catDaoPostgres.findCatByID(id));
   }
 }
 

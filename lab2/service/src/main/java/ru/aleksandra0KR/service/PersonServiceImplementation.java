@@ -2,8 +2,8 @@ package ru.aleksandra0KR.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import lombok.NoArgsConstructor;
 import ru.aleksandra0KR.dao.PersonDao;
 import ru.aleksandra0KR.dao.PersonPostgresDao;
 import ru.aleksandra0KR.dto.CatDto;
@@ -13,6 +13,7 @@ import ru.aleksandra0KR.entity.Person;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.mapper.PersonMapper;
 
+@NoArgsConstructor
 public class PersonServiceImplementation implements PersonService {
 
   private final PersonDao personDao = new PersonPostgresDao();
@@ -48,6 +49,7 @@ public class PersonServiceImplementation implements PersonService {
 
   @Override
   public void deletePerson(PersonDto person) {
-    personDao.deletePerson(PersonMapper.asDao(person));
+    var personD = personDao.findPersonByID(person.getId());
+    personDao.deletePerson(personD);
   }
 }

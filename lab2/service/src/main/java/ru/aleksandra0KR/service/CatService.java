@@ -1,7 +1,6 @@
 package ru.aleksandra0KR.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
@@ -14,9 +13,9 @@ public interface CatService {
 
   void updateCat(CatDto cat);
 
-  void deleteCat(CatDto cat);
+  void deleteCat(long id);
 
-  List<CatDto> findAllFriends(long id);
+  List<CatDto> getAllFriends(long id);
 
-  void addFriend(CatDto cat, CatDto catsFriend);
+  void addFriend(long cat, long catsFriend);
 }
