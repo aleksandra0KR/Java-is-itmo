@@ -3,17 +3,7 @@ package ru.aleksandra0KR.entity;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +17,7 @@ public class Cat {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long id;
+  private Long id;
 
   private String name;
 
@@ -52,6 +42,14 @@ public class Cat {
     this.color = color;
     this.birthday = birthday;
     this.person = owner;
+  }
+
+  public Cat(String name, String color, String breed, LocalDate birthday) {
+    this.name = name;
+    this.breed = breed;
+    this.color = color;
+    this.birthday = birthday;
+    this.person = null;
   }
 
   public void addFriend(Cat cat) {
