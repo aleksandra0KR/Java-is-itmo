@@ -3,7 +3,9 @@ package ru.aleksandra0KR.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.Transaction;
 import ru.aleksandra0KR.dao.CatDao;
 import ru.aleksandra0KR.dao.CatDaoPostgres;
 import ru.aleksandra0KR.dao.PersonDao;
@@ -12,12 +14,15 @@ import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.mapper.CatMapper;
+import org.hibernate.Session;
+import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
+import ru.aleksandra0KR.mapper.PersonMapper;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class CatServiceImplementation implements CatService {
 
-  private final CatDao catDaoPostgres = new CatDaoPostgres();
-  private final PersonDao personDao = new PersonPostgresDao();
+  private final CatDao catDaoPostgres;
+  private final PersonDao personDao;
 
   public CatDto findCatByID(long id) {
     var catDto = CatMapper.asDto(catDaoPostgres.findCatByID(id));
@@ -30,8 +35,7 @@ public class CatServiceImplementation implements CatService {
   public CatDto addCat(String name, LocalDate birthday, String color, String breed,
       PersonDto owner) {
 
-    Cat cat = new Cat(name, color, breed, birthday, personDao.findPersonByID(owner.getId()));
-    personDao.findPersonByID(owner.getId()).addCat(cat);
+    Cat cat = new Cat(name, color, breed, birthday, PersonMapper.asDao(owner));
 
     long id = catDaoPostgres.addCat(cat);
     CatDto catDto = CatMapper.asDto(cat);
@@ -75,6 +79,7 @@ public class CatServiceImplementation implements CatService {
     }
     catDaoPostgres.deleteCat(cat);
   }
+
 }
 
 

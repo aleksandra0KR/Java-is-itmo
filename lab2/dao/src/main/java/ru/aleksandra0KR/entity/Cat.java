@@ -54,6 +54,15 @@ public class Cat {
     this.person = owner;
   }
 
+  public Cat(Long id, String name, String color, String breed, LocalDate birthday, Person owner) {
+    this.id = id;
+    this.name = name;
+    this.breed = breed;
+    this.color = color;
+    this.birthday = birthday;
+    this.person = owner;
+  }
+
   public void addFriend(Cat cat) {
     if (!friends.contains(cat)) {
       friends.add(cat);

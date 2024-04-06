@@ -12,10 +12,15 @@ import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
 
 public class PersonPostgresDao implements PersonDao {
 
+  private final Session session;
+  private final Transaction transaction;
+  public PersonPostgresDao(Session session, Transaction transaction) {
+    this.session = session;
+    this.transaction = transaction;
+  }
+
   @Override
   public Person findPersonByID(long id) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     Person person = session.get(Person.class, id);
     transaction.commit();
     session.close();
@@ -24,16 +29,13 @@ public class PersonPostgresDao implements PersonDao {
 
   @Override
   public List<Cat> findAllCats(long id) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
-
     String sql = "SELECT id FROM Cats WHERE person = ?";
     Query query = session.createSQLQuery(sql);
     query.setParameter(1, id);
 
     List<BigInteger> cats_id = query.list();
     List<Cat> cats = new ArrayList<>();
-    var catDao = new CatDaoPostgres();
+    var catDao = new CatDaoPostgres(session, transaction);
     for (var a : cats_id) {
       cats.add(catDao.findCatByID(a.longValue()));
     }
@@ -45,8 +47,6 @@ public class PersonPostgresDao implements PersonDao {
 
   @Override
   public long addPerson(Person person) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.save(person);
     transaction.commit();
     session.close();
@@ -55,8 +55,6 @@ public class PersonPostgresDao implements PersonDao {
 
   @Override
   public void updatePerson(Person person) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.update(person);
     transaction.commit();
     session.close();
@@ -64,8 +62,6 @@ public class PersonPostgresDao implements PersonDao {
 
   @Override
   public void deletePerson(Person person) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.delete(person);
     transaction.commit();
     session.close();

@@ -3,20 +3,23 @@ package ru.aleksandra0KR.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import org.hibernate.Session;
 import ru.aleksandra0KR.dao.PersonDao;
 import ru.aleksandra0KR.dao.PersonPostgresDao;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.entity.Person;
+import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.mapper.PersonMapper;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class PersonServiceImplementation implements PersonService {
 
-  private final PersonDao personDao = new PersonPostgresDao();
+  private final PersonDao personDao;
 
   @Override
   public PersonDto findPersonByID(long id) {

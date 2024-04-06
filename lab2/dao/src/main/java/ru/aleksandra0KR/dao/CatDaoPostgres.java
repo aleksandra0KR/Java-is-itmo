@@ -4,14 +4,18 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.aleksandra0KR.entity.Cat;
-import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
 
 public class CatDaoPostgres implements CatDao {
 
+  private final Session session;
+  private final Transaction transaction;
+  public CatDaoPostgres(Session session, Transaction transaction) {
+    this.session = session;
+    this.transaction = transaction;
+  }
+
   @Override
   public Cat findCatByID(long id) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     Cat findCat = session.get(Cat.class, id);
     transaction.commit();
     session.close();
@@ -20,8 +24,6 @@ public class CatDaoPostgres implements CatDao {
 
   @Override
   public long addCat(Cat cat) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.save(cat);
     transaction.commit();
     session.close();
@@ -30,8 +32,6 @@ public class CatDaoPostgres implements CatDao {
 
   @Override
   public void updateCat(Cat cat) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.update(cat);
     transaction.commit();
     session.close();
@@ -39,8 +39,6 @@ public class CatDaoPostgres implements CatDao {
 
   @Override
   public void deleteCat(Cat cat) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     session.delete(cat);
     transaction.commit();
     session.close();
@@ -48,8 +46,6 @@ public class CatDaoPostgres implements CatDao {
 
   @Override
   public void addFriend(Cat cat, Cat friend) {
-    Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-    Transaction transaction = session.beginTransaction();
     cat.addFriend(friend);
     session.merge(cat);
     transaction.commit();

@@ -16,6 +16,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
 
+    implementation("org.hibernate:hibernate-gradle-plugin:5.6.15.Final")
+
+
     implementation(project(mapOf("path" to ":lab2:DAO")))
 }
 

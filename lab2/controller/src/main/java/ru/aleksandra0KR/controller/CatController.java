@@ -2,16 +2,17 @@ package ru.aleksandra0KR.controller;
 
 import java.time.LocalDate;
 import java.util.List;
-import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import ru.aleksandra0KR.dao.CatDaoPostgres;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
-import ru.aleksandra0KR.service.CatServiceImplementation;
 import ru.aleksandra0KR.service.CatService;
 
-@NoArgsConstructor
+@AllArgsConstructor
 public class CatController {
 
-  private final CatService catService = new CatServiceImplementation();
+  CatDaoPostgres catDaoPostgres;
+  private final CatService catService;
 
   public CatDto findCatByID(long id) {
     CatDto cat = catService.findCatByID(id);

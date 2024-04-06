@@ -26,4 +26,12 @@ public class CatDto {
     catOwnerDto = null;
   }
 
+  public CatDto(String name, String breed, String color, LocalDate birthDate) {
+    this.name = name;
+    this.breed = breed;
+    this.color = color;
+    this.birthDate = birthDate;
+    catOwnerDto = null;
+  }
+
 }

@@ -2,6 +2,7 @@ package ru.aleksandra0KR.controller;
 
 import java.time.LocalDate;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
@@ -9,9 +10,9 @@ import ru.aleksandra0KR.service.PersonService;
 import ru.aleksandra0KR.service.PersonServiceImplementation;
 
 @NoArgsConstructor
+@AllArgsConstructor
 public class PersonController {
-
-  private PersonService personService = new PersonServiceImplementation();
+  private PersonService personService;
 
   public PersonDto createPerson(String name, LocalDate birthDate) {
     PersonDto personDto = personService.addPerson(name, birthDate);
