@@ -36,22 +36,6 @@ public class Cat {
       inverseJoinColumns = @JoinColumn(name = "friend_id", referencedColumnName = "id"))
   private List<Cat> friends = new ArrayList<>();
 
-  public Cat(String name, String color, String breed, LocalDate birthday, Person owner) {
-    this.name = name;
-    this.breed = breed;
-    this.color = color;
-    this.birthday = birthday;
-    this.person = owner;
-  }
-
-  public Cat(String name, String color, String breed, LocalDate birthday) {
-    this.name = name;
-    this.breed = breed;
-    this.color = color;
-    this.birthday = birthday;
-    this.person = null;
-  }
-
   public void addFriend(Cat cat) {
     if (!friends.contains(cat)) {
       friends.add(cat);

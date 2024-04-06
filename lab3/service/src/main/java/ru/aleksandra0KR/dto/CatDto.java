@@ -1,10 +1,10 @@
 package ru.aleksandra0KR.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import java.time.LocalDate;
-import jdk.jfr.Name;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NoArgsConstructor
 public class CatDto {
 
+  @JsonIgnore
   private long id;
   @NotNull
   @NotEmpty
@@ -28,14 +29,5 @@ public class CatDto {
 
   private String breed;
   private String color;
-
-  public CatDto(Long id, String name, String breed, String color, LocalDate birthDate, Long personID) {
-    this.id = id;
-    this.name = name;
-    this.breed = breed;
-    this.color = color;
-    this.birthDate = birthDate;
-  }
-
 
 }

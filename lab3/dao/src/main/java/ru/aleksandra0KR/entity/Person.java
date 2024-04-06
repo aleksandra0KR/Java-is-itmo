@@ -29,16 +29,5 @@ public class Person {
   @OneToMany(mappedBy = "person", orphanRemoval = true, fetch = FetchType.EAGER)
   private List<Cat> cats = new ArrayList<>();
 
-  public Person(String name, LocalDate birthdate) {
-    this.name = name;
-    this.birthdate = birthdate;
-  }
-
-  public void addCat(Cat cat) {
-    if (!cats.contains(cat)) {
-      cats.add(cat);
-    }
-  }
-
 }
 

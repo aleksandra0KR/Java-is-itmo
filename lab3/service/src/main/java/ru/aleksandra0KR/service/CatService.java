@@ -1,9 +1,7 @@
 package ru.aleksandra0KR.service;
 
-import java.time.LocalDate;
 import java.util.List;
 import ru.aleksandra0KR.dto.CatDto;
-import ru.aleksandra0KR.dto.PersonDto;
 
 public interface CatService {
 

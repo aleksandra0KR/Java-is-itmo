@@ -32,32 +32,26 @@ public class CatServiceImplementation implements CatService {
 
   @Override
   public List<CatDto> findCatsByColor(String color) {
-    List<CatDto> catsDto = catRepository.findCatByColor(color)
+    return catRepository.findCatByColor(color)
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
-
-    return catsDto;
   }
 
   @Override
   public List<CatDto> findCatByBreed(String breed) {
-    List<CatDto> catsDto = catRepository.findCatByBreed(breed)
+    return catRepository.findCatByBreed(breed)
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
-
-    return catsDto;
   }
 
   @Override
   public List<CatDto> findCatByName(String name) {
-    List<CatDto> catsDto = catRepository.findCatByName(name)
+    return catRepository.findCatByName(name)
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
-
-    return catsDto;
   }
 
   public CatDto addCat(CatDto cat) {
@@ -123,11 +117,10 @@ public class CatServiceImplementation implements CatService {
   }
 
   public List<CatDto> getAllFriends(long id) {
-    List<CatDto> friends = catRepository.getFriendsById(id)
+    return catRepository.getFriendsById(id)
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
-    return friends;
   }
 
   @Transactional

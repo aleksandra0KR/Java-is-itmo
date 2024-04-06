@@ -4,10 +4,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import lombok.experimental.UtilityClass;
 import ru.aleksandra0KR.dto.CatDto;
-import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
-import ru.aleksandra0KR.entity.Person;
-import ru.aleksandra0KR.repository.PersonRepository;
 
 @UtilityClass
 public class CatMapper {

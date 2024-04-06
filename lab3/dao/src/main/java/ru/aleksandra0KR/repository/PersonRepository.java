@@ -7,5 +7,5 @@ import ru.aleksandra0KR.entity.Person;
 @Repository
 public interface PersonRepository extends JpaRepository<Person, Long> {
 
-  public Person findByName(String name);
+  Person findByName(String name);
 }

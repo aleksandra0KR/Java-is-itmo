@@ -1,7 +1,5 @@
 package ru.aleksandra0KR.service;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
-import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.entity.Person;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.mapper.PersonMapper;
@@ -44,12 +41,10 @@ public class PersonServiceImplementation implements PersonService {
     Person person = personRepository.findById(id)
         .orElseThrow(() -> new NullPointerException("Person not found with ID: " + id));
 
-    List<CatDto> catsDto = person.getCats()
+    return person.getCats()
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
-
-    return catsDto;
   }
 
   @Override

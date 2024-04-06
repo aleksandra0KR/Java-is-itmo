@@ -9,12 +9,12 @@ import ru.aleksandra0KR.entity.Cat;
 @Repository
 public interface CatRepository extends JpaRepository<Cat, Long> {
 
-  public List<Cat> findCatByColor(String color);
+  List<Cat> findCatByColor(String color);
 
-  public List<Cat> findCatByBreed(String color);
+  List<Cat> findCatByBreed(String color);
 
-  public List<Cat> findCatByName(String name);
+  List<Cat> findCatByName(String name);
 
-  public List<Cat> getFriendsById(Long id);
+  List<Cat> getFriendsById(Long id);
 
 }
