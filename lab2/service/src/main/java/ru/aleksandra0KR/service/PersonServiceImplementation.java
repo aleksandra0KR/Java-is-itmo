@@ -27,7 +27,7 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public PersonDto findPersonByID(long id) {
     Transaction transaction = session.beginTransaction();
-    var person = personDao.findPersonByID(id);
+    var person = personDao.findPersonByID(id, session);
     if (person == null) {
       throw new NullPointerException("person does not exist");
     }
@@ -38,11 +38,11 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public List<CatDto> findAllCats(long id) {
     Transaction transaction = session.beginTransaction();
-    var person = personDao.findPersonByID(id);
+    var person = personDao.findPersonByID(id, session);
     if (person == null) {
       throw new NullPointerException("person does not exist");
     }
-    var cats = personDao.findAllCats(id);
+    var cats = personDao.findAllCats(id, session);
     List<CatDto> catsDto = new ArrayList<>();
     for (Cat cat : cats) {
       catsDto.add(CatMapper.asDto(cat));
@@ -55,7 +55,7 @@ public class PersonServiceImplementation implements PersonService {
   public PersonDto addPerson(String name, LocalDate birthday) {
     Transaction transaction = session.beginTransaction();
     Person person = new Person(name, birthday);
-    long id = personDao.addPerson(person);
+    long id = personDao.addPerson(person, session);
     PersonDto personDto = PersonMapper.asDto(person);
     personDto.setId(id);
     transaction.commit();
@@ -65,18 +65,18 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public void updatePerson(PersonDto person) {
     Transaction transaction = session.beginTransaction();
-    personDao.updatePerson(PersonMapper.asDao(person));
+    personDao.updatePerson(PersonMapper.asDao(person), session);
     transaction.commit();
   }
 
   @Override
   public void deletePerson(PersonDto person) {
     Transaction transaction = session.beginTransaction();
-    var personD = personDao.findPersonByID(person.getId());
+    var personD = personDao.findPersonByID(person.getId(), session);
     if (personD == null) {
       throw new NullPointerException("person does not exist");
     }
-    personDao.deletePerson(personD);
+    personDao.deletePerson(personD, session);
     transaction.commit();
   }
 }

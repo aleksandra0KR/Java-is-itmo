@@ -6,16 +6,16 @@ import org.hibernate.Transaction;
 import ru.aleksandra0KR.entity.Cat;
 
 public interface CatDao {
-  Cat findCatByID(long id);
+  Cat findCatByID(long id,  Session session);
 
-  long addCat(Cat cat);
+  long addCat(Cat cat,  Session session);
 
-  void updateCat(Cat cat);
+  void updateCat(Cat cat,  Session session);
 
-  void deleteCat(Cat cat);
+  void deleteCat(Cat cat,  Session session);
 
   List<Cat> findAllFriends(Cat cat);
 
-  void addFriend(Cat cat, Cat catsFriend);
+  void addFriend(Cat cat, Cat catsFriend,  Session session);
 
 }
