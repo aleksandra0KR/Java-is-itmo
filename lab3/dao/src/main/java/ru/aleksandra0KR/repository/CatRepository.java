@@ -13,6 +13,8 @@ public interface CatRepository extends JpaRepository<Cat, Long> {
 
   public List<Cat> findCatByBreed(String color);
 
+  public List<Cat> findCatByName(String name);
+
   public List<Cat> getFriendsById(Long id);
 
 }
