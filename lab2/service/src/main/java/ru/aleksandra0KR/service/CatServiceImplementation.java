@@ -20,7 +20,11 @@ public class CatServiceImplementation implements CatService {
   private final PersonDao personDao = new PersonPostgresDao();
 
   public CatDto findCatByID(long id) {
-    return CatMapper.asDto(catDaoPostgres.findCatByID(id));
+    var catDto = CatMapper.asDto(catDaoPostgres.findCatByID(id));
+    if (catDto == null) {
+      throw new NullPointerException("this cat does not exist");
+    }
+    return catDto;
   }
 
   public CatDto addCat(String name, LocalDate birthday, String color, String breed,
@@ -41,21 +45,35 @@ public class CatServiceImplementation implements CatService {
 
   public void addFriend(long catID, long friendID) {
     Cat cat = catDaoPostgres.findCatByID(catID);
+    if (cat == null) {
+      throw new NullPointerException("this cat does not exist");
+    }
     Cat friend = catDaoPostgres.findCatByID(friendID);
+    if (friend == null) {
+      throw new NullPointerException("this cat does not exist");
+    }
     catDaoPostgres.addFriend(cat, friend);
   }
 
   public List<CatDto> getAllFriends(long id) {
-    List<Cat> catList = catDaoPostgres.findAllFriends(catDaoPostgres.findCatByID(id));
+    Cat cat = catDaoPostgres.findCatByID(id);
+    if (cat == null) {
+      throw new NullPointerException("this cat does not exist");
+    }
+    List<Cat> catList = catDaoPostgres.findAllFriends(cat);
     List<CatDto> friends = new ArrayList<>();
-    for (Cat cat : catList) {
-      friends.add(CatMapper.asDto(cat));
+    for (Cat c : catList) {
+      friends.add(CatMapper.asDto(c));
     }
     return friends;
   }
 
   public void deleteCat(long id) {
-    catDaoPostgres.deleteCat(catDaoPostgres.findCatByID(id));
+    var cat = catDaoPostgres.findCatByID(id);
+    if (cat == null) {
+      throw new NullPointerException("this cat does not exist");
+    }
+    catDaoPostgres.deleteCat(cat);
   }
 }
 

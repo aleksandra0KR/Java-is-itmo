@@ -20,11 +20,19 @@ public class PersonServiceImplementation implements PersonService {
 
   @Override
   public PersonDto findPersonByID(long id) {
-    return PersonMapper.asDto(personDao.findPersonByID(id));
+    var person = personDao.findPersonByID(id);
+    if (person == null) {
+      throw new NullPointerException("person does not exist");
+    }
+    return PersonMapper.asDto(person);
   }
 
   @Override
   public List<CatDto> findAllCats(long id) {
+    var person = personDao.findPersonByID(id);
+    if (person == null) {
+      throw new NullPointerException("person does not exist");
+    }
     var cats = personDao.findAllCats(id);
     List<CatDto> catsDto = new ArrayList<>();
     for (Cat cat : cats) {
@@ -50,6 +58,9 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public void deletePerson(PersonDto person) {
     var personD = personDao.findPersonByID(person.getId());
+    if (personD == null) {
+      throw new NullPointerException("person does not exist");
+    }
     personDao.deletePerson(personD);
   }
 }
