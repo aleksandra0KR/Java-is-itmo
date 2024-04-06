@@ -1,82 +1,166 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+import java.util.ArrayList;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
-import ru.aleksandra0KR.dao.CatDao;
+import org.mockito.stubbing.Answer;
 import ru.aleksandra0KR.dao.CatDaoPostgres;
-import ru.aleksandra0KR.dao.PersonDao;
 import ru.aleksandra0KR.dao.PersonPostgresDao;
+import ru.aleksandra0KR.dto.CatDto;
+import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.entity.Person;
+import ru.aleksandra0KR.mapper.CatMapper;
+import ru.aleksandra0KR.mapper.PersonMapper;
+import ru.aleksandra0KR.service.CatServiceImplementation;
+import ru.aleksandra0KR.service.PersonServiceImplementation;
 
 public class Tests {
 
-  @Test
-  void TestCreatePerson() {
-    PersonDao personDaoMock = Mockito.mock(PersonPostgresDao.class);
+  private CatDaoPostgres catRepository;
+  private PersonPostgresDao personRepository;
 
-    Person person = new Person("Dima", LocalDate.of(2004, 1, 1));
-    person.setPerson_id(1);
+  private CatServiceImplementation catService;
+  private PersonServiceImplementation personService;
 
-    Mockito.when(personDaoMock.addPerson(person)).thenReturn(person.getPerson_id());
-    assertEquals(personDaoMock.addPerson(person), 1);
+  @BeforeEach
+  public void setup() {
+    catRepository = Mockito.mock(CatDaoPostgres.class);
+    personRepository = Mockito.mock(PersonPostgresDao.class);
+
+    catService = new CatServiceImplementation(catRepository, personRepository);
+    personService = new PersonServiceImplementation(personRepository);
   }
 
   @Test
-  void TestCreateCat() {
+  public void CreateCat() {
 
-    CatDao catDaoMock = Mockito.mock(CatDaoPostgres.class);
+    Person owner = new Person(
+        1,
+        "Sasha",
+        LocalDate.of(2004, 5, 9),
+        new ArrayList<>());
 
-    Cat cat = new Cat("Lucky", "british", "Grey", LocalDate.now(),
-        new Person("Nasty", LocalDate.of(2004, 3, 21)));
-    cat.setId(1);
-
-    Mockito.when(catDaoMock.addCat(cat)).thenReturn(cat.getId());
-    assertEquals(catDaoMock.addCat(cat), 1);
-  }
-
-  @Test
-  void TestAddFriend() {
-
-    CatDao catDaoMock = Mockito.mock(CatDao.class);
-
-    Cat catFuFa = new Cat("FuFa", "Сhinchilla on silver", "Scottish longhair",
+    Cat cat = new Cat(
+        "Fufa",
+        "perfect",
+        "pink",
         LocalDate.of(2020, 1, 31),
-        new Person("Sasha", LocalDate.now()));
-    Cat catLucky = new Cat("Lucky", "Grey", "British", LocalDate.of(2021, 6, 15),
-        new Person("Nasty", LocalDate.now()));
-    catFuFa.setId(1);
-    catLucky.setId(2);
+        owner);
 
-    Mockito.when(catDaoMock.addCat(catFuFa)).thenReturn(catFuFa.getId());
-    Mockito.when(catDaoMock.addCat(catLucky)).thenReturn(catLucky.getId());
-    Mockito.when(catDaoMock.findAllFriends(catLucky)).thenReturn(Arrays.asList(catFuFa));
+    CatDto catDto = CatMapper.asDto(cat);
+    catDto.setId(1);
 
-    catDaoMock.addCat(catFuFa);
-    catDaoMock.addCat(catLucky);
-    catDaoMock.addFriend(catLucky, catFuFa);
+    Mockito.when(catRepository.addCat(ArgumentMatchers.any(Cat.class)))
+        .thenAnswer((Answer<Long>) invocation -> {
+          Cat cat1 = invocation.getArgument(0);
+          return cat1.getId();
+        });
 
-    List<Cat> friends = catDaoMock.findAllFriends(catLucky);
+    CatDto catDto1 = catService.addCat(cat.getName(), cat.getBirthday(), cat.getColor(),
+        cat.getBreed(), PersonMapper.asDto(owner));
 
-    assertEquals(Arrays.asList(catFuFa), friends);
+    Assertions.assertEquals(
+        catDto1.getName(),
+        cat.getName());
   }
 
   @Test
-  void TestUpdateCat() {
-    CatDao catDAO = Mockito.mock(CatDaoPostgres.class);
+  public void FindCatById() {
 
-    Cat cat = new Cat("Lucky", "british", "Grey", LocalDate.now(),
-        new Person("Nasty", LocalDate.of(2004, 3, 21)));
-    cat.setId(1);
+    Person owner = new Person(
+        1,
+        "Sasha",
+        LocalDate.of(2004, 5, 9),
+        new ArrayList<>());
 
-    Mockito.when(catDAO.addCat(cat)).thenReturn(cat.getId());
-    Mockito.when(catDAO.findCatByID(1)).thenReturn(cat);
-    catDAO.addCat(cat);
-    cat.setColor("Grey and White");
-    catDAO.updateCat(cat);
-    assertEquals(catDAO.findCatByID(1).getColor(), cat.getColor());
+    Cat cat = new Cat(
+        "Fufa",
+        "perfect",
+        "pink",
+        LocalDate.of(2020, 1, 31),
+        owner);
+
+    CatDto catDto = CatMapper.asDto(cat);
+    catDto.setId(1);
+
+    Mockito.when(catRepository.findCatByID(ArgumentMatchers.anyLong()))
+        .thenAnswer((Answer<Cat>) invocation -> cat);
+
+    CatDto catDto1 = catService.findCatByID(1);
+
+    Assertions.assertEquals(
+        catDto1.getName(),
+        cat.getName());
   }
+
+  @Test
+  public void addOwner() {
+
+    Person owner = new Person(
+        1,
+        "Sasha",
+        LocalDate.of(2004, 5, 9),
+        new ArrayList<>());
+
+    PersonDto person = PersonMapper.asDto(owner);
+    person.setId(1);
+
+    Mockito.when(personRepository.addPerson(ArgumentMatchers.any(Person.class)))
+        .thenAnswer((Answer<Long>) invocation -> {
+          Person owner1 = invocation.getArgument(0);
+          return owner1.getPerson_id();
+        });
+
+    PersonDto ownerDto1 = personService.addPerson(owner.getName(), owner.getBirthdate());
+
+    Assertions.assertEquals(
+        ownerDto1.getBirthDate(),
+        owner.getBirthdate());
+  }
+
+  @Test
+  public void createCat_addNonexistentFriend_GetException() {
+    Person owner = new Person(
+        1,
+        "Sasha",
+        LocalDate.of(2004, 5, 9),
+        new ArrayList<>());
+
+    Cat cat = new Cat(
+        "Fufa",
+        "perfect",
+        "pink",
+        LocalDate.of(2020, 1, 31),
+        owner);
+
+    Mockito.when(catRepository.addCat(ArgumentMatchers.any(Cat.class)))
+        .thenAnswer((Answer<Long>) invocation -> {
+          Cat cat1 = invocation.getArgument(0);
+          return cat1.getId();
+        });
+
+    Mockito.when(personRepository.addPerson(ArgumentMatchers.any(Person.class)))
+        .thenAnswer((Answer<Long>) invocation -> {
+          Person owner1 = invocation.getArgument(0);
+          return owner1.getPerson_id();
+        });
+    Mockito.when(personRepository.findPersonByID(Mockito.anyInt())).thenReturn(owner);
+    Mockito.when(catRepository.findCatByID(1)).thenReturn(cat);
+    Mockito.doNothing().when(catRepository)
+        .addFriend(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Cat.class));
+
+    PersonDto ownerDto1 = personService.addPerson(owner.getName(), owner.getBirthdate());
+    CatDto catDto1 = catService.addCat(cat.getName(), cat.getBirthday(), cat.getColor(),
+        cat.getBreed(), PersonMapper.asDto(owner));
+
+    assertThrows(NullPointerException.class,
+        () -> catService.addFriend(1, 5));
+  }
+
 }
