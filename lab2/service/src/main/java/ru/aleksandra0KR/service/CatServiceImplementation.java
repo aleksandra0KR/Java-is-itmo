@@ -3,51 +3,61 @@ package ru.aleksandra0KR.service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.aleksandra0KR.dao.CatDao;
-import ru.aleksandra0KR.dao.CatDaoPostgres;
-import ru.aleksandra0KR.dao.PersonDao;
-import ru.aleksandra0KR.dao.PersonPostgresDao;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
-import ru.aleksandra0KR.mapper.CatMapper;
-import org.hibernate.Session;
 import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
+import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.mapper.PersonMapper;
 
-@AllArgsConstructor
 public class CatServiceImplementation implements CatService {
 
   private final CatDao catDaoPostgres;
-  private final PersonDao personDao;
 
+  public CatServiceImplementation(CatDao catDaoPostgres){
+    Transaction transaction =  session.beginTransaction();
+
+    this.catDaoPostgres = catDaoPostgres;
+    transaction.commit();
+  }
+  Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
   public CatDto findCatByID(long id) {
+    Transaction transaction =  session.beginTransaction();
+
     var catDto = CatMapper.asDto(catDaoPostgres.findCatByID(id));
     if (catDto == null) {
       throw new NullPointerException("this cat does not exist");
     }
+    transaction.commit();
     return catDto;
   }
 
   public CatDto addCat(String name, LocalDate birthday, String color, String breed,
       PersonDto owner) {
+    Transaction transaction =  session.beginTransaction();
 
     Cat cat = new Cat(name, color, breed, birthday, PersonMapper.asDao(owner));
 
     long id = catDaoPostgres.addCat(cat);
     CatDto catDto = CatMapper.asDto(cat);
     catDto.setId(id);
+    transaction.commit();
     return catDto;
   }
 
   public void updateCat(CatDto cat) {
+    Transaction transaction =  session.beginTransaction();
+
     catDaoPostgres.updateCat(CatMapper.asDao(cat));
+    transaction.commit();
   }
 
   public void addFriend(long catID, long friendID) {
+    Transaction transaction =  session.beginTransaction();
+
     Cat cat = catDaoPostgres.findCatByID(catID);
     if (cat == null) {
       throw new NullPointerException("this cat does not exist");
@@ -57,9 +67,11 @@ public class CatServiceImplementation implements CatService {
       throw new NullPointerException("this cat does not exist");
     }
     catDaoPostgres.addFriend(cat, friend);
+    transaction.commit();
   }
 
   public List<CatDto> getAllFriends(long id) {
+    Transaction transaction =  session.beginTransaction();
     Cat cat = catDaoPostgres.findCatByID(id);
     if (cat == null) {
       throw new NullPointerException("this cat does not exist");
@@ -69,15 +81,19 @@ public class CatServiceImplementation implements CatService {
     for (Cat c : catList) {
       friends.add(CatMapper.asDto(c));
     }
+    transaction.commit();
     return friends;
   }
 
   public void deleteCat(long id) {
+    Transaction transaction =  session.beginTransaction();
+
     var cat = catDaoPostgres.findCatByID(id);
     if (cat == null) {
       throw new NullPointerException("this cat does not exist");
     }
     catDaoPostgres.deleteCat(cat);
+    transaction.commit();
   }
 
 }

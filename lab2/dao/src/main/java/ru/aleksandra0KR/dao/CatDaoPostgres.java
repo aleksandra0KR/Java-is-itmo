@@ -4,20 +4,14 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import ru.aleksandra0KR.entity.Cat;
+import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
 
 public class CatDaoPostgres implements CatDao {
 
-  private final Session session;
-  private final Transaction transaction;
-  public CatDaoPostgres(Session session, Transaction transaction) {
-    this.session = session;
-    this.transaction = transaction;
-  }
-
+  Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
   @Override
   public Cat findCatByID(long id) {
     Cat findCat = session.get(Cat.class, id);
-    transaction.commit();
     session.close();
     return findCat;
   }
@@ -25,7 +19,6 @@ public class CatDaoPostgres implements CatDao {
   @Override
   public long addCat(Cat cat) {
     session.save(cat);
-    transaction.commit();
     session.close();
     return cat.getId();
   }
@@ -33,14 +26,12 @@ public class CatDaoPostgres implements CatDao {
   @Override
   public void updateCat(Cat cat) {
     session.update(cat);
-    transaction.commit();
     session.close();
   }
 
   @Override
   public void deleteCat(Cat cat) {
     session.delete(cat);
-    transaction.commit();
     session.close();
   }
 
@@ -48,7 +39,6 @@ public class CatDaoPostgres implements CatDao {
   public void addFriend(Cat cat, Cat friend) {
     cat.addFriend(friend);
     session.merge(cat);
-    transaction.commit();
     session.close();
   }
 

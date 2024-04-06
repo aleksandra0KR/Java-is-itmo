@@ -1,10 +1,11 @@
 package ru.aleksandra0KR.dao;
 
 import java.util.List;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import ru.aleksandra0KR.entity.Cat;
 
 public interface CatDao {
-
   Cat findCatByID(long id);
 
   long addCat(Cat cat);

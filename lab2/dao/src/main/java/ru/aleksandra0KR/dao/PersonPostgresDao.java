@@ -12,17 +12,11 @@ import ru.aleksandra0KR.hibernate.HibernateSessionFactoryUtil;
 
 public class PersonPostgresDao implements PersonDao {
 
-  private final Session session;
-  private final Transaction transaction;
-  public PersonPostgresDao(Session session, Transaction transaction) {
-    this.session = session;
-    this.transaction = transaction;
-  }
+  Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
 
   @Override
   public Person findPersonByID(long id) {
     Person person = session.get(Person.class, id);
-    transaction.commit();
     session.close();
     return person;
   }
@@ -35,12 +29,11 @@ public class PersonPostgresDao implements PersonDao {
 
     List<BigInteger> cats_id = query.list();
     List<Cat> cats = new ArrayList<>();
-    var catDao = new CatDaoPostgres(session, transaction);
+    var catDao = new CatDaoPostgres();
     for (var a : cats_id) {
       cats.add(catDao.findCatByID(a.longValue()));
     }
 
-    transaction.commit();
     session.close();
     return cats;
   }
@@ -48,7 +41,6 @@ public class PersonPostgresDao implements PersonDao {
   @Override
   public long addPerson(Person person) {
     session.save(person);
-    transaction.commit();
     session.close();
     return person.getPerson_id();
   }
@@ -56,14 +48,12 @@ public class PersonPostgresDao implements PersonDao {
   @Override
   public void updatePerson(Person person) {
     session.update(person);
-    transaction.commit();
     session.close();
   }
 
   @Override
   public void deletePerson(Person person) {
     session.delete(person);
-    transaction.commit();
     session.close();
   }
 }

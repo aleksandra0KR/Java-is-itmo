@@ -3,6 +3,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import javax.transaction.Transaction;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class Tests {
     catRepository = Mockito.mock(CatDaoPostgres.class);
     personRepository = Mockito.mock(PersonPostgresDao.class);
 
-    catService = new CatServiceImplementation(catRepository, personRepository);
+    catService = new CatServiceImplementation(catRepository);
     personService = new PersonServiceImplementation(personRepository);
   }
 
