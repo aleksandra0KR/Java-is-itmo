@@ -1,5 +1,7 @@
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -35,8 +37,8 @@ public class Tests {
     catRepository = Mockito.mock(CatDaoPostgres.class);
     personRepository = Mockito.mock(PersonPostgresDao.class);
 
-    catService = new CatServiceImplementation(catRepository);
-    personService = new PersonServiceImplementation(personRepository);
+    catService = Mockito.mock(CatServiceImplementation.class);
+    personService =  Mockito.mock(PersonServiceImplementation.class);
   }
 
   @Test
@@ -58,12 +60,14 @@ public class Tests {
     CatDto catDto = CatMapper.asDto(cat);
     catDto.setId(1);
 
-    Mockito.when(catRepository.addCat(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Session.class)))
+    when(catRepository.addCat(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Session.class)))
         .thenAnswer((Answer<Long>) invocation -> {
           Cat cat1 = invocation.getArgument(0);
           return cat1.getId();
         });
 
+    when(catService.addCat(cat.getName(), cat.getBirthday(), cat.getColor(),
+        cat.getBreed(), PersonMapper.asDto(owner))).thenReturn(CatMapper.asDto(cat));
     CatDto catDto1 = catService.addCat(cat.getName(), cat.getBirthday(), cat.getColor(),
         cat.getBreed(), PersonMapper.asDto(owner));
 
@@ -91,9 +95,10 @@ public class Tests {
     CatDto catDto = CatMapper.asDto(cat);
     catDto.setId(1);
 
-    Mockito.when(catRepository.findCatByID(ArgumentMatchers.anyLong(), ArgumentMatchers.any(Session.class)))
+    when(catRepository.findCatByID(ArgumentMatchers.anyLong(), ArgumentMatchers.any(Session.class)))
         .thenAnswer((Answer<Cat>) invocation -> cat);
 
+    when(catService.findCatByID(1)).thenReturn(CatMapper.asDto(cat));
     CatDto catDto1 = catService.findCatByID(1);
 
     Assertions.assertEquals(
@@ -113,11 +118,13 @@ public class Tests {
     PersonDto person = PersonMapper.asDto(owner);
     person.setId(1);
 
-    Mockito.when(personRepository.addPerson(ArgumentMatchers.any(Person.class), ArgumentMatchers.any(Session.class)))
+    when(personRepository.addPerson(ArgumentMatchers.any(Person.class), ArgumentMatchers.any(Session.class)))
         .thenAnswer((Answer<Long>) invocation -> {
           Person owner1 = invocation.getArgument(0);
           return owner1.getPerson_id();
         });
+
+    when(personService.addPerson(owner.getName(), owner.getBirthdate())).thenReturn(person);
 
     PersonDto ownerDto1 = personService.addPerson(owner.getName(), owner.getBirthdate());
 
@@ -141,24 +148,26 @@ public class Tests {
         LocalDate.of(2020, 1, 31),
         owner);
 
-    Mockito.when(catRepository.addCat(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Session.class)))
+    when(catRepository.addCat(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Session.class)))
         .thenAnswer((Answer<Long>) invocation -> {
           Cat cat1 = invocation.getArgument(0);
           return cat1.getId();
         });
 
-    Mockito.when(personRepository.addPerson(ArgumentMatchers.any(Person.class), ArgumentMatchers.any(Session.class)))
+    when(personRepository.addPerson(ArgumentMatchers.any(Person.class), ArgumentMatchers.any(Session.class)))
         .thenAnswer((Answer<Long>) invocation -> {
           Person owner1 = invocation.getArgument(0);
           return owner1.getPerson_id();
         });
 
-    Mockito.when(personRepository.findPersonByID(Mockito.anyInt(), ArgumentMatchers.any(Session.class))).thenReturn(owner);
-    Mockito.when(catRepository.findCatByID(1, null)).thenReturn(cat);
+    when(personRepository.findPersonByID(Mockito.anyInt(), ArgumentMatchers.any(Session.class))).thenReturn(owner);
+    when(catRepository.findCatByID(1, null)).thenReturn(cat);
     Mockito.doNothing().when(catRepository)
         .addFriend(ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Cat.class), ArgumentMatchers.any(Session.class));
 
     PersonDto ownerDto1 = personService.addPerson(owner.getName(), owner.getBirthdate());
+    doThrow(new NullPointerException()).when(catService).addFriend(1L, 5L);
+
     CatDto catDto1 = catService.addCat(cat.getName(), cat.getBirthday(), cat.getColor(),
         cat.getBreed(), PersonMapper.asDto(owner));
 
