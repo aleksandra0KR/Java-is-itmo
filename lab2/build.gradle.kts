@@ -12,13 +12,13 @@ repositories {
 dependencies {
     testImplementation(platform("org.junit:junit-bom:5.9.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(project(mapOf("path" to ":lab2:DAO")))
+    testImplementation(project(mapOf("path" to ":lab2:dao")))
     testImplementation("org.mockito:mockito-core:5.2.0")
 
 
     implementation("org.hibernate:hibernate-gradle-plugin:5.6.15.Final")
 
-    implementation(project(mapOf("path" to ":lab2:DAO")))
+    implementation(project(mapOf("path" to ":lab2:dao")))
     implementation(project(mapOf("path" to ":lab2:service")))
     implementation(project(mapOf("path" to ":lab2:controller")))
     compileOnly ("org.projectlombok:lombok:1.18.30")

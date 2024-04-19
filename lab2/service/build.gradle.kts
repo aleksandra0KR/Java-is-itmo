@@ -19,7 +19,7 @@ dependencies {
     implementation("org.hibernate:hibernate-gradle-plugin:5.6.15.Final")
 
 
-    implementation(project(mapOf("path" to ":lab2:DAO")))
+    implementation(project(mapOf("path" to ":lab2:dao")))
 }
 
 tasks.test {

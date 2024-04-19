@@ -3,7 +3,7 @@ include("Bank")
 include("BankConsole")
 include("lab2")
 include("lab2:DAO")
-findProject(":lab2:DAO")?.name = "DAO"
+findProject(":lab2:DAO")?.name = "dao"
 include("lab2:service")
 findProject(":lab2:service")?.name = "service"
 include("lab2:controller")
