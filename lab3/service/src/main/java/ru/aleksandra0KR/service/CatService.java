@@ -26,5 +26,6 @@ public interface CatService {
   void attachPerson(Long personDto, Long catDto);
 
   void detachPerson(Long personId, Long catId);
+  List<CatDto> findCatsByColor(String color, String breed, String name);
 
 }

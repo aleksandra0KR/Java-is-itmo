@@ -1,6 +1,5 @@
 package ru.aleksandra0KR;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
@@ -11,15 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.RestTemplate;
 import ru.aleksandra0KR.dto.CatDto;
-import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.repository.CatRepository;
-import ru.aleksandra0KR.repository.PersonRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class TestCats {
@@ -56,10 +51,10 @@ public class TestCats {
   public void emptyFiendsTest() {
 
     CatDto catDto = new CatDto(0L, "Sasha", LocalDate.of(2000, 1, 1), "shinsh", "black");
-    restTemplate.postForObject(baseUrl.concat("/createCat"), catDto,
+    restTemplate.postForObject(baseUrl, catDto,
         CatDto.class);
 
-    List<CatDto> cats = restTemplate.getForObject(baseUrl.concat("/getAllFriends?id=0"),
+    List<CatDto> cats = restTemplate.getForObject(baseUrl.concat("/0/friends"),
         List.class);
 
     assertEquals(0, cats.size());

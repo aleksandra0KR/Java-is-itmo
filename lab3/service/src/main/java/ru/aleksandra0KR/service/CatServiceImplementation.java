@@ -2,7 +2,6 @@ package ru.aleksandra0KR.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
@@ -41,6 +40,29 @@ public class CatServiceImplementation implements CatService {
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
+  }
+  @Override
+  public List<CatDto> findCatsByColor(String color, String breed, String name){
+    if (color == null && breed == null && name == null) {
+      throw new CatDoesntExistsException("");
+    }
+
+    if (breed != null) {
+      return catRepository.findCatByBreed(breed).stream()
+          .map(CatMapper::asDto)
+          .collect(Collectors.toList());
+    }
+    else if (color != null) {
+      return catRepository.findCatByColor(color).stream()
+          .map(CatMapper::asDto)
+          .collect(Collectors.toList());
+    }
+    else if (name != null) {
+      return catRepository.findCatByName(name).stream()
+          .map(CatMapper::asDto)
+          .collect(Collectors.toList());
+    }
+   return null;
   }
 
   @Override
