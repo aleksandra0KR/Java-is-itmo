@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.entity.Cat;
 import ru.aleksandra0KR.entity.Person;
+import ru.aleksandra0KR.exceptions.CatDoesntExistsException;
+import ru.aleksandra0KR.exceptions.PersonDoesntExistException;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.repository.CatRepository;
 import ru.aleksandra0KR.repository.PersonRepository;
@@ -26,7 +28,7 @@ public class CatServiceImplementation implements CatService {
 
   public CatDto findCatByID(long id) {
     Cat cat = catRepository.findById(id)
-        .orElseThrow(() -> new NullPointerException("there is no cat with id " + id));
+        .orElseThrow(() -> new CatDoesntExistsException(id));
     return CatMapper.asDto(cat);
   }
 
@@ -48,10 +50,13 @@ public class CatServiceImplementation implements CatService {
 
   @Override
   public List<CatDto> findCatByName(String name) {
-    return catRepository.findCatByName(name)
+    List<CatDto> cats = catRepository.findCatByName(name)
         .stream()
         .map(CatMapper::asDto)
         .collect(Collectors.toList());
+    if(cats.isEmpty()) throw new CatDoesntExistsException(name);
+    return cats;
+
   }
 
   public CatDto addCat(CatDto cat) {
@@ -63,7 +68,7 @@ public class CatServiceImplementation implements CatService {
 
   @Transactional
   public void updateCat(CatDto cat) {
-    Cat catFromRepo = catRepository.getById(cat.getId());
+    Cat catFromRepo = catRepository.findById(cat.getId()).orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
 
     catFromRepo.setColor(cat.getColor());
     catFromRepo.setName(cat.getName());
@@ -76,9 +81,9 @@ public class CatServiceImplementation implements CatService {
   @Transactional
   public void addFriend(long catID, long friendID) {
     Cat cat = catRepository.findById(catID)
-        .orElseThrow(() -> new NullPointerException("there is no cat with id " + catID));
+        .orElseThrow(() -> new CatDoesntExistsException(catID));
     Cat friend = catRepository.findById(friendID)
-        .orElseThrow(() -> new NullPointerException("there is no friend with id " + friendID));
+        .orElseThrow(() -> new CatDoesntExistsException(friendID));
 
     cat.addFriend(friend);
     catRepository.save(cat);
@@ -88,9 +93,9 @@ public class CatServiceImplementation implements CatService {
   @Override
   public void attachPerson(Long personId, Long catId) {
     Person person = personRepository.findById(personId)
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + personId));
+        .orElseThrow(() -> new PersonDoesntExistException(personId));
     Cat cat = catRepository.findById(catId)
-        .orElseThrow(() -> new NullPointerException("there is no cat with id " + catId));
+        .orElseThrow(() -> new CatDoesntExistsException(catId));
 
     cat.setPerson(person);
     var cats = person.getCats();
@@ -104,9 +109,9 @@ public class CatServiceImplementation implements CatService {
   @Override
   public void detachPerson(Long personId, Long catId) {
     Person person = personRepository.findById(personId)
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + personId));
+        .orElseThrow(() -> new PersonDoesntExistException(personId));
     Cat cat = catRepository.findById(catId)
-        .orElseThrow(() -> new NullPointerException("there is no cat with id " + catId));
+        .orElseThrow(() -> new CatDoesntExistsException(catId));
 
     cat.setPerson(null);
     var cats = person.getCats();
@@ -126,11 +131,10 @@ public class CatServiceImplementation implements CatService {
   @Transactional
   public void deleteCat(long id) {
     Cat cat = catRepository.findById(id)
-        .orElseThrow(() -> new NullPointerException("there is no cat with id " + id));
+        .orElseThrow(() -> new CatDoesntExistsException(id));
     catRepository.delete(cat);
   }
 }
-
 
 
 

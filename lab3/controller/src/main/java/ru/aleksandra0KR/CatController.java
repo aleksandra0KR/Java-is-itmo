@@ -1,5 +1,6 @@
 package ru.aleksandra0KR;
 
+import jakarta.validation.Valid;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +30,7 @@ public class CatController {
   }
 
   @PostMapping("/createCat")
-  public void catRegistration(@Validated @RequestBody CatDto cat) {
+  public void catRegistration(@Valid @RequestBody CatDto cat) {
     catService.addCat(cat);
   }
 
@@ -70,8 +72,8 @@ public class CatController {
     }
   }
 
-  @PostMapping("/updateCat")
-  public void updateCat(@Validated @RequestBody CatDto cat) {
+  @PutMapping("/updateCat")
+  public void updateCat(@Valid @RequestBody CatDto cat) {
     catService.updateCat(cat);
   }
 
@@ -92,19 +94,19 @@ public class CatController {
     }
   }
 
-  @PostMapping("/addFriend")
+  @PutMapping("/addFriend")
   public void addFriend(@RequestParam("catId") Long catId,
       @RequestParam("friendId") Long friendId) {
     catService.addFriend(catId, friendId);
   }
 
-  @PostMapping("/attachPerson")
+  @PutMapping("/attachPerson")
   public void attachPerson(@RequestParam("personid") Long personid,
       @RequestParam("catid") Long catid) {
     catService.attachPerson(personid, catid);
   }
 
-  @PostMapping("/detachPerson")
+  @PutMapping("/detachPerson")
   public void detachPerson(@RequestParam("personid") Long personid,
       @RequestParam("catid") Long catid) {
     catService.detachPerson(personid, catid);

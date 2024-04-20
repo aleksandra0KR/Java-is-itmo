@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.entity.Person;
+import ru.aleksandra0KR.exceptions.PersonDoesntExistException;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.mapper.PersonMapper;
 import ru.aleksandra0KR.repository.PersonRepository;
@@ -22,7 +23,7 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public PersonDto findPersonByID(long id) {
     Person person = personRepository.findById(id)
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + id));
+        .orElseThrow(() -> new PersonDoesntExistException(id));
     return PersonMapper.asDto(person);
   }
 
@@ -30,7 +31,7 @@ public class PersonServiceImplementation implements PersonService {
   public PersonDto findPersonByName(String name) {
     var person = personRepository.findByName(name);
     if (person == null) {
-      throw new NullPointerException("there is no person with name " + name);
+      throw new PersonDoesntExistException(name);
     }
     return PersonMapper.asDto(person);
   }
@@ -39,7 +40,7 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public List<CatDto> findAllCats(long id) {
     Person person = personRepository.findById(id)
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + id));
+        .orElseThrow(() -> new PersonDoesntExistException(id));
 
     return person.getCats()
         .stream()
@@ -59,7 +60,7 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public void updatePerson(PersonDto person) {
     Person personFromRepo = personRepository.findById(person.getId())
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + person.getId()));
+        .orElseThrow(() -> new PersonDoesntExistException(person.getId()));
     personFromRepo.setName(person.getName());
     personFromRepo.setBirthdate(person.getBirthDate());
     personRepository.save(personFromRepo);
@@ -69,7 +70,7 @@ public class PersonServiceImplementation implements PersonService {
   @Override
   public void deletePerson(Long id) {
     Person personFromRepo = personRepository.findById(id)
-        .orElseThrow(() -> new NullPointerException("Person not found with ID: " + id));
+        .orElseThrow(() -> new PersonDoesntExistException(id));
     personRepository.delete(personFromRepo);
   }
 }
