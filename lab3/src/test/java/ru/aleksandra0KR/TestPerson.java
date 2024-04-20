@@ -13,10 +13,11 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.web.client.RestTemplate;
 import ru.aleksandra0KR.dto.PersonDto;
+import ru.aleksandra0KR.repository.CatRepository;
 import ru.aleksandra0KR.repository.PersonRepository;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class Tests {
+public class TestPerson {
 
   @LocalServerPort
   private int port;
@@ -27,7 +28,6 @@ public class Tests {
 
   @Autowired
   private PersonRepository personRepository;
-
 
   @BeforeAll
   public static void init() {
