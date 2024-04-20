@@ -23,7 +23,7 @@ public class Person {
   @Column(name = "name")
   private String name;
 
-  @Column(name = "birthdate")
+  @Column(name = "birthday")
   private LocalDate birthdate;
 
   @OneToMany(mappedBy = "person", orphanRemoval = true, fetch = FetchType.EAGER)
