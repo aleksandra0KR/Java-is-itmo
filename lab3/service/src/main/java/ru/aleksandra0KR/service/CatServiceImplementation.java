@@ -2,7 +2,6 @@ package ru.aleksandra0KR.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +18,16 @@ import ru.aleksandra0KR.repository.PersonRepository;
 @ComponentScan(basePackages = {"ru.aleksandra0KR.repository"})
 public class CatServiceImplementation implements CatService {
 
-  @Autowired
+  final
   CatRepository catRepository;
 
-  @Autowired
+  final
   PersonRepository personRepository;
+
+  public CatServiceImplementation(CatRepository catRepository, PersonRepository personRepository) {
+    this.catRepository = catRepository;
+    this.personRepository = personRepository;
+  }
 
 
   public CatDto findCatByID(long id) {

@@ -2,7 +2,6 @@ package ru.aleksandra0KR.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
@@ -17,8 +16,12 @@ import ru.aleksandra0KR.repository.PersonRepository;
 @Service
 public class PersonServiceImplementation implements PersonService {
 
-  @Autowired
+  final
   PersonRepository personRepository;
+
+  public PersonServiceImplementation(PersonRepository personRepository) {
+    this.personRepository = personRepository;
+  }
 
   @Override
   public PersonDto findPersonByID(long id) {
