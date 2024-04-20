@@ -15,7 +15,6 @@ import ru.aleksandra0KR.repository.CatRepository;
 import ru.aleksandra0KR.repository.PersonRepository;
 
 @Service
-@ComponentScan(basePackages = {"ru.aleksandra0KR.repository"})
 public class CatServiceImplementation implements CatService {
 
   final
