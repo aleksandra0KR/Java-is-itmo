@@ -1,8 +1,6 @@
-package ru.aleksandra0KR.entity;
+package ru.aleksandra0KR.model;
 
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

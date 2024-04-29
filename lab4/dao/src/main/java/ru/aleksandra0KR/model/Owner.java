@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.entity;
+package ru.aleksandra0KR.model;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
