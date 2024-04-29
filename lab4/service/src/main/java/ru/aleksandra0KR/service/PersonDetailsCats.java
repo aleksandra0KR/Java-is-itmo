@@ -19,49 +19,8 @@ public class PersonDetailsCats implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Arrays.stream(person.getRoles().split(", ")).map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-  }
-
-  @Override
-  public String getPassword() {
-    return person.getUsername();
-  }
-
-  @Override
-  public String getUsername() {
-    return person.getUsername();
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-    return true;
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-    return true;
-  }
-
-  @Override
-  public boolean isEnabled() {
-    return true;
-  }
-}
-/*
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    Set<Role> roles = person.getRoles();
-    List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-
-    for (Role role : roles){
-      authorities.add(new SimpleGrantedAuthority(role.getName()));
-    }
-    return authorities;
+    return Arrays.stream(person.getRoles().split(", ")).map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toList());
   }
 
   @Override
@@ -93,4 +52,4 @@ public class PersonDetailsCats implements UserDetails {
   public boolean isEnabled() {
     return true;
   }
-}*/
+}

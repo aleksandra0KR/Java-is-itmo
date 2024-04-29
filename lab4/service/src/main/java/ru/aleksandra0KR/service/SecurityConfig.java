@@ -33,15 +33,14 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
-    return http.csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth.requestMatchers("/person/**", "/cats/**").permitAll()
+
+
+   return http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/person/**").permitAll()
             .requestMatchers("owner/**").authenticated())
         .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
         .build();
-   //return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth ->auth.requestMatchers("/person/**", "/owner/").permitAll()).build();
-      // .requestMatchers("owner/**").permitAll()).build();
-       //.formLogin(
-     //  AbstractAuthenticationFilterConfigurer::permitAll).build();
+
   }
 
 
@@ -54,60 +53,5 @@ public class SecurityConfig {
     return authProvider;
   }
 
- /*  final
-  OwnerService userService;
-
-  @Bean
-  public BCryptPasswordEncoder passwordEncoder(){
-    return new BCryptPasswordEncoder();
-  }
-
-  public SecurityConfig(OwnerService userService) {
-    this.userService = userService;
-  }
-
-  @Bean
-  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
-    http
-        .csrf()
-        .disable()
-        .cors()
-        .and()
-        .authorizeHttpRequests()
-        .requestMatchers("/user/registration/**").hasRole("admin")
-        .requestMatchers("/owner/getAllOwners/**").hasRole("admin")
-        .requestMatchers("/delete/**").hasAuthority("admin")
-        .anyRequest().authenticated()
-        .and()
-        .formLogin()
-        .permitAll()
-       .and()
-        .logout()
-        .permitAll()
-        .and()
-        .httpBasic();
-    return http
-        .build();
-  }
-
-  @Bean
-  public DaoAuthenticationProvider daoAuthenticationProvider(PersonService personService) {
-    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-    daoAuthenticationProvider.setUserDetailsService(personService);
-    return daoAuthenticationProvider;
-  }
-
-  /*
-  @Bean
-  public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-    UserDetails
-  }
-
-  @Bean
-  public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
-  }*/
 }
 
