@@ -1,0 +1,113 @@
+package ru.aleksandra0KR.service;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+public class SecurityConfig {
+
+  @Bean
+  public UserDetailsService userDetailsService() {
+
+    return new PersonDetailService();
+
+  }
+
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http)  throws Exception {
+    return http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(auth -> auth.requestMatchers("/person/**", "/cats/**").permitAll()
+            .requestMatchers("owner/**").authenticated())
+        .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+        .build();
+   //return http.csrf(AbstractHttpConfigurer::disable).authorizeHttpRequests(auth ->auth.requestMatchers("/person/**", "/owner/").permitAll()).build();
+      // .requestMatchers("owner/**").permitAll()).build();
+       //.formLogin(
+     //  AbstractAuthenticationFilterConfigurer::permitAll).build();
+  }
+
+
+
+  @Bean
+  public AuthenticationProvider authProvider() {
+    DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+    authProvider.setPasswordEncoder(passwordEncoder());
+    authProvider.setUserDetailsService(userDetailsService());
+    return authProvider;
+  }
+
+ /*  final
+  OwnerService userService;
+
+  @Bean
+  public BCryptPasswordEncoder passwordEncoder(){
+    return new BCryptPasswordEncoder();
+  }
+
+  public SecurityConfig(OwnerService userService) {
+    this.userService = userService;
+  }
+
+  @Bean
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+    http
+        .csrf()
+        .disable()
+        .cors()
+        .and()
+        .authorizeHttpRequests()
+        .requestMatchers("/user/registration/**").hasRole("admin")
+        .requestMatchers("/owner/getAllOwners/**").hasRole("admin")
+        .requestMatchers("/delete/**").hasAuthority("admin")
+        .anyRequest().authenticated()
+        .and()
+        .formLogin()
+        .permitAll()
+       .and()
+        .logout()
+        .permitAll()
+        .and()
+        .httpBasic();
+    return http
+        .build();
+  }
+
+  @Bean
+  public DaoAuthenticationProvider daoAuthenticationProvider(PersonService personService) {
+    DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+    daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+    daoAuthenticationProvider.setUserDetailsService(personService);
+    return daoAuthenticationProvider;
+  }
+
+  /*
+  @Bean
+  public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+    UserDetails
+  }
+
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+  }*/
+}
+
