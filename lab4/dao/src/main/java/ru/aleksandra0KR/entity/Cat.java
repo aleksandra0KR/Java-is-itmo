@@ -28,7 +28,7 @@ public class Cat {
   private LocalDate birthday;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  private User user;
+  private Owner owner;
 
   @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
   @JoinTable(name = "friends",
