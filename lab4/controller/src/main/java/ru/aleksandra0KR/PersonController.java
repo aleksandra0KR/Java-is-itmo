@@ -34,13 +34,4 @@ public class PersonController {
     }
   }
 
-  @PostMapping("/createOwner")
-  public void addUser(@RequestBody OwnerDto ownerDto, Principal principal) {
-      personService.addOwner(ownerDto, principal);
-  }
-
-  @PutMapping("/connectOwner")
-  public void addOwnerToUser(@RequestParam("id") Long id, Principal principal) {
-    personService.connectOwner(id, principal);
-  }
 }
