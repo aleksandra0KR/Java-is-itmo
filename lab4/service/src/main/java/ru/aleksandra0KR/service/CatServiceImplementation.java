@@ -1,15 +1,19 @@
 package ru.aleksandra0KR.service;
 
+import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.CatDto;
+import ru.aleksandra0KR.exceptions.CatsPrivateInformationException;
 import ru.aleksandra0KR.model.Cat;
 import ru.aleksandra0KR.model.Owner;
 import ru.aleksandra0KR.exceptions.CatDoesntExistsException;
 import ru.aleksandra0KR.exceptions.PersonDoesntExistException;
 import ru.aleksandra0KR.mapper.CatMapper;
+import ru.aleksandra0KR.model.Person;
 import ru.aleksandra0KR.repository.CatRepository;
 import ru.aleksandra0KR.repository.OwnerRepository;
 
@@ -22,9 +26,14 @@ public class CatServiceImplementation implements CatService {
   final
   OwnerRepository ownerRepository;
 
-  public CatServiceImplementation(CatRepository catRepository, OwnerRepository ownerRepository) {
+  final
+  PersonService personService;
+
+  public CatServiceImplementation(CatRepository catRepository, OwnerRepository ownerRepository,
+      PersonService personService) {
     this.catRepository = catRepository;
     this.ownerRepository = ownerRepository;
+    this.personService = personService;
   }
 
 
@@ -34,54 +43,37 @@ public class CatServiceImplementation implements CatService {
     return CatMapper.asDto(cat);
   }
 
-  @Override
-  public List<CatDto> findCatsByColor(String color) {
-    return catRepository.findCatByColor(color)
-        .stream()
-        .map(CatMapper::asDto)
-        .collect(Collectors.toList());
+  public Long OwnerId(Principal principal) {
+    Person person = personService.getPersonByName(principal.getName());
+    if (person != null && person.getOwner() != null) {
+      return person.getOwner().getOwner_id();
+    }
+    throw new PersonDoesntExistException(principal.getName());
   }
+
   @Override
-  public List<CatDto> findCatsByColor(String color, String breed, String name){
+  public List<CatDto> findCatsByColorOrBreedOrName(Principal principal, String color, String breed,
+      String name) {
     if (color == null && breed == null && name == null) {
       throw new CatDoesntExistsException("");
     }
-
+    Long id = OwnerId(principal);
     if (breed != null) {
       return catRepository.findCatByBreed(breed).stream()
+          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
-    }
-    else if (color != null) {
+    } else if (color != null) {
       return catRepository.findCatByColor(color).stream()
+          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
-    }
-    else if (name != null) {
+    } else {
       return catRepository.findCatByName(name).stream()
+          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     }
-   return null;
-  }
-
-  @Override
-  public List<CatDto> findCatByBreed(String breed) {
-    return catRepository.findCatByBreed(breed)
-        .stream()
-        .map(CatMapper::asDto)
-        .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<CatDto> findCatByName(String name) {
-    List<CatDto> cats = catRepository.findCatByName(name)
-        .stream()
-        .map(CatMapper::asDto)
-        .collect(Collectors.toList());
-    if(cats.isEmpty()) throw new CatDoesntExistsException(name);
-    return cats;
-
   }
 
   public CatDto addCat(CatDto cat) {
@@ -92,9 +84,13 @@ public class CatServiceImplementation implements CatService {
   }
 
   @Transactional
-  public void updateCat(CatDto cat) {
-    Cat catFromRepo = catRepository.findById(cat.getId()).orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
-
+  public void updateCat(Principal principal, CatDto cat) {
+    Long id = OwnerId(principal);
+    Cat catFromRepo = catRepository.findById(cat.getId())
+        .orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
+    if (catFromRepo.getOwner().getOwner_id() != id) {
+      throw new CatsPrivateInformationException();
+    }
     catFromRepo.setColor(cat.getColor());
     catFromRepo.setName(cat.getName());
     catFromRepo.setBreed(cat.getBreed());
@@ -137,7 +133,6 @@ public class CatServiceImplementation implements CatService {
         .orElseThrow(() -> new PersonDoesntExistException(personId));
     Cat cat = catRepository.findById(catId)
         .orElseThrow(() -> new CatDoesntExistsException(catId));
-
     cat.setOwner(null);
     var cats = person.getCats();
     cats.remove(cat);
@@ -154,12 +149,23 @@ public class CatServiceImplementation implements CatService {
   }
 
   @Transactional
-  public void deleteCat(long id) {
+  public void deleteCat(Principal principal, long id) {
+
+    Long personId = OwnerId(principal); // TODO
+
     Cat cat = catRepository.findById(id)
         .orElseThrow(() -> new CatDoesntExistsException(id));
+
+    if (cat.getOwner() != null && personId != cat.getOwner().getOwner_id()) {
+      throw new CatsPrivateInformationException();
+    }
+
     catRepository.delete(cat);
   }
 }
+
+
+
 
 
 
