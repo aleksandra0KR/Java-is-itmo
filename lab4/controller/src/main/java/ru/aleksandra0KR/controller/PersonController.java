@@ -1,14 +1,9 @@
-package ru.aleksandra0KR;
+package ru.aleksandra0KR.controller;
 
-import java.security.Principal;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.aleksandra0KR.dto.OwnerDto;
 import ru.aleksandra0KR.dto.PersonDto;
 import ru.aleksandra0KR.exceptions.EmptyPersonException;
 import ru.aleksandra0KR.service.PersonService;
@@ -23,7 +18,7 @@ public class PersonController {
     this.personService = personService;
   }
 
-  @PostMapping("/registration")
+  @PostMapping
   public String addUser(@RequestBody PersonDto person) {
 
     if (person != null) {
@@ -32,6 +27,7 @@ public class PersonController {
     } else {
       throw new EmptyPersonException();
     }
+
   }
 
 }

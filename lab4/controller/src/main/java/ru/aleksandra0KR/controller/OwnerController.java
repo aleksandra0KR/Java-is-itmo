@@ -1,4 +1,4 @@
-package ru.aleksandra0KR;
+package ru.aleksandra0KR.controller;
 
 import jakarta.validation.Valid;
 import java.security.Principal;
@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.OwnerDto;
+import ru.aleksandra0KR.exceptions.EmptyPersonException;
 import ru.aleksandra0KR.service.OwnerService;
 import ru.aleksandra0KR.service.PersonService;
 
@@ -58,16 +58,16 @@ public class OwnerController {
     }
   }
 
-
-  @PostMapping("/createOwner")
-  public void addUser(@RequestBody OwnerDto ownerDto, Principal principal) {
-    personService.addOwner(ownerDto, principal);
+  @PostMapping
+  public String addUser(@RequestBody OwnerDto ownerDto, Principal principal) {
+    if (ownerDto != null) {
+      personService.addOwner(ownerDto, principal);
+      return "Owner was added successfully";
+    } else {
+      throw new EmptyPersonException();
+    }
   }
 
-  @PutMapping("/connectOwner")
-  public void addOwnerToUser(@RequestParam("id") Long id, Principal principal) {
-    personService.connectOwner(id, principal);
-  }
   @DeleteMapping("/{id}")
   public void deletePerson(@PathVariable("id") Long id) {
     ownerService.deletePerson(id);

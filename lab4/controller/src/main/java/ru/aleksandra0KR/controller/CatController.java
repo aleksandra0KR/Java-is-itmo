@@ -1,4 +1,4 @@
-package ru.aleksandra0KR;
+package ru.aleksandra0KR.controller;
 
 import jakarta.validation.Valid;
 import java.security.Principal;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.aleksandra0KR.dto.CatDto;
+import ru.aleksandra0KR.exceptions.EmptyCatException;
 import ru.aleksandra0KR.service.CatService;
 
 @RestController
@@ -33,8 +34,13 @@ public class CatController {
   }
 
   @PostMapping
-  public void catRegistration(@Valid @RequestBody CatDto cat) {
-    catService.addCat(cat);
+  public String catRegistration(@Valid @RequestBody CatDto cat) {
+    if (cat != null) {
+      catService.addCat(cat);
+      return "Cat was added successfully";
+    } else {
+      throw new EmptyCatException();
+    }
   }
 
   @GetMapping("/{id}")
@@ -93,6 +99,6 @@ public class CatController {
 
   @DeleteMapping("/{id}/people/{personId}")
   public void detachPerson(@PathVariable("id") Long id, @PathVariable("personId") Long personId) {
-    catService.detachPerson(personId, id);
+    catService.detachPerson(id, personId);
   }
 }
