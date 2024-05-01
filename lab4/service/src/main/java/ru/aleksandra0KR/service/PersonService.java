@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.dto.OwnerDto;
 import ru.aleksandra0KR.dto.PersonDto;
-import ru.aleksandra0KR.exceptions.OwnerPersonConnectionException;
 import ru.aleksandra0KR.mapper.PersonMapper;
 import ru.aleksandra0KR.model.Owner;
 import ru.aleksandra0KR.model.Person;
@@ -40,20 +39,6 @@ public class PersonService {
 
   public Person getPersonByName(String username) {
     return personRepository.findByUsername(username);
-  }
-
-  @Transactional
-  public void connectOwner(Long id, Principal principal) {
-    Person person = getPersonByName(principal.getName());
-    Owner owner = ownerRepository.getById(id);
-    if (person.getOwner() != null) {
-      throw new OwnerPersonConnectionException(person.getOwner().getName());
-    }
-
-    person.setOwner(owner);
-    owner.setPerson(person);
-    ownerRepository.save(owner);
-    personRepository.save(person);
   }
 
   @Transactional

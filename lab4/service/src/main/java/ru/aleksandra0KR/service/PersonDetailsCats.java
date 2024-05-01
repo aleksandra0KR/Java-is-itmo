@@ -10,7 +10,7 @@ import ru.aleksandra0KR.model.Person;
 
 public class PersonDetailsCats implements UserDetails {
 
-  private Person person;
+  private final Person person;
 
   public PersonDetailsCats(Person person) {
 

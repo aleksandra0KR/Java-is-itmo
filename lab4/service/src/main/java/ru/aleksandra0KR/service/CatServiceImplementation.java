@@ -60,17 +60,17 @@ public class CatServiceImplementation implements CatService {
     Long id = OwnerId(principal);
     if (breed != null) {
       return catRepository.findCatByBreed(breed).stream()
-          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
+          .filter(cat -> cat.getOwner() != null && Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     } else if (color != null) {
       return catRepository.findCatByColor(color).stream()
-          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
+          .filter(cat -> cat.getOwner() != null && Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     } else {
       return catRepository.findCatByName(name).stream()
-          .filter(cat -> Objects.equals(cat.getOwner().getOwner_id(), id))
+          .filter(cat -> cat.getOwner() != null && Objects.equals(cat.getOwner().getOwner_id(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     }
@@ -88,7 +88,8 @@ public class CatServiceImplementation implements CatService {
     Long id = OwnerId(principal);
     Cat catFromRepo = catRepository.findById(cat.getId())
         .orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
-    if (catFromRepo.getOwner().getOwner_id() != id) {
+    if (catFromRepo.getOwner() != null && !Objects.equals(catFromRepo.getOwner().getOwner_id(),
+        id)) {
       throw new CatsPrivateInformationException();
     }
     catFromRepo.setColor(cat.getColor());
@@ -112,7 +113,7 @@ public class CatServiceImplementation implements CatService {
 
   @Transactional
   @Override
-  public void attachPerson(Long personId, Long catId) {
+  public void attachPerson(Long catId, Long personId) {
     Owner person = ownerRepository.findById(personId)
         .orElseThrow(() -> new PersonDoesntExistException(personId));
     Cat cat = catRepository.findById(catId)
@@ -128,7 +129,7 @@ public class CatServiceImplementation implements CatService {
 
   @Transactional
   @Override
-  public void detachPerson(Long personId, Long catId) {
+  public void detachPerson(Long catId, Long personId) {
     Owner person = ownerRepository.findById(personId)
         .orElseThrow(() -> new PersonDoesntExistException(personId));
     Cat cat = catRepository.findById(catId)
@@ -151,12 +152,12 @@ public class CatServiceImplementation implements CatService {
   @Transactional
   public void deleteCat(Principal principal, long id) {
 
-    Long personId = OwnerId(principal); // TODO
+    Long personId = OwnerId(principal);
 
     Cat cat = catRepository.findById(id)
         .orElseThrow(() -> new CatDoesntExistsException(id));
 
-    if (cat.getOwner() != null && personId != cat.getOwner().getOwner_id()) {
+    if (cat.getOwner() != null && !Objects.equals(personId, cat.getOwner().getOwner_id())) {
       throw new CatsPrivateInformationException();
     }
 

@@ -1,6 +1,5 @@
 package ru.aleksandra0KR.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -24,7 +23,7 @@ public class PersonDto {
 
   @NotNull
   @NotEmpty
-  String roles;
+  String roles = "ROLE_USER";
 
   public PersonDto(String username, String password) {
     this.roles = "ROLE_USER";

@@ -12,12 +12,14 @@ public class OwnerMapper {
 
   public OwnerDto asDto(Owner person) {
     Objects.requireNonNull(person);
-    return new OwnerDto(person.getOwner_id(), person.getName(), person.getBirthday(), person.getPerson()
-        .getRoles());
+    return new OwnerDto(person.getOwner_id(), person.getName(), person.getBirthday(),
+        person.getPerson()
+            .getRoles());
   }
 
   public Owner asDao(OwnerDto person) {
     Objects.requireNonNull(person);
-    return new Owner(person.getId(), person.getName(), person.getBirthDate(), new ArrayList<>(), null);
+    return new Owner(person.getId(), person.getName(), person.getBirthDate(), new ArrayList<>(),
+        null);
   }
 }
