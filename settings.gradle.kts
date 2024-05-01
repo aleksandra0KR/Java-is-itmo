@@ -19,3 +19,13 @@ findProject(":lab3:service")?.name = "service"
 include("lab3:controller")
 findProject(":lab3:controller")?.name = "controller"
 
+
+include("lab4")
+include("lab4:dao")
+findProject(":lab4:dao")?.name = "dao"
+include("lab4:service")
+findProject(":lab4:service")?.name = "service"
+include("lab4:controller")
+findProject(":lab4:controller")?.name = "controller"
+include("lab4:security")
+findProject(":lab4:security")?.name = "security"
