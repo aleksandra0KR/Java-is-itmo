@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.service;
+package ru.aleksandra0KR.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import ru.aleksandra0KR.service.PersonDetailService;
 
 
 @Configuration
