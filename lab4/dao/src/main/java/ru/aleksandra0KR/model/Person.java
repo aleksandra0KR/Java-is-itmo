@@ -25,13 +25,6 @@ public class Person {
   @OneToOne(mappedBy = "person")
   private Owner owner;
 
-  /*@ManyToMany(fetch = FetchType.EAGER)
-  @JoinTable(
-      name = "users_roles",
-      joinColumns = @JoinColumn(name = "person_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id")
-  )
-  private Set<Role> roles = new HashSet<>();*/
   private String roles;
 
   public Person(String name, String password, String roles) {
@@ -39,7 +32,6 @@ public class Person {
     this.password = password;
     this.roles = roles;
   }
-
 
 }
 
