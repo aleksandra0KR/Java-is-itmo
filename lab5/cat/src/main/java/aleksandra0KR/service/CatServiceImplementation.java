@@ -1,16 +1,20 @@
 package aleksandra0KR.service;
 
 import aleksandra0KR.dao.Cat;
-import aleksandra0KR.dao.Person;
+import aleksandra0KR.dao.Owner;
 import aleksandra0KR.dto.CatDto;
 import aleksandra0KR.exception.CatDoesntExistsException;
 import aleksandra0KR.exception.CatsPrivateInformationException;
+import aleksandra0KR.exception.PersonDoesntExistException;
 import aleksandra0KR.mapper.CatMapper;
 import aleksandra0KR.repository.CatRepository;
+import aleksandra0KR.repository.OwnerRepository;
 import java.security.Principal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +27,11 @@ public class CatServiceImplementation implements CatService {
   final
   OwnerRepository ownerRepository;
 
-  final
-  PersonService personService;
+  private final KafkaTemplate<String, CatDto> getKitty;
 
+  private final KafkaTemplate<String, List<CatDto>> getKitties;
+
+  @KafkaListener(topics = "create_cat", groupId = "groupIdCK", containerFactory = "CatFactory")
   @Transactional
   public CatDto addCat(CatDto cat) {
     Cat dao = catRepository.save(CatMapper.asDao(cat));
@@ -35,10 +41,11 @@ public class CatServiceImplementation implements CatService {
   }
 
   public CatServiceImplementation(CatRepository catRepository, OwnerRepository ownerRepository,
-      PersonService personService) {
+      KafkaTemplate<String, CatDto> getKitty, KafkaTemplate<String, List<CatDto>> getKitties) {
     this.catRepository = catRepository;
     this.ownerRepository = ownerRepository;
-    this.personService = personService;
+    this.getKitty = getKitty;
+    this.getKitties = getKitties;
   }
 
 
@@ -49,9 +56,9 @@ public class CatServiceImplementation implements CatService {
   }
 
   public Long OwnerId(Principal principal) {
-    Person person = personService.getPersonByName(principal.getName());
-    if (person != null && person.getOwner() != null) {
-      return person.getOwner().getOwner_id();
+    Owner person = ownerRepository.findByName(principal.getName());
+    if (person != null) {
+      return person.getOwner_id();
     }
     throw new PersonDoesntExistException(principal.getName());
   }
@@ -81,8 +88,7 @@ public class CatServiceImplementation implements CatService {
     }
   }
 
-
-
+  @KafkaListener(topics = "updateCat", groupId = "groupIdUpdateCat", containerFactory = "CatFactory")
   @Transactional
   public void updateCat(Principal principal, CatDto cat) {
     Long id = OwnerId(principal);
@@ -100,6 +106,7 @@ public class CatServiceImplementation implements CatService {
     catRepository.save(catFromRepo);
   }
 
+  @KafkaListener(topics = "addFriend", groupId = "groupIdAddFriend", containerFactory = "friendFactory")
   @Transactional
   public void addFriend(long catID, long friendID) {
     Cat cat = catRepository.findById(catID)
@@ -111,6 +118,7 @@ public class CatServiceImplementation implements CatService {
     catRepository.save(cat);
   }
 
+  @KafkaListener(topics = "attachPerson", groupId = "groupIdAttachPerson", containerFactory = "ownerCatFactory")
   @Transactional
   @Override
   public void attachPerson(Long catId, Long personId) {
@@ -127,6 +135,7 @@ public class CatServiceImplementation implements CatService {
     ownerRepository.save(person);
   }
 
+  @KafkaListener(topics = "detachPerson", groupId = "groupIdDetachPerson", containerFactory = "ownerCatFactory")
   @Transactional
   @Override
   public void detachPerson(Long catId, Long personId) {
@@ -149,6 +158,7 @@ public class CatServiceImplementation implements CatService {
         .collect(Collectors.toList());
   }
 
+  @KafkaListener(topics = "deleteCat", groupId = "groupIdDeleteCat", containerFactory = "CatFactory")
   @Transactional
   public void deleteCat(Principal principal, long id) {
 
