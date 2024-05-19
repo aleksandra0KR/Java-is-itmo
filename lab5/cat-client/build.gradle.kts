@@ -31,7 +31,6 @@ dependencies {
     implementation("org.springframework:spring-webflux:6.0.3")
     compileOnly("javax.servlet:servlet-api:2.5")
 
-    implementation("org.slf4j:slf4j-api:2.0.6")
     implementation("org.springframework.boot:spring-boot-starter-web:3.0.5")
     implementation("org.springframework.boot:spring-boot-starter-actuator:3.0.5")
     implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")

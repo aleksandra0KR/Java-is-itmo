@@ -26,8 +26,7 @@ dependencies {
 
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.0.6")
-// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-    implementation("org.springframework.boot:spring-boot-starter-security:3.0.6")
+
 
     // https://mvnrepository.com/artifact/at.favre.lib/bcrypt
     implementation("at.favre.lib:bcrypt:0.9.0")
@@ -58,11 +57,7 @@ dependencies {
 
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.0.6")
-// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
-    implementation("org.springframework.boot:spring-boot-starter-security:3.0.6")
 
-    // https://mvnrepository.com/artifact/at.favre.lib/bcrypt
-    implementation("at.favre.lib:bcrypt:0.9.0")
 
 }
 

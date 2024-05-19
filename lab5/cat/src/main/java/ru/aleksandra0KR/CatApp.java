@@ -4,10 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import ru.aleksandra0KR.ru.rabbitMQ.RabbitConfig;
-import ru.aleksandra0KR.ru.security.SecurityConfig;
 
 @Import({
-    SecurityConfig.class,
     RabbitConfig.class
 })
 @SpringBootApplication

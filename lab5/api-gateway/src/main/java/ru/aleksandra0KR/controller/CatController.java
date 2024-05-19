@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.controller;
 
+import java.security.Principal;
 import lombok.AllArgsConstructor;
 
 import org.springframework.validation.annotation.Validated;
@@ -34,8 +35,8 @@ public class CatController {
   }
 
   @GetMapping("/{id}")
-  public CatDtoGateway findCatByID(@PathVariable("id") Long id) {
-    return  catGatewayService.getById(id);
+  public CatDtoGateway findCatByID(@PathVariable("id") Long id, Principal principal) {
+    return  catGatewayService.getById(id, principal);
   }
 
   // TODO

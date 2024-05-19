@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.ru.security;
+package ru.aleksandra0KR.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,8 +30,14 @@ public class SecurityConfig {
 
     return http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(auth -> auth.requestMatchers("/person/**").hasRole("ADMIN")
-            .anyRequest().authenticated())
+         .anyRequest().authenticated())
         .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
         .build();
   }
 }
+
+
+
+
+
+
