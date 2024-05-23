@@ -14,6 +14,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.transaction.annotation.Transactional;
+import ru.aleksandra0KR.ru.dto.CatDtoMessage;
+import ru.aleksandra0KR.ru.dto.CatFriendDtoMessage;
 
 @Component
 @EnableRabbit
@@ -24,8 +26,16 @@ public class CatServiceImplementation implements CatService {
 
   @RabbitListener(queues = "catAddQueue")
   @Transactional
-  public void addCat(CatDto cat) {
-    Cat dao = catRepository.save(CatMapper.asDao(cat));
+  public void addCat(CatDtoMessage cat) {
+    Cat dao = catRepository.save(
+Cat.builder()
+    .name(cat.getName())
+    .ownerId(cat.getOwnerID())
+    .birthday(cat.getBirthDay())
+    .breed(cat.getBreed())
+    .color(cat.getCatColor())
+    .build()
+    );
     Long generatedId = dao.getId();
     cat.setId(generatedId);
   }
@@ -75,54 +85,27 @@ public class CatServiceImplementation implements CatService {
 
   @RabbitListener(queues = "catUpdateQueue")
   @Transactional
-  public void updateCat(CatDto cat, long id) {
+  public void updateCat(CatDtoMessage cat) {
     Cat catFromRepo = catRepository.findById(cat.getId())
         .orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
-    if (catFromRepo.getOwnerId() != null && !Objects.equals(catFromRepo.getOwnerId(),
-        id)) {
-      throw new CatsPrivateInformationException();
-    }
-    catFromRepo.setColor(cat.getColor());
+
+    catFromRepo.setColor(cat.getCatColor());
     catFromRepo.setName(cat.getName());
     catFromRepo.setBreed(cat.getBreed());
-    catFromRepo.setBirthday(cat.getBirthDate());
+    catFromRepo.setBirthday(cat.getBirthDay());
 
     catRepository.save(catFromRepo);
   }
 
-  @RabbitListener(queues = "catAddFriendQueue")
-  @Transactional
-  public void addFriend(long catID, long friendID) {
-    Cat cat = catRepository.findById(catID)
-        .orElseThrow(() -> new CatDoesntExistsException(catID));
-    Cat friend = catRepository.findById(friendID)
-        .orElseThrow(() -> new CatDoesntExistsException(friendID));
-
-    cat.addFriend(friend);
-    catRepository.save(cat);
-  }
-
-  @RabbitListener(queues = "catPersonQueue")
+  @RabbitListener(queues = "catDeleteQueue")
   @Transactional
   @Override
-  public void attachPerson(Long catId, Long personId) {
-    Cat cat = catRepository.findById(catId)
-        .orElseThrow(() -> new CatDoesntExistsException(catId));
+  public void deleteCat(long id) {
+   Cat catFromRepo = catRepository.findById(id)
+        .orElseThrow(() -> new CatDoesntExistsException(id));
 
-    cat.setOwnerId(personId);
-    catRepository.save(cat);
-  }
+   catRepository.delete(catFromRepo);
 
-  @RabbitListener(queues = "catPersonQueue")
-  @Transactional
-  @Override
-  public void detachPerson(Long catId, Long personId) {
-
-    Cat cat = catRepository.findById(catId)
-        .orElseThrow(() -> new CatDoesntExistsException(catId));
-    cat.setOwnerId(null);
-
-    catRepository.save(cat);
   }
 
   public List<CatDto> getAllFriends(long id) {
@@ -132,18 +115,16 @@ public class CatServiceImplementation implements CatService {
         .collect(Collectors.toList());
   }
 
-  @RabbitListener(queues = "catDeleteQueue")
+  @RabbitListener(queues = "catAddFriendQueue")
   @Transactional
-  public void deleteCat(long id, long personId) {
+  public void addFriend(CatFriendDtoMessage catFriendDtoMessage) {
+    Cat cat = catRepository.findById(catFriendDtoMessage.getCatId())
+        .orElseThrow(() -> new CatDoesntExistsException(catFriendDtoMessage.getCatId()));
+    Cat friend = catRepository.findById(catFriendDtoMessage.getFriendId())
+        .orElseThrow(() -> new CatDoesntExistsException(catFriendDtoMessage.getFriendId()));
 
-    Cat cat = catRepository.findById(id)
-        .orElseThrow(() -> new CatDoesntExistsException(id));
-
-    if (cat.getOwnerId() != null && !Objects.equals(personId, cat.getOwnerId())) {
-      throw new CatsPrivateInformationException();
-    }
-
-    catRepository.delete(cat);
+    cat.addFriend(friend);
+    catRepository.save(cat);
   }
 }
 

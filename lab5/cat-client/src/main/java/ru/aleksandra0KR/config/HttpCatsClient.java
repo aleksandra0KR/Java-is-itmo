@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -20,7 +21,6 @@ public class HttpCatsClient implements CatClient {
   @Override
   public CatDtoClient findCatByID(long id) {
 
-
     return catsWebClient
         .get()
         .uri("/cat/%d".formatted(id))
@@ -29,6 +29,7 @@ public class HttpCatsClient implements CatClient {
         .block();
 
   }
+
   private static HttpServletRequest getRequest() {
     return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
         .filter(ServletRequestAttributes.class::isInstance)
@@ -37,16 +38,29 @@ public class HttpCatsClient implements CatClient {
         .orElseThrow(RuntimeException::new);
   }
 
-  // TODO
   @Override
   public List<CatDtoClient> getAllFriends(long id) {
-    return List.of();
+    return catsWebClient
+        .get()
+        .uri("/%d/friends".formatted(id))
+        .retrieve()
+        .bodyToMono(List.class)
+        .block();
   }
 
-  // TODO
+
   @Override
-  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name,
-      long userId) {
-    return List.of();
+  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name) {
+    LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+    params.put("name", List.of(name));
+    params.put("color", List.of(color));
+    params.put("breed", List.of(breed));
+
+    return catsWebClient
+        .get()
+        .uri(it -> it.path("/cat").queryParams(params).build())
+        .retrieve()
+        .bodyToMono(List.class)
+        .block();
   }
 }

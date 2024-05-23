@@ -2,18 +2,22 @@ package ru.aleksandra0KR.service;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import ru.aleksandra0KR.CatClient;
 import ru.aleksandra0KR.OwnerClient;
+import ru.aleksandra0KR.controller.CatPost;
 import ru.aleksandra0KR.dao.Person;
 import ru.aleksandra0KR.dto.CatDtoClient;
 import ru.aleksandra0KR.dto.CatDtoGateway;
+import ru.aleksandra0KR.dto.OwnerDtoClient;
 import ru.aleksandra0KR.exception.CatsPrivateInformationException;
 import ru.aleksandra0KR.exception.PersonDoesntExistException;
 import ru.aleksandra0KR.ru.dto.CatDtoMessage;
+import ru.aleksandra0KR.ru.dto.CatFriendDtoMessage;
 
 @Service
 @RequiredArgsConstructor
@@ -24,23 +28,47 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   private final OwnerClient ownerClient;
   private final PersonService personService;
 
-  public Long OwnerId(Principal principal) {
+  public Person Person(Principal principal) {
     Person person = personService.getPersonByName(principal.getName());
     if (person != null) {
-      return  person.getOwnerId();
+      return  person;
     }
     throw new PersonDoesntExistException(principal.getName());
   }
 
   @Override
-  public void create(String name, long ownerId, LocalDate birthdat, String breed, String color) {
+  public void deleteCat(Principal principal, long id) {
+    CatDtoGateway catClient = getById(id, principal);
+    rabbitTemplate.convertAndSend("catDeleteQueue", id);
+
+  }
+
+  @Override
+  public void create(CatPost catPost) {
+    CatDtoMessage catDtoMessage = CatDtoMessage.builder()
+        .name(catPost.getName())
+        .ownerID(catPost.getOwnerID())
+        .birthDay(catPost.getBirthDay())
+        .breed(catPost.getBreed())
+        .catColor(catPost.getColor())
+        .build();
+
+    rabbitTemplate.convertAndSend("catAddQueue", catDtoMessage);
+  }
+
+  @Override
+  public void update(CatPost catPost, Principal principal) {
+    Person person = Person(principal);
+    if (person.getOwnerId() != catPost.getOwnerID()){
+      throw new CatsPrivateInformationException();
+    }
     CatDtoMessage catDtoMessage = CatDtoMessage.builder()
         .id(new Random().nextLong())
-        .name(name)
-        .ownerID(ownerId)
-        .birthDay(birthdat)
-        .breed(breed)
-        .catColor(color)
+        .name(catPost.getName())
+        .ownerID(catPost.getOwnerID())
+        .birthDay(catPost.getBirthDay())
+        .breed(catPost.getBreed())
+        .catColor(catPost.getColor())
         .build();
 
     rabbitTemplate.convertAndSend("catAddQueue", catDtoMessage);
@@ -49,12 +77,9 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   @Override
   public CatDtoGateway getById(Long uuid, Principal principal) {
     CatDtoClient cat = catClient.findCatByID(uuid);
-    Long ownerId = OwnerId(principal);
-
-    //OwnerD self = byId.getOwner() != null
-      //  ? ownerClient.getSelf()
-        //: null;*/
-    if (ownerId != cat.getOwner()){
+    Person person = Person(principal);
+    OwnerDtoClient ownerDtoClient = ownerClient.GetOwnerById(person.getOwnerId());
+    if (person.getOwnerId() != cat.getOwner()){
       throw new CatsPrivateInformationException();
     }
 
@@ -65,14 +90,31 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
         .breed(cat.getBreed())
         .color(cat.getColor())
         .friends(cat.getFriends())
-        .owner(null)
+        .owner(ownerDtoClient)
         .build();
+  }
+
+  @Override
+  public void addFriend(CatFriendDtoMessage catFriendDtoMessage) {
+
   }
 
 
   @Override
-  public void addFriend(long catId, long friendId, long ownerId) {
+  public List<CatDtoClient> getCatsByColorOrBreedOrName(Principal principal, String color,
+      String breed, String name) {
+    Person person = personService.getPersonByName(principal.getName());
+   return catClient.findCatsByColorOrBreedOrName(color, breed, name).stream().filter(cat -> cat.getOwner().equals(person.getOwnerId())) .toList();
+  }
 
+  @Override
+  public List<CatDtoClient> getFriendsById(Principal principal, long catId) {
+    Person person = personService.getPersonByName(principal.getName());
+    CatDtoClient cat = catClient.findCatByID(catId);
+    if (!cat.getOwner().equals(person.getOwnerId())) {
+      throw new CatsPrivateInformationException();
+    }
+    return catClient.getAllFriends(catId);
   }
 
 

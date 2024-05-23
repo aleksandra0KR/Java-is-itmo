@@ -12,7 +12,6 @@ public class OwnerWebClientConfig {
   public WebClient ownersWebClient() {
     return WebClient.builder()
         .baseUrl("http://localhost:8081/")
-        .defaultCookie("cookieKey", "cookieValue")
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .build();
   }

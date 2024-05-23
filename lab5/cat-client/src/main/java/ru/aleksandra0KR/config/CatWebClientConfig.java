@@ -13,7 +13,6 @@ public class CatWebClientConfig {
   public WebClient catsWebClient() {
     return WebClient.builder()
         .baseUrl("http://localhost:8080")
-        .defaultCookie("cookieKey", "cookieValue")
         .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
         .build();
   }

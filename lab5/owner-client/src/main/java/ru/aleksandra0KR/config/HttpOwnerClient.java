@@ -7,7 +7,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.aleksandra0KR.OwnerClient;
-import ru.aleksandra0KR.dto.OwnerDto;
+import ru.aleksandra0KR.dto.OwnerDtoClient;
 
 @RequiredArgsConstructor
 public class HttpOwnerClient implements OwnerClient {
@@ -15,28 +15,13 @@ public class HttpOwnerClient implements OwnerClient {
   private final WebClient ownersWebClient;
 
   @Override
-  public OwnerDto getSelf() {
-    HttpServletRequest request = getRequest();
+  public OwnerDtoClient GetOwnerById(long id) {
 
     return ownersWebClient
         .get()
-        .uri("/owner/self")
-        .header("Authorization", request.getHeader("Authorization"))
+        .uri("/owner/%d".formatted(id))
         .retrieve()
-        .bodyToMono(OwnerDto.class)
-        .block();
-  }
-
-  @Override
-  public OwnerDto adminGetById(long uuid) {
-    var request = getRequest();
-
-    return ownersWebClient
-        .get()
-        .uri("/admin/cat-owners/%s".formatted(uuid))
-        .header("Authorization", request.getHeader("Authorization"))
-        .retrieve()
-        .bodyToMono(OwnerDto.class)
+        .bodyToMono(OwnerDtoClient.class)
         .block();
   }
 
