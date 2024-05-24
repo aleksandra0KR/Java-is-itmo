@@ -25,4 +25,5 @@ public interface CatGatewayService {
       String name);
 
   List<CatDtoClient> getFriendsById(Principal principal, long catId);
+  List<CatDtoClient> getAllOwnerCats(Principal principal, long id);
 }

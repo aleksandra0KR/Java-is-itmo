@@ -26,6 +26,7 @@ public class CatServiceImplementation implements CatService {
 
   @RabbitListener(queues = "catAddQueue")
   @Transactional
+  @Override
   public void addCat(CatDtoMessage cat) {
     Cat dao = catRepository.save(
 Cat.builder()
@@ -44,7 +45,7 @@ Cat.builder()
     this.catRepository = catRepository;
   }
 
-
+  @Override
   public CatDtoClient findCatByID(long id) {
     Cat cat = catRepository.findById(id)
         .orElseThrow(() -> new CatDoesntExistsException(id));
@@ -82,6 +83,7 @@ Cat.builder()
 
   @RabbitListener(queues = "catUpdateQueue")
   @Transactional
+  @Override
   public void updateCat(CatDtoMessage cat) {
     Cat catFromRepo = catRepository.findById(cat.getId())
         .orElseThrow(() -> new CatDoesntExistsException(cat.getId()));
@@ -105,6 +107,7 @@ Cat.builder()
 
   }
 
+  @Override
   public List<CatDtoClient> getAllFriends(long id) {
     var res = catRepository.getFriendsById(id)
         .stream()
@@ -116,6 +119,7 @@ Cat.builder()
 
   @RabbitListener(queues = "catAddFriendQueue")
   @Transactional
+  @Override
   public void addFriend(CatFriendDtoMessage catFriendDtoMessage) {
     Cat cat = catRepository.findById(catFriendDtoMessage.getCatId())
         .orElseThrow(() -> new CatDoesntExistsException(catFriendDtoMessage.getCatId()));
@@ -124,6 +128,14 @@ Cat.builder()
 
     cat.addFriend(friend);
     catRepository.save(cat);
+  }
+
+  @Override
+  public List<CatDtoClient> getAllOwnerCats(long id) {
+    return catRepository.findCatByOwnerId(id).stream()
+        .map(CatMapper::asDto)
+        .collect(Collectors.toList());
+
   }
 }
 

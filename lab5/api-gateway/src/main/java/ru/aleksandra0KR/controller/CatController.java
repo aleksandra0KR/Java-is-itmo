@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.util.Collections;
@@ -61,6 +62,13 @@ public class CatController {
     List<CatDtoClient> cats = catGatewayService.getFriendsById(principal, id);
 
    return cats;
+  }
+  @GetMapping("/owner/{id}")
+  public List<CatDtoClient> getAllOwnerCats(@PathVariable("id") Long id,
+      Principal principal) {
+
+    List<CatDtoClient> cats = catGatewayService.getAllOwnerCats(principal, id);
+    return cats;
   }
 
   @PutMapping

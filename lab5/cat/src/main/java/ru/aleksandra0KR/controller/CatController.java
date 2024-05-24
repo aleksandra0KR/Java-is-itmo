@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.controller;
 
+import java.security.Principal;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,5 +52,13 @@ public class CatController {
     var res = catService.findCatsByColorOrBreedOrName(color, breed, name);
 
     return res;
+  }
+
+  @GetMapping("/owner/{id}")
+  public List<CatDtoClient> getAllOwnerCats(@PathVariable("id") Long id,
+      Principal principal) {
+
+    List<CatDtoClient> cats = catService.getAllOwnerCats(id);
+    return cats;
   }
 }

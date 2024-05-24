@@ -1,5 +1,12 @@
 package ru.aleksandra0KR.config;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
+import io.swagger.v3.core.util.Json;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.util.ArrayList;
@@ -55,7 +62,7 @@ public class HttpCatsClient implements CatClient {
 
 
   @Override
-  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name) {
+  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name, long id) {
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080")
         .path("/cat");
 
@@ -72,15 +79,47 @@ public class HttpCatsClient implements CatClient {
     }
 
     URI uri = uriBuilder.build().toUri();
-
-    var res = catsWebClient
+    ObjectMapper mapper = new ObjectMapper()
+        .registerModule(new ParameterNamesModule())
+        .registerModule(new Jdk8Module())
+        .registerModule(new JavaTimeModule());
+    JsonNode res = catsWebClient
         .get()
         .uri(uri)
         .retrieve()
-        .bodyToMono(ArrayList.class)
+        .bodyToMono(JsonNode.class)
         .block();
+    List<CatDtoClient> accountList = mapper.convertValue(
+        res,
+        new TypeReference<List<CatDtoClient>>(){}
+    );
+    accountList.stream()
+        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(id)).toList();
     System.out.println(res);
 
-    return res;
+    return accountList;
+  }
+
+  @Override
+  public List<CatDtoClient> getAllOwnerCats(long id) {
+    var res = catsWebClient
+        .get()
+        .uri("cat//owner%d".formatted(id))
+        .retrieve()
+        .bodyToMono(Json.class)
+        .block();
+
+
+    ObjectMapper mapper = new ObjectMapper()
+        .registerModule(new ParameterNamesModule())
+        .registerModule(new Jdk8Module())
+        .registerModule(new JavaTimeModule());
+    List<CatDtoClient> accountList = mapper.convertValue(
+        res,
+        new TypeReference<List<CatDtoClient>>(){}
+    );
+    accountList.stream()
+        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(id)).toList();
+    return accountList;
   }
 }

@@ -11,7 +11,7 @@ public interface CatClient {
   List<CatDtoClient> getAllFriends(long id);
 
   List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed,
-      String name);
+      String name, long id);
 
-
+   List<CatDtoClient> getAllOwnerCats(long id);
 }

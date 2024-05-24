@@ -9,7 +9,8 @@ import ru.aleksandra0KR.mapper.OwnerMapper;
 import ru.aleksandra0KR.repository.OwnerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import ru.aleksandra0KR.ru.dto.CatDtoMessage;
+import ru.aleksandra0KR.ru.dto.OwnerDtoMessage;
 
 
 @Service
@@ -41,18 +42,7 @@ public class OwnerServiceImplementation implements OwnerService {
     return OwnerMapper.asDto(person);
   }
 
-  /*@Transactional
-  @Override
-  public List<CatDto> findAllCats(long id) {
-    Owner owner = ownerRepository.findById(id)
-        .orElseThrow(() -> new PersonDoesntExistException(id));
-
-    return owner.getCats()
-        .stream()
-        .map(CatMapper::asDto)
-        .collect(Collectors.toList());
-  }*/
-
+  // TODO
   @RabbitListener(queues = "personAddQueue")
   @Override
   public OwnerDto addPerson(OwnerDto person) {
@@ -62,7 +52,7 @@ public class OwnerServiceImplementation implements OwnerService {
     return person;
   }
 
-  @RabbitListener(queues = "personUpdateQueue")
+  @RabbitListener(queues = "ownerUpdateQueue")
   @Transactional
   @Override
   public void updatePerson(OwnerDto person) {
@@ -73,12 +63,29 @@ public class OwnerServiceImplementation implements OwnerService {
     ownerRepository.save(owner);
   }
 
-  @RabbitListener(queues = "personDeleteQueue")
+  @RabbitListener(queues = "ownerDeleteQueue")
   @Transactional
   @Override
   public void deletePerson(Long id) {
     Owner owner = ownerRepository.findById(id)
         .orElseThrow(() -> new PersonDoesntExistException(id));
     ownerRepository.delete(owner);
+  }
+
+
+
+  @RabbitListener(queues = "ownerAddQueue")
+  @Transactional
+  @Override
+  public void addOwner(OwnerDtoMessage ownerDtoMessage) {
+    Owner dao = ownerRepository.save(
+        Owner.builder()
+            .name(ownerDtoMessage.getName())
+            .owner_id(ownerDtoMessage.getId())
+            .birthday(ownerDtoMessage.getBirthDay())
+            .build()
+    );
+    Long generatedId = dao.getOwner_id();
+    ownerDtoMessage.setId(generatedId);
   }
 }

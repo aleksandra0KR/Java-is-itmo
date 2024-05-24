@@ -25,6 +25,16 @@ public class HttpOwnerClient implements OwnerClient {
         .block();
   }
 
+  @Override
+  public OwnerDtoClient GetOwnerByName(String name) {
+    return ownersWebClient
+        .get()
+        .uri("/owner/name/%s".formatted(name))
+        .retrieve()
+        .bodyToMono(OwnerDtoClient.class)
+        .block();
+  }
+
   private static HttpServletRequest getRequest() {
     return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
         .filter(ServletRequestAttributes.class::isInstance)

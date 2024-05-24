@@ -17,6 +17,7 @@ public interface CatRepository extends JpaRepository<Cat, Long> {
 
   List<Cat> findCatByName(String name);
 
+  List<Cat> findCatByOwnerId(Long ownerId);
   @Query(value = "SELECT cat.* FROM cats cat WHERE cat.id IN ( SELECT friend_id FROM friends WHERE cat_id = :id)", nativeQuery = true)
   List<Cat> getFriendsById(@Param("id") Long id);
 

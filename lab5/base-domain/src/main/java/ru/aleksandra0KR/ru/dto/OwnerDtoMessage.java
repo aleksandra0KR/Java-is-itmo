@@ -14,7 +14,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class OwnerDtoMessage {
   @JsonProperty("id")
-  Long uuid;
+  Long id;
   @JsonProperty("name")
   String name;
   @JsonProperty("birthDay")

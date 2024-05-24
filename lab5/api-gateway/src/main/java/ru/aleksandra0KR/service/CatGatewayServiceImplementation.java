@@ -1,5 +1,7 @@
 package ru.aleksandra0KR.service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -33,11 +35,12 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   public Person Person(Principal principal) {
     Person person = personService.getPersonByName(principal.getName());
     if (person != null) {
-      return  person;
+      return person;
     }
     throw new PersonDoesntExistException(principal.getName());
   }
 
+  // TODO
   @Override
   public void deleteCat(Principal principal, long id) {
     CatDtoGateway catClient = getById(id, principal);
@@ -61,7 +64,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   @Override
   public void update(CatPost catPost, Principal principal) {
     Person person = Person(principal);
-    if (person.getOwnerId() != catPost.getOwnerID()){
+    if (person.getOwnerId() != catPost.getOwnerID()) {
       throw new CatsPrivateInformationException();
     }
     CatDtoMessage catDtoMessage = CatDtoMessage.builder()
@@ -81,7 +84,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
     CatDtoClient cat = catClient.findCatByID(uuid);
     Person person = Person(principal);
     OwnerDtoClient ownerDtoClient = ownerClient.GetOwnerById(person.getOwnerId());
-    if (person.getOwnerId() != cat.getOwner()){
+    if (person.getOwnerId() != cat.getOwner()) {
       throw new CatsPrivateInformationException();
     }
 
@@ -106,17 +109,11 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   public List<CatDtoClient> getCatsByColorOrBreedOrName(Principal principal, String color,
       String breed, String name) {
     Person person = personService.getPersonByName(principal.getName());
-    System.out.println( "res");
-    var res = catClient.findCatsByColorOrBreedOrName(color, breed, name);
-  System.out.println( res);
-    List<CatDtoClient> catDtoClientList = new ArrayList<>();
+    System.out.println("res");
+    var res = catClient.findCatsByColorOrBreedOrName(color, breed, name, person.getOwnerId());
+    System.out.println(res);
 
-    for (var cat : res) {
-      if (cat.getOwner().equals(person.getOwnerId())){
-        catDtoClientList.add(cat);
-      }
-    }
-  return catDtoClientList;
+    return res;
   }
 
   @Override
@@ -127,6 +124,15 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
       throw new CatsPrivateInformationException();
     }
     return catClient.getAllFriends(catId);
+  }
+
+  @Override
+  public List<CatDtoClient> getAllOwnerCats(Principal principal, long id) {
+    Person person = personService.getPersonByName(principal.getName());
+    if (id != person.getOwnerId()) {
+      throw new CatsPrivateInformationException();
+    }
+    return catClient.getAllOwnerCats(id);
   }
 
 

@@ -20,7 +20,7 @@ public interface CatService {
   List<CatDtoClient> getAllFriends(long id);
 
   void addFriend(CatFriendDtoMessage catFriendDtoMessage);
-
+  List<CatDtoClient> getAllOwnerCats(long id);
   List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed,
       String name);
 
