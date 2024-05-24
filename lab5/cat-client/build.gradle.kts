@@ -19,7 +19,6 @@ dependencies {
     implementation("org.projectlombok:lombok:1.18.22")
     annotationProcessor("org.projectlombok:lombok:1.18.26")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.2.1")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.0.6")
     runtimeOnly("org.postgresql:postgresql:42.6.0")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.0.6")

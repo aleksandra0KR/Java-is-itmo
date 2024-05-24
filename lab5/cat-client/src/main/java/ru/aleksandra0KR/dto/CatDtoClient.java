@@ -33,7 +33,6 @@ public class CatDtoClient {
   private String breed;
   private String color;
   private Long owner;
-  private List<Long> friends;
 
 
 

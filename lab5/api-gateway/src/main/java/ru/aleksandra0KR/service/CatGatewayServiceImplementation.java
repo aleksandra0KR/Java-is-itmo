@@ -2,6 +2,8 @@ package ru.aleksandra0KR.service;
 
 import java.security.Principal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +65,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
       throw new CatsPrivateInformationException();
     }
     CatDtoMessage catDtoMessage = CatDtoMessage.builder()
-        .id(new Random().nextLong())
+        .id(catPost.getId())
         .name(catPost.getName())
         .ownerID(catPost.getOwnerID())
         .birthDay(catPost.getBirthDay())
@@ -71,7 +73,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
         .catColor(catPost.getColor())
         .build();
 
-    rabbitTemplate.convertAndSend("catAddQueue", catDtoMessage);
+    rabbitTemplate.convertAndSend("catUpdateQueue", catDtoMessage);
   }
 
   @Override
@@ -89,7 +91,6 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
         .birthDate(cat.getBirthDate())
         .breed(cat.getBreed())
         .color(cat.getColor())
-        .friends(cat.getFriends())
         .owner(ownerDtoClient)
         .build();
   }
@@ -97,6 +98,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   @Override
   public void addFriend(CatFriendDtoMessage catFriendDtoMessage) {
 
+    rabbitTemplate.convertAndSend("catAddFriendQueue", catFriendDtoMessage);
   }
 
 
@@ -104,7 +106,17 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   public List<CatDtoClient> getCatsByColorOrBreedOrName(Principal principal, String color,
       String breed, String name) {
     Person person = personService.getPersonByName(principal.getName());
-   return catClient.findCatsByColorOrBreedOrName(color, breed, name).stream().filter(cat -> cat.getOwner().equals(person.getOwnerId())) .toList();
+    System.out.println( "res");
+    var res = catClient.findCatsByColorOrBreedOrName(color, breed, name);
+  System.out.println( res);
+    List<CatDtoClient> catDtoClientList = new ArrayList<>();
+
+    for (var cat : res) {
+      if (cat.getOwner().equals(person.getOwnerId())){
+        catDtoClientList.add(cat);
+      }
+    }
+  return catDtoClientList;
   }
 
   @Override

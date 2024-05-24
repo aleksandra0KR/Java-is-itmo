@@ -17,11 +17,11 @@ public interface CatService {
 
   void deleteCat(long id);
 
-  List<CatDto> getAllFriends(long id);
+  List<CatDtoClient> getAllFriends(long id);
 
   void addFriend(CatFriendDtoMessage catFriendDtoMessage);
 
-  List<CatDto> findCatsByColorOrBreedOrName(String color, String breed,
-      String name, long userId);
+  List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed,
+      String name);
 
 }

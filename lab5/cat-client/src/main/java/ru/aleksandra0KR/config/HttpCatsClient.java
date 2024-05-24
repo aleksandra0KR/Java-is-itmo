@@ -1,6 +1,8 @@
 package ru.aleksandra0KR.config;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import ru.aleksandra0KR.CatClient;
 import ru.aleksandra0KR.dto.CatDtoClient;
 
@@ -40,27 +43,44 @@ public class HttpCatsClient implements CatClient {
 
   @Override
   public List<CatDtoClient> getAllFriends(long id) {
-    return catsWebClient
+    var res = catsWebClient
         .get()
-        .uri("/%d/friends".formatted(id))
+        .uri("cat/%d/friends".formatted(id))
         .retrieve()
         .bodyToMono(List.class)
         .block();
+    //System.out.println(res);
+    return res;
   }
 
 
   @Override
   public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name) {
-    LinkedMultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-    params.put("name", List.of(name));
-    params.put("color", List.of(color));
-    params.put("breed", List.of(breed));
+    UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080")
+        .path("/cat");
 
-    return catsWebClient
+    if (color != null) {
+      uriBuilder.queryParam("color", color);
+    }
+
+    if (breed != null) {
+      uriBuilder.queryParam("breed", breed);
+    }
+
+    if (name != null) {
+      uriBuilder.queryParam("name", name);
+    }
+
+    URI uri = uriBuilder.build().toUri();
+
+    var res = catsWebClient
         .get()
-        .uri(it -> it.path("/cat").queryParams(params).build())
+        .uri(uri)
         .retrieve()
-        .bodyToMono(List.class)
+        .bodyToMono(ArrayList.class)
         .block();
+    System.out.println(res);
+
+    return res;
   }
 }

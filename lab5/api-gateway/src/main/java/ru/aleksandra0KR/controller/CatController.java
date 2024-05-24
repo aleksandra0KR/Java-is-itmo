@@ -43,33 +43,24 @@ public class CatController {
   }
 
   @GetMapping
-  public ResponseEntity<List<CatDtoClient>> getCatsByColorOrBreedOrName(
+  public List<CatDtoClient> getCatsByColorOrBreedOrName(
       @RequestParam(value = "color", required = false) String color,
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(value = "breed", required = false) String breed,
       Principal principal) {
+    List<CatDtoClient> cats = catGatewayService.getCatsByColorOrBreedOrName(principal, color, breed, name);
 
-    List<CatDtoClient> catDTOList;
-    try {
-      catDTOList = catGatewayService.getCatsByColorOrBreedOrName(principal, color, breed, name);
-    } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+      return cats;
 
-    return new ResponseEntity<>(catDTOList, HttpStatus.OK);
   }
 
   @GetMapping("/{id}/friends")
-  public ResponseEntity<List<CatDtoClient>> getAllFriends(@PathVariable("id") Long id,
+  public List<CatDtoClient> getAllFriends(@PathVariable("id") Long id,
       Principal principal) {
 
     List<CatDtoClient> cats = catGatewayService.getFriendsById(principal, id);
 
-    if (cats.isEmpty()) {
-      return ResponseEntity.ok().body(Collections.emptyList());
-    } else {
-      return ResponseEntity.ok(cats);
-    }
+   return cats;
   }
 
   @PutMapping

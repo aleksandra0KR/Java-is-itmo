@@ -60,24 +60,21 @@ Cat.builder()
   }
 
   @Override
-  public List<CatDto> findCatsByColorOrBreedOrName(String color, String breed,
-      String name, long id) {
+  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed,
+      String name) {
     if (color == null && breed == null && name == null) {
       throw new CatDoesntExistsException("");
     }
     if (breed != null) {
       return catRepository.findCatByBreed(breed).stream()
-          .filter(cat -> cat.getOwnerId() != null && Objects.equals(cat.getOwnerId(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     } else if (color != null) {
       return catRepository.findCatByColor(color).stream()
-          .filter(cat -> cat.getOwnerId() != null && Objects.equals(cat.getOwnerId(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     } else {
       return catRepository.findCatByName(name).stream()
-          .filter(cat -> cat.getOwnerId() != null && Objects.equals(cat.getOwnerId(), id))
           .map(CatMapper::asDto)
           .collect(Collectors.toList());
     }
@@ -108,11 +105,13 @@ Cat.builder()
 
   }
 
-  public List<CatDto> getAllFriends(long id) {
-    return catRepository.getFriendsById(id)
+  public List<CatDtoClient> getAllFriends(long id) {
+    var res = catRepository.getFriendsById(id)
         .stream()
         .map(CatMapper::asDto)
-        .collect(Collectors.toList());
+        .toList();
+
+    return res;
   }
 
   @RabbitListener(queues = "catAddFriendQueue")

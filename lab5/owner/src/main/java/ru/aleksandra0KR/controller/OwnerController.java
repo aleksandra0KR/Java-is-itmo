@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.aleksandra0KR.dto.OwnerDto;
+import ru.aleksandra0KR.dto.OwnerDtoClient;
 import ru.aleksandra0KR.service.OwnerService;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,7 +21,7 @@ public class OwnerController {
   }
 
   @GetMapping("/{id}")
-  public OwnerDto findPersonById(@PathVariable("id") Long id) {
+  public OwnerDtoClient findPersonById(@PathVariable("id") Long id) {
     return ownerService.findPersonByID(id);
   }
 

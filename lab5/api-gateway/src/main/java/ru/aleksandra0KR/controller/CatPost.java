@@ -2,6 +2,7 @@ package ru.aleksandra0KR.controller;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
+import java.util.function.LongPredicate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,9 @@ public class CatPost {
 
   @JsonProperty("color")
   private String color;
+
+  @JsonProperty("id")
+  private Long id;
 
   @JsonProperty("ownerID")
   private Long ownerID;

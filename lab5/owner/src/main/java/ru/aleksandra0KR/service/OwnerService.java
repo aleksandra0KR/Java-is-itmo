@@ -2,10 +2,11 @@ package ru.aleksandra0KR.service;
 
 import ru.aleksandra0KR.dto.OwnerDto;
 import java.util.List;
+import ru.aleksandra0KR.dto.OwnerDtoClient;
 
 public interface OwnerService {
 
-  OwnerDto findPersonByID(long id);
+  OwnerDtoClient findPersonByID(long id);
 
   OwnerDto findPersonByName(String name);
 

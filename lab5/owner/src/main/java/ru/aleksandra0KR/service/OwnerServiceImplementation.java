@@ -3,6 +3,7 @@ package ru.aleksandra0KR.service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import ru.aleksandra0KR.dao.Owner;
 import ru.aleksandra0KR.dto.OwnerDto;
+import ru.aleksandra0KR.dto.OwnerDtoClient;
 import ru.aleksandra0KR.exception.PersonDoesntExistException;
 import ru.aleksandra0KR.mapper.OwnerMapper;
 import ru.aleksandra0KR.repository.OwnerRepository;
@@ -21,10 +22,14 @@ public class OwnerServiceImplementation implements OwnerService {
   }
 
   @Override
-  public OwnerDto findPersonByID(long id) {
+  public OwnerDtoClient findPersonByID(long id) {
     Owner owner = ownerRepository.findById(id)
         .orElseThrow(() -> new PersonDoesntExistException(id));
-    return OwnerMapper.asDto(owner);
+    return OwnerDtoClient.builder()
+        .owner_id(owner.getOwner_id())
+        .birthday(owner.getBirthday())
+        .name(owner.getName())
+            .build();
   }
 
   @Override

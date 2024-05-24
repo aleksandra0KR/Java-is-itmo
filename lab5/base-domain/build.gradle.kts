@@ -22,8 +22,6 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.22")
     implementation("org.projectlombok:lombok:1.18.22")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.2.1")
-
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.0.6")
 
@@ -53,7 +51,6 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.22")
     implementation("org.projectlombok:lombok:1.18.22")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.2.1")
 
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:3.0.6")

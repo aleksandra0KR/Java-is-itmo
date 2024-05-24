@@ -34,31 +34,22 @@ public class CatController {
   }
 
   @GetMapping("/{id}/friends")
-  public ResponseEntity<List<CatDto>> getAllFriends(@PathVariable("id") long id) {
+  public List<CatDtoClient> getAllFriends(@PathVariable("id") long id) {
 
-    List<CatDto> cats = catService.getAllFriends(id);
+    List<CatDtoClient> cats = catService.getAllFriends(id);
 
-    if (cats.isEmpty()) {
-      return ResponseEntity.ok().body(Collections.emptyList());
-    } else {
-      return ResponseEntity.ok(cats);
-    }
+      return cats;
+
   }
 
   @GetMapping
-  public ResponseEntity<List<CatDto>> getCatsByColorOrBreedOrName(
+  public List<CatDtoClient> getCatsByColorOrBreedOrName(
       @RequestParam(value = "color", required = false) String color,
       @RequestParam(value = "name", required = false) String name,
-      @RequestParam(value = "breed", required = false) String breed,
-      @RequestParam("personId") long personId) {
+      @RequestParam(value = "breed", required = false) String breed) {
 
-    List<CatDto> catDTOList;
-    try {
-      catDTOList = catService.findCatsByColorOrBreedOrName(color, breed, name, personId);
-    } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
+    var res = catService.findCatsByColorOrBreedOrName(color, breed, name);
 
-    return new ResponseEntity<>(catDTOList, HttpStatus.OK);
+    return res;
   }
 }
