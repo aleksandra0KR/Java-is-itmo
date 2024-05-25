@@ -11,10 +11,9 @@ public interface OwnerService {
 
   OwnerDtoClient findPersonByName(String name);
 
-  //OwnerDto addPerson(OwnerDto ownerDto);
-
   void updatePerson(OwnerDtoMessage ownerDto);
 
   void deletePerson(Long id);
+
   void addOwner(OwnerDtoMessage ownerDtoMessage);
 }

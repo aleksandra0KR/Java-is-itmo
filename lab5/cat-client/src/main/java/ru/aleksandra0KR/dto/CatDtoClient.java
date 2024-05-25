@@ -42,6 +42,4 @@ public class CatDtoClient {
   private Long owner;
 
 
-
-
 }

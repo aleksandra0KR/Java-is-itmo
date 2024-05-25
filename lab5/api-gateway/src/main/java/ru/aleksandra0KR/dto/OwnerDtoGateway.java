@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -27,6 +28,7 @@ public class OwnerDtoGateway {
   @DateTimeFormat(pattern = "yyyy-mm-dd")
   private LocalDate birthDate;
 
+  @JsonIgnore
   private List<Long> cats;
 }
 

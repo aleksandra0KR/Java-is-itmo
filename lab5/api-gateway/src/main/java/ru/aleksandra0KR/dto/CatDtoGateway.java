@@ -1,5 +1,6 @@
 package ru.aleksandra0KR.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
@@ -32,6 +33,7 @@ public class CatDtoGateway {
 
   private String color;
   private OwnerDtoClient owner;
+  @JsonIgnore
   private List<Long> friends;
 
 }

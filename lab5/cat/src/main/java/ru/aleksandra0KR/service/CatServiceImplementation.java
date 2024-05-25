@@ -3,19 +3,16 @@ package ru.aleksandra0KR.service;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import ru.aleksandra0KR.dao.Cat;
-import ru.aleksandra0KR.dto.CatDto;
 import ru.aleksandra0KR.dto.CatDtoClient;
-import ru.aleksandra0KR.exception.CatDoesntExistsException;
-import ru.aleksandra0KR.exception.CatsPrivateInformationException;
 import ru.aleksandra0KR.mapper.CatMapper;
 import ru.aleksandra0KR.repository.CatRepository;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.ru.dto.CatDtoMessage;
 import ru.aleksandra0KR.ru.dto.CatFriendDtoMessage;
+import ru.aleksandra0KR.ru.exception.CatDoesntExistsException;
 
 @Component
 @EnableRabbit
@@ -29,13 +26,13 @@ public class CatServiceImplementation implements CatService {
   @Override
   public void addCat(CatDtoMessage cat) {
     Cat dao = catRepository.save(
-Cat.builder()
-    .name(cat.getName())
-    .ownerId(cat.getOwnerID())
-    .birthday(cat.getBirthDay())
-    .breed(cat.getBreed())
-    .color(cat.getCatColor())
-    .build()
+        Cat.builder()
+            .name(cat.getName())
+            .ownerId(cat.getOwnerID())
+            .birthday(cat.getBirthDay())
+            .breed(cat.getBreed())
+            .color(cat.getCatColor())
+            .build()
     );
     Long generatedId = dao.getId();
     cat.setId(generatedId);
@@ -50,7 +47,7 @@ Cat.builder()
     Cat cat = catRepository.findById(id)
         .orElseThrow(() -> new CatDoesntExistsException(id));
     System.out.println(cat);
-    return  CatDtoClient.builder()
+    return CatDtoClient.builder()
         .id(cat.getId())
         .name(cat.getName())
         .owner(cat.getOwnerId())
@@ -100,10 +97,10 @@ Cat.builder()
   @Transactional
   @Override
   public void deleteCat(long id) {
-   Cat catFromRepo = catRepository.findById(id)
+    Cat catFromRepo = catRepository.findById(id)
         .orElseThrow(() -> new CatDoesntExistsException(id));
 
-   catRepository.delete(catFromRepo);
+    catRepository.delete(catFromRepo);
 
   }
 

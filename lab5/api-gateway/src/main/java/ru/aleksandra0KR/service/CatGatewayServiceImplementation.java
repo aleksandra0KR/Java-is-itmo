@@ -12,6 +12,7 @@ import ru.aleksandra0KR.dao.Person;
 import ru.aleksandra0KR.dto.CatDtoClient;
 import ru.aleksandra0KR.dto.CatDtoGateway;
 import ru.aleksandra0KR.dto.OwnerDtoClient;
+import ru.aleksandra0KR.ru.dto.PersonDtoMessage;
 import ru.aleksandra0KR.ru.exception.CatDoesntExistsException;
 import ru.aleksandra0KR.ru.exception.CatsPrivateInformationException;
 import ru.aleksandra0KR.ru.exception.PersonDoesntExistException;
@@ -62,7 +63,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   @Override
   public void update(CatPost catPost, Principal principal) {
     Person person = Person(principal);
-    if (person.getOwnerId() != catPost.getOwnerID()) {
+    if (!person.getOwnerId().equals(catPost.getOwnerID()) && !person.getRoles().equals("ROLE_ADMIN")) {
       throw new CatsPrivateInformationException();
     }
     CatDtoMessage catDtoMessage = CatDtoMessage.builder()
@@ -82,7 +83,7 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
     CatDtoClient cat = catClient.findCatByID(uuid);
     Person person = Person(principal);
     OwnerDtoClient ownerDtoClient = ownerClient.GetOwnerById(person.getOwnerId());
-    if (!person.getOwnerId().equals(cat.getOwner())) {
+    if (!person.getOwnerId().equals(cat.getOwner()) && !person.getRoles().equals("ROLE_ADMIN")) {
       throw new CatsPrivateInformationException();
     }
 
@@ -97,8 +98,13 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   }
 
   @Override
-  public void addFriend(CatFriendDtoMessage catFriendDtoMessage) {
-
+  public void addFriend(CatFriendDtoMessage catFriendDtoMessage, Principal principal) {
+    Person person = Person(principal);
+    CatDtoClient catDtoClient = catClient.findCatByID(catFriendDtoMessage.getCatId());
+    CatDtoClient catFriendDtoClient = catClient.findCatByID(catFriendDtoMessage.getFriendId());
+    if (!person.getOwnerId().equals(catFriendDtoClient.getOwner()) && !person.getOwnerId().equals(catDtoClient.getOwner()) && !person.getRoles().equals("ROLE_ADMIN")) {
+      throw new CatsPrivateInformationException();
+    }
     rabbitTemplate.convertAndSend("catAddFriendQueue", catFriendDtoMessage);
   }
 
@@ -107,8 +113,9 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
   public List<CatDtoClient> getCatsByColorOrBreedOrName(Principal principal, String color,
       String breed, String name) {
     Person person = personService.getPersonByName(principal.getName());
+    PersonDtoMessage personDtoMessage = new PersonDtoMessage(person.getPerson_id(), person.getUsername(), person.getOwnerId(), person.getRoles());
 
-    return catClient.findCatsByColorOrBreedOrName(color, breed, name, person.getOwnerId());
+    return catClient.findCatsByColorOrBreedOrName(color, breed, name, personDtoMessage);
   }
 
   @Override
@@ -127,7 +134,9 @@ public class CatGatewayServiceImplementation implements CatGatewayService {
     if (id != person.getOwnerId()) {
       throw new CatsPrivateInformationException();
     }
-    return catClient.getAllOwnerCats(id);
+    PersonDtoMessage personDtoMessage = new PersonDtoMessage(person.getPerson_id(), person.getUsername(), person.getOwnerId(), person.getRoles());
+
+    return catClient.getAllOwnerCats(personDtoMessage);
   }
 
 

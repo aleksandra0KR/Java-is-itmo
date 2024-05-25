@@ -12,7 +12,6 @@ repositories {
 dependencies {
     implementation(project(mapOf("path" to ":lab5:base-domain")))
 
-
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 

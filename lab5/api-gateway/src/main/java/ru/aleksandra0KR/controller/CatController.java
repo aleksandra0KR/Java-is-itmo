@@ -37,9 +37,10 @@ public class CatController {
       @RequestParam(value = "name", required = false) String name,
       @RequestParam(value = "breed", required = false) String breed,
       Principal principal) {
-    List<CatDtoClient> cats = catGatewayService.getCatsByColorOrBreedOrName(principal, color, breed, name);
+    List<CatDtoClient> cats = catGatewayService.getCatsByColorOrBreedOrName(principal, color, breed,
+        name);
 
-      return cats;
+    return cats;
 
   }
 
@@ -49,8 +50,9 @@ public class CatController {
 
     List<CatDtoClient> cats = catGatewayService.getFriendsById(principal, id);
 
-   return cats;
+    return cats;
   }
+
   @GetMapping("/owner/{id}")
   public List<CatDtoClient> getAllOwnerCats(@PathVariable("id") Long id,
       Principal principal) {
@@ -71,7 +73,9 @@ public class CatController {
 
 
   @PutMapping("/{id}/friends/{friendId}")
-  public void addFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
-    catGatewayService.addFriend(CatFriendDtoMessage.builder().catId(id).friendId(friendId).build());
+  public void addFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId,
+      Principal principal) {
+    catGatewayService.addFriend(CatFriendDtoMessage.builder().catId(id).friendId(friendId).build(),
+        principal);
   }
 }

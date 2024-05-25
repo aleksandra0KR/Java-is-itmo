@@ -7,20 +7,14 @@ import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import io.swagger.v3.core.util.Json;
-import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.aleksandra0KR.CatClient;
 import ru.aleksandra0KR.dto.CatDtoClient;
+import ru.aleksandra0KR.ru.dto.PersonDtoMessage;
 
 
 public class HttpCatsClient implements CatClient {
@@ -40,29 +34,20 @@ public class HttpCatsClient implements CatClient {
 
   }
 
-  private static HttpServletRequest getRequest() {
-    return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
-        .filter(ServletRequestAttributes.class::isInstance)
-        .map(ServletRequestAttributes.class::cast)
-        .map(ServletRequestAttributes::getRequest)
-        .orElseThrow(RuntimeException::new);
-  }
-
   @Override
   public List<CatDtoClient> getAllFriends(long id) {
-    var res = catsWebClient
+    return catsWebClient
         .get()
         .uri("cat/%d/friends".formatted(id))
         .retrieve()
         .bodyToMono(List.class)
         .block();
-    //System.out.println(res);
-    return res;
   }
 
 
   @Override
-  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name, long id) {
+  public List<CatDtoClient> findCatsByColorOrBreedOrName(String color, String breed, String name,
+     PersonDtoMessage personDtoMessage) {
     UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString("http://localhost:8080")
         .path("/cat");
 
@@ -89,37 +74,41 @@ public class HttpCatsClient implements CatClient {
         .retrieve()
         .bodyToMono(JsonNode.class)
         .block();
-    List<CatDtoClient> accountList = mapper.convertValue(
+    List<CatDtoClient> cats = mapper.convertValue(
         res,
-        new TypeReference<List<CatDtoClient>>(){}
+        new TypeReference<List<CatDtoClient>>() {
+        }
     );
-    accountList.stream()
-        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(id)).toList();
-    System.out.println(res);
+    if (personDtoMessage.getRoles().equals("ROLE_ADMIN")) return cats;
 
-    return accountList;
+    cats.stream()
+        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(personDtoMessage.getOwnerID())).toList();
+
+    return cats;
   }
 
   @Override
-  public List<CatDtoClient> getAllOwnerCats(long id) {
+  public List<CatDtoClient> getAllOwnerCats(PersonDtoMessage personDtoMessage) {
     var res = catsWebClient
         .get()
-        .uri("cat//owner%d".formatted(id))
+        .uri("cat//owner%d".formatted(personDtoMessage.getOwnerID()))
         .retrieve()
         .bodyToMono(Json.class)
         .block();
-
 
     ObjectMapper mapper = new ObjectMapper()
         .registerModule(new ParameterNamesModule())
         .registerModule(new Jdk8Module())
         .registerModule(new JavaTimeModule());
-    List<CatDtoClient> accountList = mapper.convertValue(
+    List<CatDtoClient> cats = mapper.convertValue(
         res,
-        new TypeReference<List<CatDtoClient>>(){}
+        new TypeReference<List<CatDtoClient>>() {
+        }
     );
-    accountList.stream()
-        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(id)).toList();
-    return accountList;
+
+    if (personDtoMessage.getRoles().equals("ROLE_ADMIN")) return cats;
+    cats.stream()
+        .filter(cat -> cat.getOwner() != null && cat.getOwner().equals(personDtoMessage.getOwnerID())).toList();
+    return cats;
   }
 }

@@ -17,7 +17,7 @@ public interface CatGatewayService {
 
   CatDtoGateway getById(Long uuid, Principal principal);
 
-  void addFriend(CatFriendDtoMessage catFriendDtoMessage);
+  void addFriend(CatFriendDtoMessage catFriendDtoMessage, Principal principal);
 
   List<CatDtoClient> getCatsByColorOrBreedOrName(Principal principal, String color, String breed,
       String name);

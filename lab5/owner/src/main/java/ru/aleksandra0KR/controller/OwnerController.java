@@ -1,10 +1,6 @@
 package ru.aleksandra0KR.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ru.aleksandra0KR.dto.OwnerDto;
+import org.springframework.web.bind.annotation.*;
 import ru.aleksandra0KR.dto.OwnerDtoClient;
 import ru.aleksandra0KR.service.OwnerService;
 import org.springframework.validation.annotation.Validated;
@@ -29,16 +25,5 @@ public class OwnerController {
   public OwnerDtoClient findPersonByName(@PathVariable("name") String name) {
     return ownerService.findPersonByName(name);
   }
-
-  /*@GetMapping("/{id}/cats")
-  public ResponseEntity<List<CatDto>> findAllCats(@PathVariable("id") Long id) {
-    List<CatDto> cats = ownerService.findAllCats(id);
-
-    if (cats.isEmpty()) {
-      return ResponseEntity.ok().body(Collections.emptyList());
-    } else {
-      return ResponseEntity.ok(cats);
-    }
-  }*/
 
 }

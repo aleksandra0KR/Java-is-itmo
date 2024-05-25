@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.dto;
+package ru.aleksandra0KR.ru.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -7,28 +7,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
 @Data
 @AllArgsConstructor
 @ToString
 @NoArgsConstructor
-public class PersonDto {
+public class PersonDtoMessage {
+
+  Long Id;
 
   @NotNull
   @NotEmpty
   String username;
 
-  @NotNull
-  @NotEmpty
-  String password;
+  Long ownerID;
 
   @NotNull
   @NotEmpty
   String roles = "ROLE_USER";
 
-  Long ownerID;
 
-  public PersonDto(String username, String password) {
-    this.username = username;
-    this.password = password;
-  }
+
 }

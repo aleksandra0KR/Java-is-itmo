@@ -1,10 +1,6 @@
 package ru.aleksandra0KR.config;
 
-import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.reactive.function.client.WebClient;
 import ru.aleksandra0KR.OwnerClient;
 import ru.aleksandra0KR.dto.OwnerDtoClient;
@@ -27,21 +23,11 @@ public class HttpOwnerClient implements OwnerClient {
 
   @Override
   public OwnerDtoClient GetOwnerByName(String name) {
-    OwnerDtoClient owner =ownersWebClient
+    return ownersWebClient
         .get()
         .uri("/owner/name/%s".formatted(name))
         .retrieve()
         .bodyToMono(OwnerDtoClient.class)
         .block();
-        System.out.println(owner);
-    return owner;
-  }
-
-  private static HttpServletRequest getRequest() {
-    return Optional.ofNullable(RequestContextHolder.getRequestAttributes())
-        .filter(ServletRequestAttributes.class::isInstance)
-        .map(ServletRequestAttributes.class::cast)
-        .map(ServletRequestAttributes::getRequest)
-        .orElseThrow(RuntimeException::new);
   }
 }

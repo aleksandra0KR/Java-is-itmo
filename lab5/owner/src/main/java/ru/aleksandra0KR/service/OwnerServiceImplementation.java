@@ -5,10 +5,10 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 import ru.aleksandra0KR.dao.Owner;
 import ru.aleksandra0KR.dto.OwnerDtoClient;
-import ru.aleksandra0KR.exception.PersonDoesntExistException;
 import ru.aleksandra0KR.repository.OwnerRepository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.aleksandra0KR.ru.dto.OwnerDtoMessage;
+import ru.aleksandra0KR.ru.exception.PersonDoesntExistException;
 
 
 @Component
@@ -30,7 +30,7 @@ public class OwnerServiceImplementation implements OwnerService {
         .birthday(owner.getBirthday())
         .name(owner.getName())
         .person_id(owner.getPersonId())
-            .build();
+        .build();
   }
 
   @Override
@@ -71,12 +71,10 @@ public class OwnerServiceImplementation implements OwnerService {
   }
 
 
-
   @RabbitListener(queues = "ownerAddQueue")
   @Transactional
   @Override
   public void addOwner(OwnerDtoMessage ownerDtoMessage) {
-
 
     Owner dao = ownerRepository.save(
         Owner.builder()
