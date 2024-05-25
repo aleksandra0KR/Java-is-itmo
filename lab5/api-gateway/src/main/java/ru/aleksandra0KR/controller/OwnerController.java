@@ -4,18 +4,11 @@ import jakarta.validation.Valid;
 import java.security.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.aleksandra0KR.dto.OwnerDtoClient;
-import ru.aleksandra0KR.exception.EmptyPersonException;
+import ru.aleksandra0KR.dto.OwnerPost;
+import ru.aleksandra0KR.ru.exception.EmptyPersonException;
 import ru.aleksandra0KR.service.OwnerGatewayService;
-import ru.aleksandra0KR.service.PersonService;
 
 
 @RestController
@@ -24,13 +17,11 @@ import ru.aleksandra0KR.service.PersonService;
 public class OwnerController {
 
   private final OwnerGatewayService ownerGatewayService;
-  private final PersonService personService;
 
 
   @Autowired
-  public OwnerController(OwnerGatewayService ownerGatewayService, PersonService personService) {
+  public OwnerController(OwnerGatewayService ownerGatewayService) {
     this.ownerGatewayService = ownerGatewayService;
-    this.personService = personService;
   }
 
   @GetMapping("/{id}")
@@ -53,9 +44,9 @@ public class OwnerController {
   }
 
   @PostMapping
-  public String addOwner(@RequestBody OwnerPost ownerDto) {
+  public String addOwner(@RequestBody OwnerPost ownerDto, Principal principal) {
     if (ownerDto != null) {
-      ownerGatewayService.addOwner(ownerDto);
+      ownerGatewayService.addOwner(ownerDto.getName(), ownerDto.getBirthDay(), principal);
       return "Owner was added successfully";
     } else {
       throw new EmptyPersonException();

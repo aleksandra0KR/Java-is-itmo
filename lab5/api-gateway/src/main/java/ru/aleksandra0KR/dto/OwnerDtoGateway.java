@@ -29,3 +29,4 @@ public class OwnerDtoGateway {
 
   private List<Long> cats;
 }
+

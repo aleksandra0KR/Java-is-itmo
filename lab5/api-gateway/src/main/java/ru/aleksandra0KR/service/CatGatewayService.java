@@ -1,10 +1,8 @@
 package ru.aleksandra0KR.service;
 
 import java.security.Principal;
-import java.time.LocalDate;
 import java.util.List;
-import ru.aleksandra0KR.CatClient;
-import ru.aleksandra0KR.controller.CatPost;
+import ru.aleksandra0KR.dto.CatPost;
 import ru.aleksandra0KR.dto.CatDtoClient;
 import ru.aleksandra0KR.dto.CatDtoGateway;
 import ru.aleksandra0KR.ru.dto.CatFriendDtoMessage;
@@ -25,5 +23,6 @@ public interface CatGatewayService {
       String name);
 
   List<CatDtoClient> getFriendsById(Principal principal, long catId);
+
   List<CatDtoClient> getAllOwnerCats(Principal principal, long id);
 }

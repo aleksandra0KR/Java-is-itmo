@@ -54,13 +54,13 @@ public class RabbitConfig {
   }
 
   @Bean
-  public Queue personDeleteQueue(){
-    return new Queue("personDeleteQueue");
+  public Queue updatePersonQueue(){
+    return new Queue("ownerUpdateQueue");
   }
 
   @Bean
-  public Queue personUpdateQueue(){
-    return new Queue("personUpdateQueue");
+  public Queue deletePersonQueue(){
+    return new Queue("ownerDeleteQueue");
   }
 
   @Bean
@@ -69,8 +69,8 @@ public class RabbitConfig {
   }
 
   @Bean
-  public Queue userAddQueue(){
-    return new Queue("userAddQueue");
+  public Queue addOwnerQueue(){
+    return new Queue("ownerAddQueue");
   }
 
 }

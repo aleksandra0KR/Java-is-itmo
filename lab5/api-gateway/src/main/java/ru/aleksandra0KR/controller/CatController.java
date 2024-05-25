@@ -1,26 +1,14 @@
 package ru.aleksandra0KR.controller;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import jakarta.validation.Valid;
 import java.security.Principal;
-import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.aleksandra0KR.dto.CatDtoClient;
 import ru.aleksandra0KR.dto.CatDtoGateway;
+import ru.aleksandra0KR.dto.CatPost;
 import ru.aleksandra0KR.ru.dto.CatFriendDtoMessage;
 import ru.aleksandra0KR.service.CatGatewayService;
 

@@ -19,4 +19,7 @@ public class OwnerDtoMessage {
   String name;
   @JsonProperty("birthDay")
   LocalDate birthDay;
+
+  @JsonProperty("person_id")
+  private Long person_id;
 }

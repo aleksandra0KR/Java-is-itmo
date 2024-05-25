@@ -21,7 +21,6 @@ public class PersonService {
     this.personRepository = personRepository;
   }
 
-  @RabbitListener(queues = "userAddQueue")
   @Transactional
   public void addUser(PersonDto personDto) {
     Person person = PersonMapper.asDao(personDto);

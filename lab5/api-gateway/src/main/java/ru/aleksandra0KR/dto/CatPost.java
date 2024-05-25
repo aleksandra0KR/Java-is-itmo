@@ -1,12 +1,10 @@
-package ru.aleksandra0KR.controller;
+package ru.aleksandra0KR.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
-import java.util.function.LongPredicate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 
 @AllArgsConstructor
 @Data

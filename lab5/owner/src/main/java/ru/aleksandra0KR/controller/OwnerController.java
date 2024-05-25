@@ -26,7 +26,7 @@ public class OwnerController {
   }
 
   @GetMapping("/name/{name}")
-  public OwnerDto findPersonByName(@PathVariable("name") String name) {
+  public OwnerDtoClient findPersonByName(@PathVariable("name") String name) {
     return ownerService.findPersonByName(name);
   }
 

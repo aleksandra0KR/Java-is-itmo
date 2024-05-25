@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.controller;
+package ru.aleksandra0KR.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,10 +6,12 @@ import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.jackson.Jacksonized;
 
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
+@Jacksonized
 public class OwnerPost {
 
   @JsonProperty("name")
@@ -20,5 +22,6 @@ public class OwnerPost {
 
   @JsonProperty("id")
   private Long id;
+
 
 }

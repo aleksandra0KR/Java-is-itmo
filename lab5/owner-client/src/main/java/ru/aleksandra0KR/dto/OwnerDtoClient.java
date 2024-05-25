@@ -21,4 +21,6 @@ public class OwnerDtoClient {
 
   private Set<Long> cats;
 
+  private Long person_id;
+
 }

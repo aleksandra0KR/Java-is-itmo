@@ -27,12 +27,14 @@ public class HttpOwnerClient implements OwnerClient {
 
   @Override
   public OwnerDtoClient GetOwnerByName(String name) {
-    return ownersWebClient
+    OwnerDtoClient owner =ownersWebClient
         .get()
         .uri("/owner/name/%s".formatted(name))
         .retrieve()
         .bodyToMono(OwnerDtoClient.class)
         .block();
+        System.out.println(owner);
+    return owner;
   }
 
   private static HttpServletRequest getRequest() {

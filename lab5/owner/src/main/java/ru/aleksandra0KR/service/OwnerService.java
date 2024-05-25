@@ -9,11 +9,11 @@ public interface OwnerService {
 
   OwnerDtoClient findPersonByID(long id);
 
-  OwnerDto findPersonByName(String name);
+  OwnerDtoClient findPersonByName(String name);
 
-  OwnerDto addPerson(OwnerDto ownerDto);
+  //OwnerDto addPerson(OwnerDto ownerDto);
 
-  void updatePerson(OwnerDto ownerDto);
+  void updatePerson(OwnerDtoMessage ownerDto);
 
   void deletePerson(Long id);
   void addOwner(OwnerDtoMessage ownerDtoMessage);

@@ -1,4 +1,4 @@
-package ru.aleksandra0KR.exception;
+package ru.aleksandra0KR.ru.exception;
 
 public class CatsPrivateInformationException extends CatExceptions {
 
