@@ -29,3 +29,27 @@ include("lab4:controller")
 findProject(":lab4:controller")?.name = "controller"
 include("lab4:security")
 findProject(":lab4:security")?.name = "security"
+
+
+include("lab5")
+include("lab5:base-domain")
+findProject(":lab5:base-domain")?.name = "base-domain"
+
+include("lab5:cat")
+findProject(":lab5:cat")?.name = "cat"
+include("lab5:owner")
+findProject(":lab5:owner")?.name = "owner"
+include("lab5:user")
+findProject(":lab5:user")?.name = "user"
+include("lab5:user")
+findProject(":lab5:user")?.name = "user"
+include("lab5:owner")
+findProject(":lab5:owner")?.name = "owner"
+include("lab5:cat-client")
+findProject(":lab5:cat-client")?.name = "cat-client"
+include("lab5:owner-client")
+findProject(":lab5:owner-client")?.name = "owner-client"
+include("lab5:user-client")
+findProject(":lab5:user-client")?.name = "user-client"
+include("lab5:api-gateway")
+findProject(":lab5:api-gateway")?.name = "api-gateway"
